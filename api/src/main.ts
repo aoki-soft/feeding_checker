@@ -1,33 +1,44 @@
+// ライブラリインポート
 import express from 'express'
-const app: express.Express = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+import log4js from 'log4js'
+import express_logger from 'morgan'
+import cors from 'cors'
 
-//CROS対応（というか完全無防備：本番環境ではだめ絶対）
-app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "*")
-    res.header("Access-Control-Allow-Headers", "*");
-    next();
-})
+// ファイルインポート
+import getDriver from './db/driver'
+import typeDefs from './db/schema'
+import apollo_server_setup from './apollo_server/setup'
 
-app.listen(3001, () => {
-    console.log("Start on port 3001.")
-})
+/**
+ * エントリーポイント
+ */
+async function main() {
+    const logger = log4js.getLogger();
+    logger.level = 'debug';
 
-type User = {
-    id: number
-    name: string
-    email: string
-};
+    const db_driver = getDriver();
+    const apollo_server = await apollo_server_setup(db_driver, typeDefs);
 
-const users: User[] = [
-    { id: 1, name: "User1", email: "user1@test.local" },
-    { id: 2, name: "User2", email: "user2@test.local" },
-    { id: 3, name: "User3", email: "user3@test.local" }
-]
+    const app: express.Express = express()
+    app.use(express_logger("short"));
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
+    app.use(cors())
 
-//一覧取得
-app.get('/users', (req: express.Request, res: express.Response) => {
-    res.send(JSON.stringify(users))
-})
+    // CROS対応（というか完全無防備：本番環境ではだめ絶対）
+    // app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    //     res.header("Access-Control-Allow-Origin", "*");
+    //     res.header("Access-Control-Allow-Methods", "*")
+    //     res.header("Access-Control-Allow-Headers", "*");
+    //     next();
+    // })
+
+    apollo_server.applyMiddleware({ app });
+
+    const port = 3001
+    app.listen(port, () => {
+        logger.info(`🏃 apiサーバーをスタートしました port: ${port}` )
+    })
+}
+
+main();
