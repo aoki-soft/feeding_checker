@@ -33,7 +33,11 @@ async function main() {
     //     next();
     // })
 
-    apollo_server.applyMiddleware({ app });
+    apollo_server.applyMiddleware({ 
+        app,
+        cors: true,
+        path: '/api',
+    });
 
     const port = 3001
     app.listen(port, () => {

@@ -31,8 +31,8 @@ services:
     volumes:
       - ./api/:/api
     restart: always
-    ports:
-      - "3001:3001"
+    # ports:
+      # - "3001:3001"
     command: "bash"
   neo4j:
     image: neo4j
