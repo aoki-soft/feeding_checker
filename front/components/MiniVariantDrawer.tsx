@@ -136,25 +136,20 @@ export default function MiniDrawer({ children }: Props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          {/* {['えさやり登録'].map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                {index === 0 ? <img style={{height:"40px"}} src="/dog_food.svg" /> : <></>}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          ))} */}
+          <ListItem button key="えさやり登録">
+            <ListItemIcon>
+              <img style={{height:"40px"}} src="/dog_food.svg" />
+            </ListItemIcon>
+            <ListItemText primary={"えさやり登録"} />
+          </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
