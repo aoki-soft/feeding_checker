@@ -37,9 +37,27 @@ const Home: NextPage = () => {
   useEffect(() => {
     setInterval(async () => {
       const response = await today_feeding();
-      const data = response["data"]["feedings"];
-      console.log(data);
-      
+      const feedings = response["data"]["feedings"];
+      console.log(feedings);
+      console.log(feedings.length);
+      const feedings_length = feedings.length;
+
+      for (let i=0; i<feedings_length; i++) {
+        if (feedings[i]["eater"]["name"] === "1号") {
+          if (feedings[i]["am_pm"] === "am") {
+            setDog1AmEated(true);
+          } else if(feedings[i]["am_pm"] === "pm") {
+            setDog1PmEated(true);
+          }
+        } else if (feedings[i]["eater"]["name"] === "2号") {
+          if (feedings[i]["am_pm"] === "am") {
+            setDog2AmEated(true);
+          } else if(feedings[i]["am_pm"] === "pm") {
+            setDog2PmEated(true);
+          }
+        }
+      }
+
     }, 5000)
   }, [])
 
