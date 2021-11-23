@@ -16,6 +16,7 @@ const typeDefs = gql`
         updateAt: DateTime @timestamp(operations: [UPDATE]) @readonly
         giver: User @relationship(type: "GIVE", direction: IN)
         eater: Pet @relationship(type: "EATE", direction: OUT)
+        am_pm: String
     }
     # ユーザー
     type User {
