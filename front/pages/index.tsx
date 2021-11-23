@@ -1,8 +1,55 @@
 import type { NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import Button from '@mui/material/Button';
+
 import MiniDrawer from '../components/MiniVariantDrawer'
 
+import { today_feeding } from '../components/graphql/today_feeding'
+import { create_feeding } from '../components/graphql/create_feeding'
+
+type ClockProps = {
+  date: Date;
+}
+
+function Clock(props: ClockProps) {
+  return (<>
+    <div> {props.date.getMonth()}月 {props.date.getDate()}日</div>
+    <div> {props.date.getHours()}:{props.date.getMinutes()}:{props.date.getSeconds()}</div>
+  </>)
+}
+
+
 const Home: NextPage = () => {
+  const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    setInterval(async () => {
+      setDate(new Date())
+    }, 1000)
+  }, [])
+
+  const [dog1_am_eated, setDog1AmEated] = useState(false);
+  const [dog1_pm_eated, setDog1PmEated] = useState(false);
+  const [dog2_am_eated, setDog2AmEated] = useState(false);
+  const [dog2_pm_eated, setDog2PmEated] = useState(false);
+
+  useEffect(() => {
+    setInterval(async () => {
+      const response = await today_feeding();
+      const data = response["data"]["feedings"];
+      console.log(data);
+      
+    }, 5000)
+  }, [])
+
+  const set_feed = async () => {
+    alert("登録を開始します")
+    // const res = await create_feeding();
+    // console.log(res);
+    alert("登録しました")
+  }
+
   return (<>
     <Head>
       <title>えさやりチェッカー</title>
@@ -13,18 +60,18 @@ const Home: NextPage = () => {
       />
     </Head>
     <MiniDrawer>
-      <div>12月31日 日曜日</div>
+      <Clock date={date} />
       
       <div>
         <div>
           えさをあげる人
         </div>
         <div>
-          <button>ぷっちょ</button>
-          <button>次男</button>
-          <button>末っ子</button>
-          <button>母</button>
-          <button>父</button>
+          <Button variant="contained" color="warning">ぷっちょ</Button>
+          <Button variant="contained" color="inherit">ぷっちょ</Button>
+          <Button variant="contained" disabled>ぷっちょ</Button>
+          <Button variant="contained">ぷっちょ</Button>
+          <Button variant="contained">ぷっちょ</Button>
         </div>
       </div>
 
@@ -37,15 +84,31 @@ const Home: NextPage = () => {
             <div>
               犬1号
             </div>
-            <button>午前</button>
-            <button>午後</button>
+            {
+              dog1_am_eated ? 
+              <Button variant="contained" size="large" color="primary" disabled>午前</Button>
+              :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog1AmEated(true)}}>午前</Button>
+            }
+            {
+              dog1_pm_eated ?
+              <Button variant="contained" size="large" color="error" disabled>午後</Button>
+              :<Button variant="contained" size="large" color="error" onClick={()=>{setDog1PmEated(true)}}>午後</Button>
+            }
           </div>
           <div>
             <div>
               犬2号
             </div>
-            <button>午前</button>
-            <button>午後</button>
+            {
+              dog2_am_eated ? 
+              <Button variant="contained" size="large" color="primary" disabled>午前</Button>
+              :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog2AmEated(true)}}>午前</Button>
+            }
+            {
+              dog2_pm_eated ?
+              <Button variant="contained" size="large" color="error" disabled>午後</Button>
+              :<Button variant="contained" size="large" color="error" onClick={()=>{setDog2PmEated(true)}}>午後</Button>
+            }
           </div>
         </div>
       </div>
