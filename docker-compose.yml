@@ -8,8 +8,6 @@ services:
       - NODE_ENV=production
     tty: true
     working_dir: /front
-    # volumes:
-    #   - ./front/:/front
     restart: always
     command: "npm start"
   nginx:
@@ -23,15 +21,15 @@ services:
       # sslの鍵 (nginx.confを参照)
       - ./nginx/key_cert:/key_cert
   api:
-    image: node
+    build: 
+      context: ./api
+      dockerfile: ./Dockerfile
     environment:
       - NODE_ENV=production
     tty: true
     working_dir: /api
-    # volumes:
-    #   - ./api/:/api
     restart: always
-    command: "bash"
+    command: "npm start"
   neo4j:
     image: neo4j
     restart: always
