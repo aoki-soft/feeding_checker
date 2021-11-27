@@ -11,7 +11,7 @@ import {
 export async function create_feeding(giver_name: String, eater_name: String, am_pm: String) {
 	const cache = new InMemoryCache();
 	const httpLink = createHttpLink({
-			uri: 'https://study.aokki.jp/api'
+			uri: `${location.origin}/api`
 	});
 	const client = new ApolloClient({
 			cache: cache,

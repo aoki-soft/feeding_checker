@@ -15,10 +15,9 @@ export async function today_feeding(now: Date) {
 	const end_datetime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}T15:00:00.000Z`;
 	console.log("スタート: " + start_datetime);
 	console.log("エンド: "+ end_datetime);
-
 	const cache = new InMemoryCache();
 	const httpLink = createHttpLink({
-			uri: 'https://study.aokki.jp/api'
+			uri: `${location.origin}/api`
 	});
 	const client = new ApolloClient({
 			cache: cache,
