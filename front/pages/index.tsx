@@ -47,7 +47,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await today_feeding();
+      const response = await today_feeding(new Date());
       const feedings = response["data"]["feedings"];
       const feedings_length = feedings.length;
       for (let i=0; i<feedings_length; i++) {
@@ -68,7 +68,7 @@ const Home: NextPage = () => {
     })();
 
     setInterval(async () => {
-      const response = await today_feeding();
+      const response = await today_feeding(new Date());
       const feedings = response["data"]["feedings"];
       console.log(feedings);
       console.log(feedings.length);
@@ -88,7 +88,6 @@ const Home: NextPage = () => {
           }
         }
       }
-
     }, 5000)
   }, [])
 
