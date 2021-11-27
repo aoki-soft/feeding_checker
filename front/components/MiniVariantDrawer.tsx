@@ -15,8 +15,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import Link from 'next/link'
 
 
 const drawerWidth = 240;
@@ -136,20 +135,24 @@ export default function MiniDrawer({ children }: Props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {/* {['えさやり登録'].map((text, index) => (
-            <ListItem button key={text}>
+          <Link href="/">
+            <ListItem button key="えさやり登録">
               <ListItemIcon>
-                {index === 0 ? <img style={{height:"40px"}} src="/dog_food.svg" /> : <></>}
+                <img style={{height:"40px"}} src="/dog_food.svg" />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={"えさやり登録"} />
             </ListItem>
-          ))} */}
-          <ListItem button key="えさやり登録">
-            <ListItemIcon>
-              <img style={{height:"40px"}} src="/dog_food.svg" />
-            </ListItemIcon>
-            <ListItemText primary={"えさやり登録"} />
-          </ListItem>
+          </Link>
+        </List>
+        <List>
+          <Link href="/users">
+            <ListItem button key="ユーザー管理">
+              <ListItemIcon>
+                <img style={{height:"40px"}} src="/users.svg" />
+              </ListItemIcon>
+              <ListItemText primary={"ユーザー管理"} />
+            </ListItem>
+          </Link>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
