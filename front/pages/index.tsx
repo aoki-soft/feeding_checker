@@ -18,7 +18,7 @@ function Clock(props: ClockProps) {
       props.date == null?
       <></>:
       <>
-        <div> {props.date.getMonth()}月 {props.date.getDate()}日</div>
+        <div> {props.date.getMonth()+1}月 {props.date.getDate()}日</div>
         <div> {props.date.getHours()}:{props.date.getMinutes()}:{props.date.getSeconds()}</div>
       </>
     }
@@ -159,12 +159,28 @@ const Home: NextPage = () => {
                 {
                   dog1_am_eated ? 
                   <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-                  :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog1AmEated(true)}}>午前</Button>
+                  :<Button variant="contained" size="large" color="primary" onClick={async ()=>{
+                    if (feeding_user != null) {
+                      setDog1AmEated(true)
+                      const res = await create_feeding(feeding_user, "1号", "am");
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }}>午前</Button>
                 }
                 {
                   dog1_pm_eated ?
                   <Button variant="contained" size="large" color="error" disabled>午後</Button>
-                  :<Button variant="contained" size="large" color="error" onClick={()=>{setDog1PmEated(true)}}>午後</Button>
+                  :<Button variant="contained" size="large" color="error" onClick={async ()=>{
+                    if (feeding_user != null) {
+                      setDog1PmEated(true)
+                      const res = await create_feeding(feeding_user, "1号", "pm");
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }}>午後</Button>
                 }
               </div>
               <div>
@@ -174,12 +190,29 @@ const Home: NextPage = () => {
                 {
                   dog2_am_eated ? 
                   <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-                  :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog2AmEated(true)}}>午前</Button>
+                  :<Button variant="contained" size="large" color="primary" onClick={async ()=>{
+                    if (feeding_user != null) {
+                      setDog2AmEated(true)
+                      const res = await create_feeding(feeding_user, "2号", "am");
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }}>午前</Button>
                 }
                 {
                   dog2_pm_eated ?
                   <Button variant="contained" size="large" color="error" disabled>午後</Button>
-                  :<Button variant="contained" size="large" color="error" onClick={()=>{setDog2PmEated(true)}}>午後</Button>
+                  :<Button variant="contained" size="large" color="error" onClick={async ()=>{
+                    if (feeding_user != null) {
+                      setDog2PmEated(true)
+                      const res = await create_feeding(feeding_user, "2号", "pm");
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }
+                  }>午後</Button>
                 }
               </div>
             </div>

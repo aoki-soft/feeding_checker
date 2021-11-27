@@ -11,8 +11,8 @@ import {
 export async function today_feeding(now: Date) {
 	const yesterday = new Date();
 	yesterday.setTime(now.getTime() -86400000);
-	const start_datetime = `${yesterday.getFullYear()}-${yesterday.getMonth()}-${yesterday.getDate()}T15:00:00.000Z`;
-	const end_datetime = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}T15:00:00.000Z`;
+	const start_datetime = `${yesterday.getFullYear()}-${yesterday.getMonth()+1}-${yesterday.getDate()}T15:00:00.000Z`;
+	const end_datetime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}T15:00:00.000Z`;
 	console.log("スタート: " + start_datetime);
 	console.log("エンド: "+ end_datetime);
 

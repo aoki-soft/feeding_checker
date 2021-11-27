@@ -8,7 +8,7 @@ import {
     gql,
 } from "@apollo/client";
 
-export async function create_feeding() {
+export async function create_feeding(giver_name: String, eater_name: String, am_pm: String) {
 	const cache = new InMemoryCache();
 	const httpLink = createHttpLink({
 			uri: 'https://study.aokki.jp/api'
@@ -43,12 +43,12 @@ export async function create_feeding() {
 		variables: {
 			"input": [
 				{
-					"am_pm": "pm",
+					"am_pm": am_pm,
 					"giver": {
 						"connect": {
 							"where": {
 								"node": {
-									"id": "46dd2b11-7527-4ef5-9288-6ac86d179ece"
+									"name": giver_name
 								}
 							}
 						}
@@ -57,7 +57,7 @@ export async function create_feeding() {
 						"connect": {
 							"where": {
 								"node": {
-									"id": "82fa0198-38a3-46e1-bbb5-e38357379b05"
+									"name": eater_name
 								}
 							}
 						}
