@@ -26,6 +26,11 @@ function Clock(props: ClockProps) {
 }
 
 const Home: NextPage = () => {
+  const [now_loading, setNowLoading] = useState(true);
+  setTimeout(()=>{
+    setNowLoading(false);
+  }, 500)
+
   const [date, setDate] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -104,58 +109,63 @@ const Home: NextPage = () => {
       />
     </Head>
     <MiniDrawer>
-      <Clock date={date} />
-      
-      <div>
-        <div>
-          えさをあげる人
-        </div>
-        <div>
-          <Button variant="contained" color="warning">ぷっちょ</Button>
-          <Button variant="contained" color="inherit">ぷっちょ</Button>
-          <Button variant="contained" disabled>ぷっちょ</Button>
-          <Button variant="contained">ぷっちょ</Button>
-          <Button variant="contained">ぷっちょ</Button>
-        </div>
-      </div>
+      {
+        now_loading?
+        <div>ローディング中です</div>
+        :<>
+          <Clock date={date} />
+          <div>
+            <div>
+              えさをあげる人
+            </div>
+            <div>
+              <Button variant="contained" color="warning">ぷっちょ</Button>
+              <Button variant="contained" color="inherit">ぷっちょ</Button>
+              <Button variant="contained" disabled>ぷっちょ</Button>
+              <Button variant="contained">ぷっちょ</Button>
+              <Button variant="contained">ぷっちょ</Button>
+            </div>
+          </div>
 
-      <div>
-        <div>
-          えさを与えたら押してください
-        </div>
-        <div>
           <div>
             <div>
-              犬1号
+              えさを与えたら押してください
             </div>
-            {
-              dog1_am_eated ? 
-              <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-              :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog1AmEated(true)}}>午前</Button>
-            }
-            {
-              dog1_pm_eated ?
-              <Button variant="contained" size="large" color="error" disabled>午後</Button>
-              :<Button variant="contained" size="large" color="error" onClick={()=>{setDog1PmEated(true)}}>午後</Button>
-            }
-          </div>
-          <div>
             <div>
-              犬2号
+              <div>
+                <div>
+                  犬1号
+                </div>
+                {
+                  dog1_am_eated ? 
+                  <Button variant="contained" size="large" color="primary" disabled>午前</Button>
+                  :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog1AmEated(true)}}>午前</Button>
+                }
+                {
+                  dog1_pm_eated ?
+                  <Button variant="contained" size="large" color="error" disabled>午後</Button>
+                  :<Button variant="contained" size="large" color="error" onClick={()=>{setDog1PmEated(true)}}>午後</Button>
+                }
+              </div>
+              <div>
+                <div>
+                  犬2号
+                </div>
+                {
+                  dog2_am_eated ? 
+                  <Button variant="contained" size="large" color="primary" disabled>午前</Button>
+                  :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog2AmEated(true)}}>午前</Button>
+                }
+                {
+                  dog2_pm_eated ?
+                  <Button variant="contained" size="large" color="error" disabled>午後</Button>
+                  :<Button variant="contained" size="large" color="error" onClick={()=>{setDog2PmEated(true)}}>午後</Button>
+                }
+              </div>
             </div>
-            {
-              dog2_am_eated ? 
-              <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-              :<Button variant="contained" size="large" color="primary" onClick={()=>{setDog2AmEated(true)}}>午前</Button>
-            }
-            {
-              dog2_pm_eated ?
-              <Button variant="contained" size="large" color="error" disabled>午後</Button>
-              :<Button variant="contained" size="large" color="error" onClick={()=>{setDog2PmEated(true)}}>午後</Button>
-            }
           </div>
-        </div>
-      </div>
+        </>
+      }
     </MiniDrawer>
   </>)
 }
