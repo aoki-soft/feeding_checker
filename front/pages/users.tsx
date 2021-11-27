@@ -5,17 +5,20 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 import { get_users } from '../components/graphql/get_users'
 import { create_user } from '../components/graphql/create_user'
-import { delete_user } from '../components/graphql/delete_user';
+import { delete_user } from '../components/graphql/delete_user'
+import { update_user } from '../components/graphql/update_user'
 
 const Users: NextPage = () => {
 	const [now_loading, setNowLoading] = useState(true);
 	const [users, setUsers] = useState([]);
 	const [new_user_name, setNewUserName] = useState("");
+	const [rename_user_id, setRenameUserId] = useState<String | null>(null);
+	const [rename_name, setRenameName] = useState("");
 
   useEffect(() => {
 		(async ()=>{
@@ -32,7 +35,7 @@ const Users: NextPage = () => {
 
 	return (<>
 		<Head>
-      <title>ユーザー管理 / えさやりチェッカー</title>
+    	<title>ユーザー管理 / えさやりチェッカー</title>
       <link rel="icon" href="/dog_food.svg" />
       <link
         rel="stylesheet"
@@ -72,7 +75,9 @@ const Users: NextPage = () => {
 										>
 											{`えさやり回数 ${user["feedingAggregate"]["count"]}回`}
 										</Typography>
-										{/* <Button color="primary" variant="contained" size="small" sx={{margin: "10px"}}>名前変更</Button> */}
+										<Button color="primary" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
+											setRenameUserId(user["id"])
+										}}>名前変更</Button>
 										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
 											const res = await delete_user(user["id"]);
 											console.log(res);
@@ -87,6 +92,34 @@ const Users: NextPage = () => {
 				}
 			</List>
 			</>}
+			<Dialog open={rename_user_id != null} onClose={()=>{setRenameUserId(null)}}>
+        <DialogTitle>名前変更</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+						新しい名前を入力してください
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="名前"
+            type="text"
+            fullWidth
+            variant="standard"
+						onChange={(e)=>{setRenameName(e.target.value)}}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>{setRenameUserId(null)}}>Cancel</Button>
+          <Button onClick={async ()=>{
+						if (rename_user_id != null) {
+							const res = await update_user(rename_user_id, rename_name);
+							console.log(res);
+						}
+						setRenameUserId(null)
+					}}>Rename</Button>
+        </DialogActions>
+      </Dialog>
 		</MiniDrawer>
 	</>)
 }
