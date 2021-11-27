@@ -9,21 +9,27 @@ import { today_feeding } from '../components/graphql/today_feeding'
 import { create_feeding } from '../components/graphql/create_feeding'
 
 type ClockProps = {
-  date: Date;
+  date: Date|null;
 }
 
 function Clock(props: ClockProps) {
   return (<>
-    <div> {props.date.getMonth()}月 {props.date.getDate()}日</div>
-    <div> {props.date.getHours()}:{props.date.getMinutes()}:{props.date.getSeconds()}</div>
+    {
+      props.date == null?
+      <></>:
+      <>
+        <div> {props.date.getMonth()}月 {props.date.getDate()}日</div>
+        <div> {props.date.getHours()}:{props.date.getMinutes()}:{props.date.getSeconds()}</div>
+      </>
+    }
   </>)
 }
 
-
 const Home: NextPage = () => {
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(null);
 
   useEffect(() => {
+    setDate(new Date())
     setInterval(async () => {
       setDate(new Date())
     }, 1000)
@@ -35,13 +41,33 @@ const Home: NextPage = () => {
   const [dog2_pm_eated, setDog2PmEated] = useState(false);
 
   useEffect(() => {
+    (async () => {
+      const response = await today_feeding();
+      const feedings = response["data"]["feedings"];
+      const feedings_length = feedings.length;
+      for (let i=0; i<feedings_length; i++) {
+        if (feedings[i]["eater"]["name"] === "1号") {
+          if (feedings[i]["am_pm"] === "am") {
+            setDog1AmEated(true);
+          } else if(feedings[i]["am_pm"] === "pm") {
+            setDog1PmEated(true);
+          }
+        } else if (feedings[i]["eater"]["name"] === "2号") {
+          if (feedings[i]["am_pm"] === "am") {
+            setDog2AmEated(true);
+          } else if(feedings[i]["am_pm"] === "pm") {
+            setDog2PmEated(true);
+          }
+        }
+      }
+    })();
+
     setInterval(async () => {
       const response = await today_feeding();
       const feedings = response["data"]["feedings"];
       console.log(feedings);
       console.log(feedings.length);
       const feedings_length = feedings.length;
-
       for (let i=0; i<feedings_length; i++) {
         if (feedings[i]["eater"]["name"] === "1号") {
           if (feedings[i]["am_pm"] === "am") {
