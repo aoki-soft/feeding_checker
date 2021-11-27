@@ -1,17 +1,17 @@
 version: '3'
 services:
   front:
-    build: 
-      context: ./front
-      dockerfile: ./Dockerfile
-    environment:
-      - NODE_ENV=production
+    image: node
+    # environment:
+      # - NODE_ENV=production
     tty: true
     working_dir: /front
-    # volumes:
-    #   - ./front/:/front
+    volumes:
+      - ./front/:/front
     restart: always
-    command: "npm start"
+    # ports:
+    #   - "3000:3000"
+    command: "bash"
   nginx:
     image: nginx
     ports:
@@ -24,13 +24,15 @@ services:
       - ./nginx/key_cert:/key_cert
   api:
     image: node
-    environment:
-      - NODE_ENV=production
+    # environment:
+      # - NODE_ENV=production
     tty: true
     working_dir: /api
-    # volumes:
-    #   - ./api/:/api
+    volumes:
+      - ./api/:/api
     restart: always
+    # ports:
+      # - "3001:3001"
     command: "bash"
   neo4j:
     image: neo4j
