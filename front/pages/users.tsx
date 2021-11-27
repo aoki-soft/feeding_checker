@@ -5,14 +5,17 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 import { get_users } from '../components/graphql/get_users'
+import { create_user } from '../components/graphql/create_user'
+import { delete_user } from '../components/graphql/delete_user';
 
 const Users: NextPage = () => {
 	const [now_loading, setNowLoading] = useState(true);
 	const [users, setUsers] = useState([]);
+	const [new_user_name, setNewUserName] = useState("");
 
   useEffect(() => {
 		(async ()=>{
@@ -20,6 +23,10 @@ const Users: NextPage = () => {
 			console.log(res["data"]["users"]);
 			setUsers(res["data"]["users"]);
 			setNowLoading(false);
+			setInterval(async ()=>{
+				const res = await get_users();
+				setUsers(res["data"]["users"]);
+			}, 500)
 		})()
 	}, [])
 
@@ -35,8 +42,19 @@ const Users: NextPage = () => {
 		<MiniDrawer>
 			{
 				now_loading? <>ローディング中です</>:<>
-				ユーザー管理画面<br/>
 			ユーザー追加<br/>
+			<TextField id="outlined-basic" label="名前" variant="outlined" onChange={(e)=>{setNewUserName(e.target.value)}} />
+			<Button variant="outlined" onClick={async ()=>{
+				console.log(new_user_name);
+				if (new_user_name == "") {
+					alert("名前が未入力です。")
+				} else {
+					const res = await create_user(new_user_name);
+					console.log(res);
+					alert("新しいユーザーを追加しました。")
+				}
+			}}>登録</Button>
+
 			<List sx={{ width: "100%", maxWidth: 360, bgcolor: 'background.paper'}}>
 				{
 					users.map((user)=>{
@@ -54,8 +72,12 @@ const Users: NextPage = () => {
 										>
 											{`えさやり回数 ${user["feedingAggregate"]["count"]}回`}
 										</Typography>
-										<Button color="primary" variant="contained" size="small" sx={{margin: "10px"}}>名前変更</Button>
-										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}}>削除</Button>
+										{/* <Button color="primary" variant="contained" size="small" sx={{margin: "10px"}}>名前変更</Button> */}
+										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
+											const res = await delete_user(user["id"]);
+											console.log(res);
+											alert("ユーザーを削除しました")
+										}}>削除</Button>
 									</Fragment>
 								}
 								/>
