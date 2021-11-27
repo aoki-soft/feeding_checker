@@ -1,12 +1,13 @@
 import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Button from '@mui/material/Button';
+import {Button, ButtonProps, colors} from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 
 import { today_feeding } from '../components/graphql/today_feeding'
 import { create_feeding } from '../components/graphql/create_feeding'
+import { styled } from '@mui/system';
 
 type ClockProps = {
   date: Date|null;
@@ -24,6 +25,17 @@ function Clock(props: ClockProps) {
     }
   </>)
 }
+
+const FeedingButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  width: '30vw',
+  height: '80px',
+  margin: '10px',
+  color: 'white',
+  backgroundColor: colors.blue[300],
+  '&:hover': {
+    backgroundColor: colors.blue[400],
+  },
+}));
 
 const Home: NextPage = () => {
   const [now_loading, setNowLoading] = useState(true);
@@ -92,13 +104,6 @@ const Home: NextPage = () => {
     }, 5000)
   }, [])
 
-  const set_feed = async () => {
-    alert("登録を開始します")
-    // const res = await create_feeding();
-    // console.log(res);
-    alert("登録しました")
-  }
-
   return (<>
     <Head>
       <title>えさやりチェッカー</title>
@@ -156,10 +161,13 @@ const Home: NextPage = () => {
                 <div>
                   犬1号
                 </div>
-                {
-                  dog1_am_eated ? 
-                  <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-                  :<Button variant="contained" size="large" color="primary" onClick={async ()=>{
+                <FeedingButton variant="contained" size="large" color="primary" disabled={dog1_am_eated} sx={{
+                  backgroundColor: colors.blue[300],
+                  '&:hover': {
+                    backgroundColor: colors.blue[400],
+                  }
+                }}
+                  onClick={async ()=>{
                     if (feeding_user != null) {
                       setDog1AmEated(true)
                       const res = await create_feeding(feeding_user, "1号", "am");
@@ -167,12 +175,14 @@ const Home: NextPage = () => {
                     } else {
                       alert("えさを与える人を選択してください")
                     }
-                  }}>午前</Button>
-                }
-                {
-                  dog1_pm_eated ?
-                  <Button variant="contained" size="large" color="error" disabled>午後</Button>
-                  :<Button variant="contained" size="large" color="error" onClick={async ()=>{
+                  }}>午前</FeedingButton>
+                <FeedingButton variant="contained" size="large" color="error" disabled={dog1_pm_eated} sx={{
+                    backgroundColor: colors.orange[600],
+                    '&:hover': {
+                      backgroundColor: colors.orange[700],
+                    }
+                  }}
+                  onClick={async ()=>{
                     if (feeding_user != null) {
                       setDog1PmEated(true)
                       const res = await create_feeding(feeding_user, "1号", "pm");
@@ -180,17 +190,19 @@ const Home: NextPage = () => {
                     } else {
                       alert("えさを与える人を選択してください")
                     }
-                  }}>午後</Button>
-                }
+                  }}>午後</FeedingButton>
               </div>
               <div>
                 <div>
                   犬2号
                 </div>
-                {
-                  dog2_am_eated ? 
-                  <Button variant="contained" size="large" color="primary" disabled>午前</Button>
-                  :<Button variant="contained" size="large" color="primary" onClick={async ()=>{
+                <FeedingButton variant="contained" size="large" color="primary" disabled={dog2_am_eated} sx={{
+                  backgroundColor: colors.blue[300],
+                  '&:hover': {
+                    backgroundColor: colors.blue[400],
+                  }
+                }}
+                  onClick={async ()=>{
                     if (feeding_user != null) {
                       setDog2AmEated(true)
                       const res = await create_feeding(feeding_user, "2号", "am");
@@ -198,12 +210,14 @@ const Home: NextPage = () => {
                     } else {
                       alert("えさを与える人を選択してください")
                     }
-                  }}>午前</Button>
-                }
-                {
-                  dog2_pm_eated ?
-                  <Button variant="contained" size="large" color="error" disabled>午後</Button>
-                  :<Button variant="contained" size="large" color="error" onClick={async ()=>{
+                }}>午前</FeedingButton>
+                <FeedingButton variant="contained" size="large" color="error" disabled={dog2_pm_eated} sx={{
+                    backgroundColor: colors.orange[600],
+                    '&:hover': {
+                      backgroundColor: colors.orange[700],
+                    }
+                  }}
+                  onClick={async ()=>{
                     if (feeding_user != null) {
                       setDog2PmEated(true)
                       const res = await create_feeding(feeding_user, "2号", "pm");
@@ -212,8 +226,18 @@ const Home: NextPage = () => {
                       alert("えさを与える人を選択してください")
                     }
                   }
-                  }>午後</Button>
-                }
+                  }>午後</FeedingButton>
+
+              </div>
+              <div>
+                <div>3号</div>
+                <FeedingButton>午前</FeedingButton>
+                <FeedingButton sx={{
+                  backgroundColor: colors.orange[600],
+                  '&:hover': {
+                    backgroundColor: colors.orange[700],
+                  }
+                }}>午後</FeedingButton>
               </div>
             </div>
           </div>
