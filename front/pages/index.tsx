@@ -14,13 +14,15 @@ type ClockProps = {
 }
 
 function Clock(props: ClockProps) {
+  const WeekChars = [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ];
+
   return (<>
     {
       props.date == null?
       <></>:
       <>
-        <div> {props.date.getMonth()+1}月 {props.date.getDate()}日</div>
-        <div> {props.date.getHours()}:{props.date.getMinutes()}:{props.date.getSeconds()}</div>
+        <div> {props.date.getMonth()+1}月 {props.date.getDate()}日 {WeekChars[props.date.getDay()]}</div>
+        <div> {props.date.getHours()}:{props.date.getMinutes()}</div>
       </>
     }
   </>)
@@ -30,11 +32,24 @@ const FeedingButton = styled(Button)<ButtonProps>(({ theme }) => ({
   width: '30vw',
   height: '80px',
   margin: '10px',
+  fontSize: '2em',
   color: 'white',
   backgroundColor: colors.blue[300],
   '&:hover': {
     backgroundColor: colors.blue[400],
   },
+}));
+
+const GiverButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  width: '30vw',
+  height: '80px',
+  margin: '10px',
+  fontSize: '1.3em',
+  // color: 'white',
+  // backgroundColor: colors.blue[300],
+  // '&:hover': {
+  //   backgroundColor: colors.blue[400],
+  // },
 }));
 
 const Home: NextPage = () => {
@@ -124,37 +139,16 @@ const Home: NextPage = () => {
               えさをあげる人
             </div>
             <div>
-              {
-                feeding_user == "ぷっちょ" ?
-                <Button variant="contained" color="warning" >ぷっちょ</Button>
-                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("ぷっちょ")}} >ぷっちょ</Button>
-              }
-              {
-                feeding_user == "次男" ?
-                <Button variant="contained" color="warning" >次男</Button>
-                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("次男")}} >次男</Button>
-              }
-              {
-                feeding_user == "末っ子" ?
-                <Button variant="contained" color="warning" >末っ子</Button>
-                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("末っ子")}} >末っ子</Button>
-              }
-              {
-                feeding_user == "母" ?
-                <Button variant="contained" color="warning" >母</Button>
-                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("母")}} >母</Button>
-              }
-              {
-                feeding_user == "父" ?
-                <Button variant="contained" color="warning" >父</Button>
-                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("父")}} >父</Button>
-              }
-              
+              <GiverButton variant="contained" color={feeding_user == "ぷっちょ" ? "warning": "primary"} onClick={()=>{setFeedingUser("ぷっちょ")}} >ぷっちょ</GiverButton>
+              <GiverButton variant="contained" color={feeding_user == "次男" ? "warning": "primary"} onClick={()=>{setFeedingUser("次男")}} >次男</GiverButton>
+              <GiverButton variant="contained" color={feeding_user == "末っ子" ? "warning": "primary"} onClick={()=>{setFeedingUser("末っ子")}} >末っ子</GiverButton>
+              <GiverButton variant="contained" color={feeding_user == "母" ? "warning": "primary"} onClick={()=>{setFeedingUser("母")}} >母</GiverButton>
+              <GiverButton variant="contained" color={feeding_user == "父" ? "warning": "primary"} onClick={()=>{setFeedingUser("父")}} >父</GiverButton>             
             </div>
           </div>
           <div>
             <div>
-              えさを与えたら押してください
+              えさを与えたら押す
             </div>
             <div>
               <div>
@@ -228,16 +222,6 @@ const Home: NextPage = () => {
                   }
                   }>午後</FeedingButton>
 
-              </div>
-              <div>
-                <div>3号</div>
-                <FeedingButton>午前</FeedingButton>
-                <FeedingButton sx={{
-                  backgroundColor: colors.orange[600],
-                  '&:hover': {
-                    backgroundColor: colors.orange[700],
-                  }
-                }}>午後</FeedingButton>
               </div>
             </div>
           </div>
