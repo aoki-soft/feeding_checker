@@ -32,13 +32,14 @@ const Home: NextPage = () => {
   }, 500)
 
   const [date, setDate] = useState<Date | null>(null);
-
   useEffect(() => {
     setDate(new Date())
     setInterval(async () => {
       setDate(new Date())
     }, 1000)
   }, [])
+
+  const [feeding_user, setFeedingUser] = useState<String | null>(null);
 
   const [dog1_am_eated, setDog1AmEated] = useState(false);
   const [dog1_pm_eated, setDog1PmEated] = useState(false);
@@ -118,14 +119,34 @@ const Home: NextPage = () => {
               えさをあげる人
             </div>
             <div>
-              <Button variant="contained" color="warning">ぷっちょ</Button>
-              <Button variant="contained" color="inherit">ぷっちょ</Button>
-              <Button variant="contained" disabled>ぷっちょ</Button>
-              <Button variant="contained">ぷっちょ</Button>
-              <Button variant="contained">ぷっちょ</Button>
+              {
+                feeding_user == "ぷっちょ" ?
+                <Button variant="contained" color="warning" >ぷっちょ</Button>
+                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("ぷっちょ")}} >ぷっちょ</Button>
+              }
+              {
+                feeding_user == "次男" ?
+                <Button variant="contained" color="warning" >次男</Button>
+                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("次男")}} >次男</Button>
+              }
+              {
+                feeding_user == "末っ子" ?
+                <Button variant="contained" color="warning" >末っ子</Button>
+                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("末っ子")}} >末っ子</Button>
+              }
+              {
+                feeding_user == "母" ?
+                <Button variant="contained" color="warning" >母</Button>
+                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("母")}} >母</Button>
+              }
+              {
+                feeding_user == "父" ?
+                <Button variant="contained" color="warning" >父</Button>
+                :<Button variant="contained" color="primary" onClick={()=>{setFeedingUser("父")}} >父</Button>
+              }
+              
             </div>
           </div>
-
           <div>
             <div>
               えさを与えたら押してください
