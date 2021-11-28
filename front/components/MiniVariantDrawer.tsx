@@ -154,6 +154,16 @@ export default function MiniDrawer({ children }: Props) {
             </ListItem>
           </Link>
         </List>
+        <List>
+          <Link href="/pets">
+            <ListItem button key="ペット管理">
+              <ListItemIcon>
+                <img style={{height:"40px"}} src="/siba.svg" />
+              </ListItemIcon>
+              <ListItemText primary={"ペット管理"} />
+            </ListItem>
+          </Link>
+        </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
