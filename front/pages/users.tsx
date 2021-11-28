@@ -35,7 +35,7 @@ const Users: NextPage = () => {
 
 	return (<>
 		<Head>
-    	<title>ユーザー管理 / えさやりチェッカー</title>
+			<title>ユーザー管理 / えさやりチェッカー</title>
       <link rel="icon" href="/dog_food.svg" />
       <link
         rel="stylesheet"

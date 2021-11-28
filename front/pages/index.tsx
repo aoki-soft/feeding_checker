@@ -2,12 +2,13 @@ import type { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import {Button, ButtonProps, colors} from '@mui/material';
+import { styled } from '@mui/system';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 
 import { today_feeding } from '../components/graphql/today_feeding'
 import { create_feeding } from '../components/graphql/create_feeding'
-import { styled } from '@mui/system';
+import { get_users } from '../components/graphql/get_users'
 
 type ClockProps = {
   date: Date|null;
@@ -66,7 +67,16 @@ const Home: NextPage = () => {
     }, 1000)
   }, [])
 
-  const [feeding_user, setFeedingUser] = useState<String | null>(null);
+  const [feeding_user_id, setFeedingUserId] = useState<String | null>(null);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await get_users();
+      setUsers(res["data"]["users"]);
+    })()
+  })
+
 
   const [dog1_am_eated, setDog1AmEated] = useState(false);
   const [dog1_pm_eated, setDog1PmEated] = useState(false);
@@ -98,8 +108,6 @@ const Home: NextPage = () => {
     setInterval(async () => {
       const response = await today_feeding(new Date());
       const feedings = response["data"]["feedings"];
-      console.log(feedings);
-      console.log(feedings.length);
       const feedings_length = feedings.length;
       for (let i=0; i<feedings_length; i++) {
         if (feedings[i]["eater"]["name"] === "1号") {
@@ -116,7 +124,9 @@ const Home: NextPage = () => {
           }
         }
       }
-    }, 5000)
+      const res = await get_users();
+      setUsers(res["data"]["users"]);
+    }, 500)
   }, [])
 
   return (<>
@@ -139,11 +149,9 @@ const Home: NextPage = () => {
               えさをあげる人
             </div>
             <div>
-              <GiverButton variant="contained" color={feeding_user == "ぷっちょ" ? "warning": "primary"} onClick={()=>{setFeedingUser("ぷっちょ")}} >ぷっちょ</GiverButton>
-              <GiverButton variant="contained" color={feeding_user == "次男" ? "warning": "primary"} onClick={()=>{setFeedingUser("次男")}} >次男</GiverButton>
-              <GiverButton variant="contained" color={feeding_user == "末っ子" ? "warning": "primary"} onClick={()=>{setFeedingUser("末っ子")}} >末っ子</GiverButton>
-              <GiverButton variant="contained" color={feeding_user == "母" ? "warning": "primary"} onClick={()=>{setFeedingUser("母")}} >母</GiverButton>
-              <GiverButton variant="contained" color={feeding_user == "父" ? "warning": "primary"} onClick={()=>{setFeedingUser("父")}} >父</GiverButton>             
+              {users.map((user)=>{
+                return <GiverButton variant="contained" color={feeding_user_id == user["id"] ? "warning": "primary"} onClick={()=>{setFeedingUserId(user["id"])}} >{user["name"]}</GiverButton>
+              })}    
             </div>
           </div>
           <div>
@@ -162,9 +170,9 @@ const Home: NextPage = () => {
                   }
                 }}
                   onClick={async ()=>{
-                    if (feeding_user != null) {
+                    if (feeding_user_id != null) {
                       setDog1AmEated(true)
-                      const res = await create_feeding(feeding_user, "1号", "am");
+                      const res = await create_feeding(feeding_user_id, "1号", "am");
                       console.log(res);
                     } else {
                       alert("えさを与える人を選択してください")
@@ -177,9 +185,9 @@ const Home: NextPage = () => {
                     }
                   }}
                   onClick={async ()=>{
-                    if (feeding_user != null) {
+                    if (feeding_user_id != null) {
                       setDog1PmEated(true)
-                      const res = await create_feeding(feeding_user, "1号", "pm");
+                      const res = await create_feeding(feeding_user_id, "1号", "pm");
                       console.log(res);
                     } else {
                       alert("えさを与える人を選択してください")
@@ -197,9 +205,9 @@ const Home: NextPage = () => {
                   }
                 }}
                   onClick={async ()=>{
-                    if (feeding_user != null) {
+                    if (feeding_user_id != null) {
                       setDog2AmEated(true)
-                      const res = await create_feeding(feeding_user, "2号", "am");
+                      const res = await create_feeding(feeding_user_id, "2号", "am");
                       console.log(res);
                     } else {
                       alert("えさを与える人を選択してください")
@@ -212,9 +220,9 @@ const Home: NextPage = () => {
                     }
                   }}
                   onClick={async ()=>{
-                    if (feeding_user != null) {
+                    if (feeding_user_id != null) {
                       setDog2PmEated(true)
-                      const res = await create_feeding(feeding_user, "2号", "pm");
+                      const res = await create_feeding(feeding_user_id, "2号", "pm");
                       console.log(res);
                     } else {
                       alert("えさを与える人を選択してください")
