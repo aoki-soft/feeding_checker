@@ -5,7 +5,7 @@ import {
     gql,
 } from "@apollo/client";
 
-export async function create_feeding(giver_id: String, eater_name: String, am_pm: String) {
+export async function create_feeding(giver_id: String, eater_id: String, am_pm: String) {
 	const cache = new InMemoryCache();
 	const httpLink = createHttpLink({
 			uri: `${location.origin}/api`
@@ -54,7 +54,7 @@ export async function create_feeding(giver_id: String, eater_name: String, am_pm
 						"connect": {
 							"where": {
 								"node": {
-									"name": eater_name
+									"id": eater_id
 								}
 							}
 						}
