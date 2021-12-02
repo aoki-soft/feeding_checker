@@ -72,6 +72,7 @@ const Home: NextPage = () => {
 
   const fetch_status = async () => {
     const response = await today_feeding(new Date());
+    console.log(response["data"]["feedings"]);
     setTodayFeedings(response["data"]["feedings"])
     const res = await get_users();
     setUsers(res["data"]["users"]);
@@ -106,7 +107,7 @@ const Home: NextPage = () => {
             </div>
             <div>
               {users.map((user)=>{
-                return <GiverButton variant="contained" color={feeding_user_id == user["id"] ? "warning": "primary"} onClick={()=>{setFeedingUserId(user["id"])}} >{user["name"]}</GiverButton>
+                return <GiverButton key={user["id"]} variant="contained" color={feeding_user_id == user["id"] ? "warning": "primary"} onClick={()=>{setFeedingUserId(user["id"])}} >{user["name"]}</GiverButton>
               })}    
             </div>
           </div>
@@ -121,9 +122,11 @@ const Home: NextPage = () => {
                     <div>
                       {pet["name"]}
                     </div>
-                    <FeedingButton variant="contained" size="large" color="primary" disabled={(()=>{
+                    <FeedingButton key={pet["id"] + "_am"} variant="contained" size="large" color="primary" disabled={(()=>{
                         for (const feeding of today_feedings) {
-                          if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "am") { return true }
+                          if (feeding["eater"] != null) {
+                            if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "am") { return true }
+                          }
                         }
                         return false
                       })()} 
@@ -141,9 +144,11 @@ const Home: NextPage = () => {
                           alert("えさを与える人を選択してください")
                         }
                       }}>午前</FeedingButton>
-                    <FeedingButton variant="contained" size="large" color="error" disabled={(()=>{
+                    <FeedingButton key={pet["id"] + "_pm"} variant="contained" size="large" color="error" disabled={(()=>{
                         for (const feeding of today_feedings) {
-                          if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "pm") { return true }
+                          if (feeding["eater"] != null) {
+                            if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "pm") { return true }
+                          }
                         }
                         return false
                       })()} 

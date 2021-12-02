@@ -24,5 +24,5 @@ npm run dev
 
 ビルドし直し
 ```
-docker-compose up --build
+docker-compose up --build -d
 ```

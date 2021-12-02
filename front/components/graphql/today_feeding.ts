@@ -1,18 +1,31 @@
 import {
     ApolloClient,
     InMemoryCache,
-    ApolloProvider,
-    useQuery,
-    HttpLink,
     createHttpLink,
     gql,
 } from "@apollo/client";
 
+/**
+ * 1桁の数値を0でパディングする
+ * @param num 2桁以下の数値
+ */
+const zero_padding = (num: number) => {
+	if (num < 10) {
+		return "0" + num;
+	}
+	return "" + num;
+}
+
+/**
+ * その日のえさやり情報取得
+ * @param now 日時
+ * @returns nowの日時のえさやり情報を返す
+ */
 export async function today_feeding(now: Date) {
-	const yesterday = new Date();
+	const end_datetime = `${now.getFullYear()}-${zero_padding(now.getMonth()+1)}-${zero_padding(now.getDate())}T15:00:00.000Z`;
+	const yesterday = now;
 	yesterday.setTime(now.getTime() -86400000);
-	const start_datetime = `${yesterday.getFullYear()}-${yesterday.getMonth()+1}-${yesterday.getDate()}T15:00:00.000Z`;
-	const end_datetime = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}T15:00:00.000Z`;
+	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
 	const cache = new InMemoryCache();
 	const httpLink = createHttpLink({
 			uri: `${location.origin}/api`
@@ -23,18 +36,19 @@ export async function today_feeding(now: Date) {
 	});
 	return client.query({
 		query: gql`
-			query Feedings($where: FeedingWhere) {
+			query Query($where: FeedingWhere) {
 				feedings(where: $where) {
 					id
 					am_pm
 					createAt
+					updateAt
 					giver {
-						name
 						id
+						name
 					}
 					eater {
-						name
 						id
+						name
 					}
 				}
 			}
