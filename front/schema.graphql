@@ -1,0 +1,1012 @@
+type Query {
+  pets(where: PetWhere, options: PetOptions): [Pet!]!
+  petsCount(where: PetWhere): Int!
+  petsAggregate(where: PetWhere): PetAggregateSelection!
+  feedings(where: FeedingWhere, options: FeedingOptions): [Feeding!]!
+  feedingsCount(where: FeedingWhere): Int!
+  feedingsAggregate(where: FeedingWhere): FeedingAggregateSelection!
+  users(where: UserWhere, options: UserOptions): [User!]!
+  usersCount(where: UserWhere): Int!
+  usersAggregate(where: UserWhere): UserAggregateSelection!
+}
+
+type Mutation {
+  createPets(input: [PetCreateInput!]!): CreatePetsMutationResponse!
+  deletePets(where: PetWhere, delete: PetDeleteInput): DeleteInfo!
+  updatePets(where: PetWhere, update: PetUpdateInput, connect: PetConnectInput, disconnect: PetDisconnectInput, create: PetRelationInput, delete: PetDeleteInput): UpdatePetsMutationResponse!
+  createFeedings(input: [FeedingCreateInput!]!): CreateFeedingsMutationResponse!
+  deleteFeedings(where: FeedingWhere, delete: FeedingDeleteInput): DeleteInfo!
+  updateFeedings(where: FeedingWhere, update: FeedingUpdateInput, connect: FeedingConnectInput, disconnect: FeedingDisconnectInput, create: FeedingRelationInput, delete: FeedingDeleteInput): UpdateFeedingsMutationResponse!
+  createUsers(input: [UserCreateInput!]!): CreateUsersMutationResponse!
+  deleteUsers(where: UserWhere, delete: UserDeleteInput): DeleteInfo!
+  updateUsers(where: UserWhere, update: UserUpdateInput, connect: UserConnectInput, disconnect: UserDisconnectInput, create: UserRelationInput, delete: UserDeleteInput): UpdateUsersMutationResponse!
+}
+
+"""A date and time, represented as an ISO-8601 string"""
+scalar DateTime
+
+enum SortDirection {
+  """Sort by field values in ascending order."""
+  ASC
+
+  """Sort by field values in descending order."""
+  DESC
+}
+
+type CreateFeedingsMutationResponse {
+  info: CreateInfo!
+  feedings: [Feeding!]!
+}
+
+type CreateInfo {
+  bookmark: String
+  nodesCreated: Int!
+  relationshipsCreated: Int!
+}
+
+type CreatePetsMutationResponse {
+  info: CreateInfo!
+  pets: [Pet!]!
+}
+
+type CreateUsersMutationResponse {
+  info: CreateInfo!
+  users: [User!]!
+}
+
+type DateTimeAggregateSelection {
+  min: DateTime!
+  max: DateTime!
+}
+
+type DeleteInfo {
+  bookmark: String
+  nodesDeleted: Int!
+  relationshipsDeleted: Int!
+}
+
+type Feeding {
+  id: ID!
+  am_pm: String
+  createAt: DateTime
+  updateAt: DateTime
+  giver(where: UserWhere, options: UserOptions): User
+  giverAggregate(where: UserWhere): FeedingUserGiverAggregationSelection
+  eater(where: PetWhere, options: PetOptions): Pet
+  eaterAggregate(where: PetWhere): FeedingPetEaterAggregationSelection
+  giverConnection(where: FeedingGiverConnectionWhere, first: Int, after: String, sort: [FeedingGiverConnectionSort!]): FeedingGiverConnection!
+  eaterConnection(where: FeedingEaterConnectionWhere, first: Int, after: String, sort: [FeedingEaterConnectionSort!]): FeedingEaterConnection!
+}
+
+type FeedingAggregateSelection {
+  count: Int!
+  id: IDAggregateSelection!
+  am_pm: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type FeedingEaterConnection {
+  edges: [FeedingEaterRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type FeedingEaterRelationship {
+  cursor: String!
+  node: Pet!
+}
+
+type FeedingGiverConnection {
+  edges: [FeedingGiverRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type FeedingGiverRelationship {
+  cursor: String!
+  node: User!
+}
+
+type FeedingPetEaterAggregationSelection {
+  count: Int!
+  node: FeedingPetEaterNodeAggregateSelection
+}
+
+type FeedingPetEaterNodeAggregateSelection {
+  id: IDAggregateSelection!
+  name: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type FeedingUserGiverAggregationSelection {
+  count: Int!
+  node: FeedingUserGiverNodeAggregateSelection
+}
+
+type FeedingUserGiverNodeAggregateSelection {
+  id: IDAggregateSelection!
+  name: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type IDAggregateSelection {
+  shortest: ID!
+  longest: ID!
+}
+
+"""Pagination information (Relay)"""
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Pet {
+  id: ID!
+  name: String!
+  createAt: DateTime
+  updateAt: DateTime
+  eating(where: FeedingWhere, options: FeedingOptions): [Feeding]
+  eatingAggregate(where: FeedingWhere): PetFeedingEatingAggregationSelection
+  eatingConnection(where: PetEatingConnectionWhere, first: Int, after: String, sort: [PetEatingConnectionSort!]): PetEatingConnection!
+}
+
+type PetAggregateSelection {
+  count: Int!
+  id: IDAggregateSelection!
+  name: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type PetEatingConnection {
+  edges: [PetEatingRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type PetEatingRelationship {
+  cursor: String!
+  node: Feeding!
+}
+
+type PetFeedingEatingAggregationSelection {
+  count: Int!
+  node: PetFeedingEatingNodeAggregateSelection
+}
+
+type PetFeedingEatingNodeAggregateSelection {
+  id: IDAggregateSelection!
+  am_pm: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type StringAggregateSelection {
+  shortest: String!
+  longest: String!
+}
+
+type UpdateFeedingsMutationResponse {
+  info: UpdateInfo!
+  feedings: [Feeding!]!
+}
+
+type UpdateInfo {
+  bookmark: String
+  nodesCreated: Int!
+  nodesDeleted: Int!
+  relationshipsCreated: Int!
+  relationshipsDeleted: Int!
+}
+
+type UpdatePetsMutationResponse {
+  info: UpdateInfo!
+  pets: [Pet!]!
+}
+
+type UpdateUsersMutationResponse {
+  info: UpdateInfo!
+  users: [User!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  createAt: DateTime
+  updateAt: DateTime
+  feeding(where: FeedingWhere, options: FeedingOptions): [Feeding]
+  feedingAggregate(where: FeedingWhere): UserFeedingFeedingAggregationSelection
+  feedingConnection(where: UserFeedingConnectionWhere, first: Int, after: String, sort: [UserFeedingConnectionSort!]): UserFeedingConnection!
+}
+
+type UserAggregateSelection {
+  count: Int!
+  id: IDAggregateSelection!
+  name: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type UserFeedingConnection {
+  edges: [UserFeedingRelationship!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type UserFeedingFeedingAggregationSelection {
+  count: Int!
+  node: UserFeedingFeedingNodeAggregateSelection
+}
+
+type UserFeedingFeedingNodeAggregateSelection {
+  id: IDAggregateSelection!
+  am_pm: StringAggregateSelection!
+  createAt: DateTimeAggregateSelection!
+  updateAt: DateTimeAggregateSelection!
+}
+
+type UserFeedingRelationship {
+  cursor: String!
+  node: Feeding!
+}
+
+input FeedingConnectInput {
+  giver: FeedingGiverConnectFieldInput
+  eater: FeedingEaterConnectFieldInput
+}
+
+input FeedingConnectWhere {
+  node: FeedingWhere!
+}
+
+input FeedingCreateInput {
+  am_pm: String
+  giver: FeedingGiverFieldInput
+  eater: FeedingEaterFieldInput
+}
+
+input FeedingDeleteInput {
+  giver: FeedingGiverDeleteFieldInput
+  eater: FeedingEaterDeleteFieldInput
+}
+
+input FeedingDisconnectInput {
+  giver: FeedingGiverDisconnectFieldInput
+  eater: FeedingEaterDisconnectFieldInput
+}
+
+input FeedingEaterAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [FeedingEaterAggregateInput!]
+  OR: [FeedingEaterAggregateInput!]
+  node: FeedingEaterNodeAggregationWhereInput
+}
+
+input FeedingEaterConnectFieldInput {
+  where: PetConnectWhere
+  connect: PetConnectInput
+}
+
+input FeedingEaterConnectionSort {
+  node: PetSort
+}
+
+input FeedingEaterConnectionWhere {
+  AND: [FeedingEaterConnectionWhere!]
+  OR: [FeedingEaterConnectionWhere!]
+  node: PetWhere
+  node_NOT: PetWhere
+}
+
+input FeedingEaterCreateFieldInput {
+  node: PetCreateInput!
+}
+
+input FeedingEaterDeleteFieldInput {
+  where: FeedingEaterConnectionWhere
+  delete: PetDeleteInput
+}
+
+input FeedingEaterDisconnectFieldInput {
+  where: FeedingEaterConnectionWhere
+  disconnect: PetDisconnectInput
+}
+
+input FeedingEaterFieldInput {
+  create: FeedingEaterCreateFieldInput
+  connect: FeedingEaterConnectFieldInput
+}
+
+input FeedingEaterNodeAggregationWhereInput {
+  AND: [FeedingEaterNodeAggregationWhereInput!]
+  OR: [FeedingEaterNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  createAt_EQUAL: DateTime
+  createAt_MIN_EQUAL: DateTime
+  createAt_MAX_EQUAL: DateTime
+  createAt_GT: DateTime
+  createAt_MIN_GT: DateTime
+  createAt_MAX_GT: DateTime
+  createAt_GTE: DateTime
+  createAt_MIN_GTE: DateTime
+  createAt_MAX_GTE: DateTime
+  createAt_LT: DateTime
+  createAt_MIN_LT: DateTime
+  createAt_MAX_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_MIN_LTE: DateTime
+  createAt_MAX_LTE: DateTime
+  updateAt_EQUAL: DateTime
+  updateAt_MIN_EQUAL: DateTime
+  updateAt_MAX_EQUAL: DateTime
+  updateAt_GT: DateTime
+  updateAt_MIN_GT: DateTime
+  updateAt_MAX_GT: DateTime
+  updateAt_GTE: DateTime
+  updateAt_MIN_GTE: DateTime
+  updateAt_MAX_GTE: DateTime
+  updateAt_LT: DateTime
+  updateAt_MIN_LT: DateTime
+  updateAt_MAX_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_MIN_LTE: DateTime
+  updateAt_MAX_LTE: DateTime
+}
+
+input FeedingEaterUpdateConnectionInput {
+  node: PetUpdateInput
+}
+
+input FeedingEaterUpdateFieldInput {
+  where: FeedingEaterConnectionWhere
+  update: FeedingEaterUpdateConnectionInput
+  connect: FeedingEaterConnectFieldInput
+  disconnect: FeedingEaterDisconnectFieldInput
+  create: FeedingEaterCreateFieldInput
+  delete: FeedingEaterDeleteFieldInput
+}
+
+input FeedingGiverAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [FeedingGiverAggregateInput!]
+  OR: [FeedingGiverAggregateInput!]
+  node: FeedingGiverNodeAggregationWhereInput
+}
+
+input FeedingGiverConnectFieldInput {
+  where: UserConnectWhere
+  connect: UserConnectInput
+}
+
+input FeedingGiverConnectionSort {
+  node: UserSort
+}
+
+input FeedingGiverConnectionWhere {
+  AND: [FeedingGiverConnectionWhere!]
+  OR: [FeedingGiverConnectionWhere!]
+  node: UserWhere
+  node_NOT: UserWhere
+}
+
+input FeedingGiverCreateFieldInput {
+  node: UserCreateInput!
+}
+
+input FeedingGiverDeleteFieldInput {
+  where: FeedingGiverConnectionWhere
+  delete: UserDeleteInput
+}
+
+input FeedingGiverDisconnectFieldInput {
+  where: FeedingGiverConnectionWhere
+  disconnect: UserDisconnectInput
+}
+
+input FeedingGiverFieldInput {
+  create: FeedingGiverCreateFieldInput
+  connect: FeedingGiverConnectFieldInput
+}
+
+input FeedingGiverNodeAggregationWhereInput {
+  AND: [FeedingGiverNodeAggregationWhereInput!]
+  OR: [FeedingGiverNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  name_EQUAL: String
+  name_AVERAGE_EQUAL: Float
+  name_LONGEST_EQUAL: Int
+  name_SHORTEST_EQUAL: Int
+  name_GT: Int
+  name_AVERAGE_GT: Float
+  name_LONGEST_GT: Int
+  name_SHORTEST_GT: Int
+  name_GTE: Int
+  name_AVERAGE_GTE: Float
+  name_LONGEST_GTE: Int
+  name_SHORTEST_GTE: Int
+  name_LT: Int
+  name_AVERAGE_LT: Float
+  name_LONGEST_LT: Int
+  name_SHORTEST_LT: Int
+  name_LTE: Int
+  name_AVERAGE_LTE: Float
+  name_LONGEST_LTE: Int
+  name_SHORTEST_LTE: Int
+  createAt_EQUAL: DateTime
+  createAt_MIN_EQUAL: DateTime
+  createAt_MAX_EQUAL: DateTime
+  createAt_GT: DateTime
+  createAt_MIN_GT: DateTime
+  createAt_MAX_GT: DateTime
+  createAt_GTE: DateTime
+  createAt_MIN_GTE: DateTime
+  createAt_MAX_GTE: DateTime
+  createAt_LT: DateTime
+  createAt_MIN_LT: DateTime
+  createAt_MAX_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_MIN_LTE: DateTime
+  createAt_MAX_LTE: DateTime
+  updateAt_EQUAL: DateTime
+  updateAt_MIN_EQUAL: DateTime
+  updateAt_MAX_EQUAL: DateTime
+  updateAt_GT: DateTime
+  updateAt_MIN_GT: DateTime
+  updateAt_MAX_GT: DateTime
+  updateAt_GTE: DateTime
+  updateAt_MIN_GTE: DateTime
+  updateAt_MAX_GTE: DateTime
+  updateAt_LT: DateTime
+  updateAt_MIN_LT: DateTime
+  updateAt_MAX_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_MIN_LTE: DateTime
+  updateAt_MAX_LTE: DateTime
+}
+
+input FeedingGiverUpdateConnectionInput {
+  node: UserUpdateInput
+}
+
+input FeedingGiverUpdateFieldInput {
+  where: FeedingGiverConnectionWhere
+  update: FeedingGiverUpdateConnectionInput
+  connect: FeedingGiverConnectFieldInput
+  disconnect: FeedingGiverDisconnectFieldInput
+  create: FeedingGiverCreateFieldInput
+  delete: FeedingGiverDeleteFieldInput
+}
+
+input FeedingOptions {
+  """
+  Specify one or more FeedingSort objects to sort Feedings by. The sorts will be applied in the order in which they are arranged in the array.
+  """
+  sort: [FeedingSort]
+  limit: Int
+  offset: Int
+}
+
+input FeedingRelationInput {
+  giver: FeedingGiverCreateFieldInput
+  eater: FeedingEaterCreateFieldInput
+}
+
+"""
+Fields to sort Feedings by. The order in which sorts are applied is not guaranteed when specifying many fields in one FeedingSort object.
+"""
+input FeedingSort {
+  id: SortDirection
+  am_pm: SortDirection
+  createAt: SortDirection
+  updateAt: SortDirection
+}
+
+input FeedingUpdateInput {
+  am_pm: String
+  giver: FeedingGiverUpdateFieldInput
+  eater: FeedingEaterUpdateFieldInput
+}
+
+input FeedingWhere {
+  OR: [FeedingWhere!]
+  AND: [FeedingWhere!]
+  id: ID
+  id_NOT: ID
+  id_IN: [ID]
+  id_NOT_IN: [ID]
+  id_CONTAINS: ID
+  id_NOT_CONTAINS: ID
+  id_STARTS_WITH: ID
+  id_NOT_STARTS_WITH: ID
+  id_ENDS_WITH: ID
+  id_NOT_ENDS_WITH: ID
+  am_pm: String
+  am_pm_NOT: String
+  am_pm_IN: [String]
+  am_pm_NOT_IN: [String]
+  am_pm_CONTAINS: String
+  am_pm_NOT_CONTAINS: String
+  am_pm_STARTS_WITH: String
+  am_pm_NOT_STARTS_WITH: String
+  am_pm_ENDS_WITH: String
+  am_pm_NOT_ENDS_WITH: String
+  createAt: DateTime
+  createAt_NOT: DateTime
+  createAt_IN: [DateTime]
+  createAt_NOT_IN: [DateTime]
+  createAt_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_GT: DateTime
+  createAt_GTE: DateTime
+  updateAt: DateTime
+  updateAt_NOT: DateTime
+  updateAt_IN: [DateTime]
+  updateAt_NOT_IN: [DateTime]
+  updateAt_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_GT: DateTime
+  updateAt_GTE: DateTime
+  giver: UserWhere
+  giver_NOT: UserWhere
+  giverAggregate: FeedingGiverAggregateInput
+  eater: PetWhere
+  eater_NOT: PetWhere
+  eaterAggregate: FeedingEaterAggregateInput
+  giverConnection: FeedingGiverConnectionWhere
+  giverConnection_NOT: FeedingGiverConnectionWhere
+  eaterConnection: FeedingEaterConnectionWhere
+  eaterConnection_NOT: FeedingEaterConnectionWhere
+}
+
+input PetConnectInput {
+  eating: [PetEatingConnectFieldInput!]
+}
+
+input PetConnectWhere {
+  node: PetWhere!
+}
+
+input PetCreateInput {
+  name: String!
+  eating: PetEatingFieldInput
+}
+
+input PetDeleteInput {
+  eating: [PetEatingDeleteFieldInput!]
+}
+
+input PetDisconnectInput {
+  eating: [PetEatingDisconnectFieldInput!]
+}
+
+input PetEatingAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [PetEatingAggregateInput!]
+  OR: [PetEatingAggregateInput!]
+  node: PetEatingNodeAggregationWhereInput
+}
+
+input PetEatingConnectFieldInput {
+  where: FeedingConnectWhere
+  connect: [FeedingConnectInput!]
+}
+
+input PetEatingConnectionSort {
+  node: FeedingSort
+}
+
+input PetEatingConnectionWhere {
+  AND: [PetEatingConnectionWhere!]
+  OR: [PetEatingConnectionWhere!]
+  node: FeedingWhere
+  node_NOT: FeedingWhere
+}
+
+input PetEatingCreateFieldInput {
+  node: FeedingCreateInput!
+}
+
+input PetEatingDeleteFieldInput {
+  where: PetEatingConnectionWhere
+  delete: FeedingDeleteInput
+}
+
+input PetEatingDisconnectFieldInput {
+  where: PetEatingConnectionWhere
+  disconnect: FeedingDisconnectInput
+}
+
+input PetEatingFieldInput {
+  create: [PetEatingCreateFieldInput!]
+  connect: [PetEatingConnectFieldInput!]
+}
+
+input PetEatingNodeAggregationWhereInput {
+  AND: [PetEatingNodeAggregationWhereInput!]
+  OR: [PetEatingNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  am_pm_EQUAL: String
+  am_pm_AVERAGE_EQUAL: Float
+  am_pm_LONGEST_EQUAL: Int
+  am_pm_SHORTEST_EQUAL: Int
+  am_pm_GT: Int
+  am_pm_AVERAGE_GT: Float
+  am_pm_LONGEST_GT: Int
+  am_pm_SHORTEST_GT: Int
+  am_pm_GTE: Int
+  am_pm_AVERAGE_GTE: Float
+  am_pm_LONGEST_GTE: Int
+  am_pm_SHORTEST_GTE: Int
+  am_pm_LT: Int
+  am_pm_AVERAGE_LT: Float
+  am_pm_LONGEST_LT: Int
+  am_pm_SHORTEST_LT: Int
+  am_pm_LTE: Int
+  am_pm_AVERAGE_LTE: Float
+  am_pm_LONGEST_LTE: Int
+  am_pm_SHORTEST_LTE: Int
+  createAt_EQUAL: DateTime
+  createAt_MIN_EQUAL: DateTime
+  createAt_MAX_EQUAL: DateTime
+  createAt_GT: DateTime
+  createAt_MIN_GT: DateTime
+  createAt_MAX_GT: DateTime
+  createAt_GTE: DateTime
+  createAt_MIN_GTE: DateTime
+  createAt_MAX_GTE: DateTime
+  createAt_LT: DateTime
+  createAt_MIN_LT: DateTime
+  createAt_MAX_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_MIN_LTE: DateTime
+  createAt_MAX_LTE: DateTime
+  updateAt_EQUAL: DateTime
+  updateAt_MIN_EQUAL: DateTime
+  updateAt_MAX_EQUAL: DateTime
+  updateAt_GT: DateTime
+  updateAt_MIN_GT: DateTime
+  updateAt_MAX_GT: DateTime
+  updateAt_GTE: DateTime
+  updateAt_MIN_GTE: DateTime
+  updateAt_MAX_GTE: DateTime
+  updateAt_LT: DateTime
+  updateAt_MIN_LT: DateTime
+  updateAt_MAX_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_MIN_LTE: DateTime
+  updateAt_MAX_LTE: DateTime
+}
+
+input PetEatingUpdateConnectionInput {
+  node: FeedingUpdateInput
+}
+
+input PetEatingUpdateFieldInput {
+  where: PetEatingConnectionWhere
+  update: PetEatingUpdateConnectionInput
+  connect: [PetEatingConnectFieldInput!]
+  disconnect: [PetEatingDisconnectFieldInput!]
+  create: [PetEatingCreateFieldInput!]
+  delete: [PetEatingDeleteFieldInput!]
+}
+
+input PetOptions {
+  """
+  Specify one or more PetSort objects to sort Pets by. The sorts will be applied in the order in which they are arranged in the array.
+  """
+  sort: [PetSort]
+  limit: Int
+  offset: Int
+}
+
+input PetRelationInput {
+  eating: [PetEatingCreateFieldInput!]
+}
+
+"""
+Fields to sort Pets by. The order in which sorts are applied is not guaranteed when specifying many fields in one PetSort object.
+"""
+input PetSort {
+  id: SortDirection
+  name: SortDirection
+  createAt: SortDirection
+  updateAt: SortDirection
+}
+
+input PetUpdateInput {
+  name: String
+  eating: [PetEatingUpdateFieldInput!]
+}
+
+input PetWhere {
+  OR: [PetWhere!]
+  AND: [PetWhere!]
+  id: ID
+  id_NOT: ID
+  id_IN: [ID]
+  id_NOT_IN: [ID]
+  id_CONTAINS: ID
+  id_NOT_CONTAINS: ID
+  id_STARTS_WITH: ID
+  id_NOT_STARTS_WITH: ID
+  id_ENDS_WITH: ID
+  id_NOT_ENDS_WITH: ID
+  name: String
+  name_NOT: String
+  name_IN: [String]
+  name_NOT_IN: [String]
+  name_CONTAINS: String
+  name_NOT_CONTAINS: String
+  name_STARTS_WITH: String
+  name_NOT_STARTS_WITH: String
+  name_ENDS_WITH: String
+  name_NOT_ENDS_WITH: String
+  createAt: DateTime
+  createAt_NOT: DateTime
+  createAt_IN: [DateTime]
+  createAt_NOT_IN: [DateTime]
+  createAt_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_GT: DateTime
+  createAt_GTE: DateTime
+  updateAt: DateTime
+  updateAt_NOT: DateTime
+  updateAt_IN: [DateTime]
+  updateAt_NOT_IN: [DateTime]
+  updateAt_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_GT: DateTime
+  updateAt_GTE: DateTime
+  eating: FeedingWhere
+  eating_NOT: FeedingWhere
+  eatingAggregate: PetEatingAggregateInput
+  eatingConnection: PetEatingConnectionWhere
+  eatingConnection_NOT: PetEatingConnectionWhere
+}
+
+input UserConnectInput {
+  feeding: [UserFeedingConnectFieldInput!]
+}
+
+input UserConnectWhere {
+  node: UserWhere!
+}
+
+input UserCreateInput {
+  name: String!
+  feeding: UserFeedingFieldInput
+}
+
+input UserDeleteInput {
+  feeding: [UserFeedingDeleteFieldInput!]
+}
+
+input UserDisconnectInput {
+  feeding: [UserFeedingDisconnectFieldInput!]
+}
+
+input UserFeedingAggregateInput {
+  count: Int
+  count_LT: Int
+  count_LTE: Int
+  count_GT: Int
+  count_GTE: Int
+  AND: [UserFeedingAggregateInput!]
+  OR: [UserFeedingAggregateInput!]
+  node: UserFeedingNodeAggregationWhereInput
+}
+
+input UserFeedingConnectFieldInput {
+  where: FeedingConnectWhere
+  connect: [FeedingConnectInput!]
+}
+
+input UserFeedingConnectionSort {
+  node: FeedingSort
+}
+
+input UserFeedingConnectionWhere {
+  AND: [UserFeedingConnectionWhere!]
+  OR: [UserFeedingConnectionWhere!]
+  node: FeedingWhere
+  node_NOT: FeedingWhere
+}
+
+input UserFeedingCreateFieldInput {
+  node: FeedingCreateInput!
+}
+
+input UserFeedingDeleteFieldInput {
+  where: UserFeedingConnectionWhere
+  delete: FeedingDeleteInput
+}
+
+input UserFeedingDisconnectFieldInput {
+  where: UserFeedingConnectionWhere
+  disconnect: FeedingDisconnectInput
+}
+
+input UserFeedingFieldInput {
+  create: [UserFeedingCreateFieldInput!]
+  connect: [UserFeedingConnectFieldInput!]
+}
+
+input UserFeedingNodeAggregationWhereInput {
+  AND: [UserFeedingNodeAggregationWhereInput!]
+  OR: [UserFeedingNodeAggregationWhereInput!]
+  id_EQUAL: ID
+  am_pm_EQUAL: String
+  am_pm_AVERAGE_EQUAL: Float
+  am_pm_LONGEST_EQUAL: Int
+  am_pm_SHORTEST_EQUAL: Int
+  am_pm_GT: Int
+  am_pm_AVERAGE_GT: Float
+  am_pm_LONGEST_GT: Int
+  am_pm_SHORTEST_GT: Int
+  am_pm_GTE: Int
+  am_pm_AVERAGE_GTE: Float
+  am_pm_LONGEST_GTE: Int
+  am_pm_SHORTEST_GTE: Int
+  am_pm_LT: Int
+  am_pm_AVERAGE_LT: Float
+  am_pm_LONGEST_LT: Int
+  am_pm_SHORTEST_LT: Int
+  am_pm_LTE: Int
+  am_pm_AVERAGE_LTE: Float
+  am_pm_LONGEST_LTE: Int
+  am_pm_SHORTEST_LTE: Int
+  createAt_EQUAL: DateTime
+  createAt_MIN_EQUAL: DateTime
+  createAt_MAX_EQUAL: DateTime
+  createAt_GT: DateTime
+  createAt_MIN_GT: DateTime
+  createAt_MAX_GT: DateTime
+  createAt_GTE: DateTime
+  createAt_MIN_GTE: DateTime
+  createAt_MAX_GTE: DateTime
+  createAt_LT: DateTime
+  createAt_MIN_LT: DateTime
+  createAt_MAX_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_MIN_LTE: DateTime
+  createAt_MAX_LTE: DateTime
+  updateAt_EQUAL: DateTime
+  updateAt_MIN_EQUAL: DateTime
+  updateAt_MAX_EQUAL: DateTime
+  updateAt_GT: DateTime
+  updateAt_MIN_GT: DateTime
+  updateAt_MAX_GT: DateTime
+  updateAt_GTE: DateTime
+  updateAt_MIN_GTE: DateTime
+  updateAt_MAX_GTE: DateTime
+  updateAt_LT: DateTime
+  updateAt_MIN_LT: DateTime
+  updateAt_MAX_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_MIN_LTE: DateTime
+  updateAt_MAX_LTE: DateTime
+}
+
+input UserFeedingUpdateConnectionInput {
+  node: FeedingUpdateInput
+}
+
+input UserFeedingUpdateFieldInput {
+  where: UserFeedingConnectionWhere
+  update: UserFeedingUpdateConnectionInput
+  connect: [UserFeedingConnectFieldInput!]
+  disconnect: [UserFeedingDisconnectFieldInput!]
+  create: [UserFeedingCreateFieldInput!]
+  delete: [UserFeedingDeleteFieldInput!]
+}
+
+input UserOptions {
+  """
+  Specify one or more UserSort objects to sort Users by. The sorts will be applied in the order in which they are arranged in the array.
+  """
+  sort: [UserSort]
+  limit: Int
+  offset: Int
+}
+
+input UserRelationInput {
+  feeding: [UserFeedingCreateFieldInput!]
+}
+
+"""
+Fields to sort Users by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSort object.
+"""
+input UserSort {
+  id: SortDirection
+  name: SortDirection
+  createAt: SortDirection
+  updateAt: SortDirection
+}
+
+input UserUpdateInput {
+  name: String
+  feeding: [UserFeedingUpdateFieldInput!]
+}
+
+input UserWhere {
+  OR: [UserWhere!]
+  AND: [UserWhere!]
+  id: ID
+  id_NOT: ID
+  id_IN: [ID]
+  id_NOT_IN: [ID]
+  id_CONTAINS: ID
+  id_NOT_CONTAINS: ID
+  id_STARTS_WITH: ID
+  id_NOT_STARTS_WITH: ID
+  id_ENDS_WITH: ID
+  id_NOT_ENDS_WITH: ID
+  name: String
+  name_NOT: String
+  name_IN: [String]
+  name_NOT_IN: [String]
+  name_CONTAINS: String
+  name_NOT_CONTAINS: String
+  name_STARTS_WITH: String
+  name_NOT_STARTS_WITH: String
+  name_ENDS_WITH: String
+  name_NOT_ENDS_WITH: String
+  createAt: DateTime
+  createAt_NOT: DateTime
+  createAt_IN: [DateTime]
+  createAt_NOT_IN: [DateTime]
+  createAt_LT: DateTime
+  createAt_LTE: DateTime
+  createAt_GT: DateTime
+  createAt_GTE: DateTime
+  updateAt: DateTime
+  updateAt_NOT: DateTime
+  updateAt_IN: [DateTime]
+  updateAt_NOT_IN: [DateTime]
+  updateAt_LT: DateTime
+  updateAt_LTE: DateTime
+  updateAt_GT: DateTime
+  updateAt_GTE: DateTime
+  feeding: FeedingWhere
+  feeding_NOT: FeedingWhere
+  feedingAggregate: UserFeedingAggregateInput
+  feedingConnection: UserFeedingConnectionWhere
+  feedingConnection_NOT: UserFeedingConnectionWhere
+}

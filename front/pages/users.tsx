@@ -15,6 +15,8 @@ import {
 	useMutation,
 } from "@apollo/client";
 
+import { UsersQuery } from '../lib/generated/client';
+
 const GET_USERS = gql`
 	query Users {
 		users {
@@ -62,7 +64,7 @@ const UPDATE_USER = gql`
 
 
 const Users: NextPage = () => {
-	const { loading, error, data, refetch, networkStatus } = useQuery(GET_USERS,{
+	const { loading, error, data, refetch, networkStatus } = useQuery<UsersQuery>(GET_USERS,{
 		pollInterval: 500
 	});
 	const [createUser, create_result ] = useMutation(CREATE_USER);
@@ -73,6 +75,9 @@ const Users: NextPage = () => {
 	const [rename_user_id, setRenameUserId] = useState<String | null>(null);
 	const [rename_name, setRenameName] = useState("");
 
+	if (loading) return <div>ローディング中です</div>;
+	if (error) return <div>`Error! ${error.message}`</div>;
+	if (data == undefined) return <div>データを取得出来ませんでした。</div>
 
 	return (<>
 		<Head>
@@ -84,8 +89,6 @@ const Users: NextPage = () => {
       />
     </Head>
 		<MiniDrawer>
-			{
-				loading? <>ローディング中です</>:<>
 			ユーザー追加<br/>
 			<TextField id="outlined-basic" label="名前" variant="outlined" onChange={(e)=>{setNewUserName(e.target.value)}} />
 			<Button variant="outlined" onClick={async ()=>{
@@ -101,11 +104,11 @@ const Users: NextPage = () => {
 
 			<List sx={{ width: "100%", maxWidth: 360, bgcolor: 'background.paper'}}>
 				{
-					data.users.map((user: any)=>{
+					data.users.map((user)=>{
 						return (
-							<ListItem alignItems="flex-start" key={user["name"]}>
+							<ListItem alignItems="flex-start" key={user.name}>
 							<ListItemText
-								primary={user["name"]}
+								primary={user.name}
 								secondary={
 									<Fragment>
 										<Typography
@@ -114,13 +117,13 @@ const Users: NextPage = () => {
 											variant="body2"
 											color="text.primary"
 										>
-											{`えさやり回数 ${user["feedingAggregate"]["count"]}回`}
+											えさやり回数{user.feedingAggregate !=null? user.feedingAggregate.count: 0}回
 										</Typography>
 										<Button color="primary" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											setRenameUserId(user["id"])
+											setRenameUserId(user.id)
 										}}>名前変更</Button>
 										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											const res = await deleteUser({variables:{"where": {"id": user["id"]}}})
+											const res = await deleteUser({variables:{"where": {"id": user.id}}})
 											console.log(res);
 											alert("ユーザーを削除しました")
 										}}>削除</Button>
@@ -132,7 +135,6 @@ const Users: NextPage = () => {
 					})
 				}
 			</List>
-			</>}
 			<Dialog open={rename_user_id != null} onClose={()=>{setRenameUserId(null)}}>
         <DialogTitle>名前変更</DialogTitle>
         <DialogContent>
