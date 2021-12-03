@@ -6,10 +6,41 @@ import { styled } from '@mui/system';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 
-import { today_feeding } from '../components/graphql/today_feeding'
 import { create_feeding } from '../components/graphql/create_feeding'
-import { get_users } from '../components/graphql/get_users'
-import { get_pets } from '../components/graphql/pets/get_pets'
+
+import {
+	useQuery,
+	NetworkStatus,
+	gql,
+} from "@apollo/client";
+
+const GET_USER_PETS_FEEDING = gql`
+  query Query($where: FeedingWhere) {
+  pets {
+    id
+    name
+  }
+  users {
+    id
+    name
+  }
+  feedings(where: $where) {
+    id
+    am_pm
+    createAt
+    updateAt
+    giver {
+      id
+      name
+    }
+    eater {
+      id
+      name
+    }
+  }
+}
+`
+
 
 type ClockProps = {
   date: Date|null;
@@ -54,8 +85,33 @@ const GiverButton = styled(Button)<ButtonProps>(({ theme }) => ({
   // },
 }));
 
+/**
+ * 1桁の数値を0でパディングする
+ * @param num 2桁以下の数値
+ */
+const zero_padding = (num: number) => {
+	if (num < 10) {
+		return "0" + num;
+	}
+	return "" + num;
+}
+
 const Home: NextPage = () => {
-  const [now_loading, setNowLoading] = useState(true);
+  const now = new Date();
+  const end_datetime = `${now.getFullYear()}-${zero_padding(now.getMonth()+1)}-${zero_padding(now.getDate())}T15:00:00.000Z`;
+	const yesterday = now;
+	yesterday.setTime(now.getTime() -86400000);
+	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
+
+  const { loading, error, data, refetch, networkStatus } = useQuery(GET_USER_PETS_FEEDING,{
+    variables: {
+      "where": {
+        "createAt_GTE": start_datetime,
+        "createAt_LT": end_datetime,
+      }
+    },
+		pollInterval: 500
+	});
 
   const [date, setDate] = useState<Date | null>(null);
   useEffect(() => {
@@ -66,25 +122,6 @@ const Home: NextPage = () => {
   }, [])
 
   const [feeding_user_id, setFeedingUserId] = useState<String | null>(null);
-  const [users, setUsers] = useState([]);
-  const [pets, setPets] = useState([])
-  const [today_feedings, setTodayFeedings] = useState([])
-
-  const fetch_status = async () => {
-    const response = await today_feeding(new Date());
-    console.log(response["data"]["feedings"]);
-    setTodayFeedings(response["data"]["feedings"])
-    const res = await get_users();
-    setUsers(res["data"]["users"]);
-    const res_pets = await get_pets();
-    setPets(res_pets["data"]["pets"]);
-  }
-
-  useEffect(() => {
-    fetch_status();
-    setNowLoading(false);
-    setInterval(fetch_status, 500)
-  }, [])
 
   return (<>
     <Head>
@@ -97,7 +134,7 @@ const Home: NextPage = () => {
     </Head>
     <MiniDrawer>
       {
-        now_loading?
+        loading?
         <div>ローディング中です</div>
         :<>
           <Clock date={date} />
@@ -106,7 +143,7 @@ const Home: NextPage = () => {
               えさをあげる人
             </div>
             <div>
-              {users.map((user)=>{
+              {data.users.map((user: any)=>{
                 return <GiverButton key={user["id"]} variant="contained" color={feeding_user_id == user["id"] ? "warning": "primary"} onClick={()=>{setFeedingUserId(user["id"])}} >{user["name"]}</GiverButton>
               })}    
             </div>
@@ -117,13 +154,13 @@ const Home: NextPage = () => {
             </div>
             <div>
               {
-                pets.map((pet)=>{
+                data.pets.map((pet: any)=>{
                   return(<>
                     <div>
                       {pet["name"]}
                     </div>
                     <FeedingButton key={pet["id"] + "_am"} variant="contained" size="large" color="primary" disabled={(()=>{
-                        for (const feeding of today_feedings) {
+                        for (const feeding of data.feedings) {
                           if (feeding["eater"] != null) {
                             if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "am") { return true }
                           }
@@ -145,7 +182,7 @@ const Home: NextPage = () => {
                         }
                       }}>午前</FeedingButton>
                     <FeedingButton key={pet["id"] + "_pm"} variant="contained" size="large" color="error" disabled={(()=>{
-                        for (const feeding of today_feedings) {
+                        for (const feeding of data.feedings) {
                           if (feeding["eater"] != null) {
                             if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "pm") { return true }
                           }

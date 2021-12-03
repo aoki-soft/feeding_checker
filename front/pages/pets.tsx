@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import Head from 'next/head'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -8,30 +8,35 @@ import Typography from '@mui/material/Typography';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import { get_pets } from '../components/graphql/pets/get_pets';
 import { create_pet } from '../components/graphql/pets/create_pet';
 import { update_pet } from '../components/graphql/pets/update_pet';
 import { delete_pet } from '../components/graphql/pets/delete_pet';
+import {
+	useQuery,
+	NetworkStatus,
+	gql,
+} from "@apollo/client";
+
+const GET_PETS = gql`
+	query Query {
+		pets {
+			id
+			name
+			eatingAggregate {
+				count
+			}
+		}
+	}
+`
 
 const Pets: NextPage = () => {
-	const [now_loading, setNowLoading] = useState(true);
-	const [pets, setPets] = useState([]);
+	const { loading, error, data, refetch, networkStatus } = useQuery(GET_PETS,{
+		pollInterval: 500
+	});
+
 	const [new_pet_name, setNewPetName] = useState("");
 	const [rename_pet_id, setRenamePetId] = useState<String | null>(null);
 	const [rename_name, setRenameName] = useState("");
-
-  useEffect(() => {
-		(async ()=>{
-			const res = await get_pets();
-			console.log(res["data"]["pets"]);
-			setPets(res["data"]["pets"]);
-			setNowLoading(false);
-			setInterval(async ()=>{
-				const res = await get_pets();
-				setPets(res["data"]["pets"]);
-			}, 500)
-		})()
-	}, [])
 
 	return (<>
 		<Head>
@@ -44,7 +49,7 @@ const Pets: NextPage = () => {
     </Head>
 		<MiniDrawer>
 			{
-				now_loading? <>ローディング中です</>:<>
+				loading? <>ローディング中です</>:<>
 			ペット追加<br/>
 			<TextField id="outlined-basic" label="名前" variant="outlined" onChange={(e)=>{setNewPetName(e.target.value)}} />
 			<Button variant="outlined" onClick={async ()=>{
@@ -60,7 +65,7 @@ const Pets: NextPage = () => {
 
 			<List sx={{ width: "100%", maxWidth: 360, bgcolor: 'background.paper'}}>
 				{
-					pets.map((pet)=>{
+					data.pets.map((pet: any)=>{
 						return (
 							<ListItem alignItems="flex-start" key={pet["name"]}>
 							<ListItemText

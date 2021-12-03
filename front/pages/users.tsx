@@ -8,30 +8,36 @@ import Typography from '@mui/material/Typography';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import { get_users } from '../components/graphql/get_users'
 import { create_user } from '../components/graphql/create_user'
 import { delete_user } from '../components/graphql/delete_user'
 import { update_user } from '../components/graphql/update_user'
+import {
+	useQuery,
+	NetworkStatus,
+	gql,
+} from "@apollo/client";
+
+const GET_USERS = gql`
+	query Users {
+		users {
+			id
+			name
+			feedingAggregate {
+				count
+			}
+		}
+	}
+`
 
 const Users: NextPage = () => {
-	const [now_loading, setNowLoading] = useState(true);
-	const [users, setUsers] = useState([]);
+	const { loading, error, data, refetch, networkStatus } = useQuery(GET_USERS,{
+		pollInterval: 500
+	});
+
 	const [new_user_name, setNewUserName] = useState("");
 	const [rename_user_id, setRenameUserId] = useState<String | null>(null);
 	const [rename_name, setRenameName] = useState("");
 
-  useEffect(() => {
-		(async ()=>{
-			const res = await get_users();
-			console.log(res["data"]["users"]);
-			setUsers(res["data"]["users"]);
-			setNowLoading(false);
-			setInterval(async ()=>{
-				const res = await get_users();
-				setUsers(res["data"]["users"]);
-			}, 500)
-		})()
-	}, [])
 
 	return (<>
 		<Head>
@@ -44,7 +50,7 @@ const Users: NextPage = () => {
     </Head>
 		<MiniDrawer>
 			{
-				now_loading? <>ローディング中です</>:<>
+				loading? <>ローディング中です</>:<>
 			ユーザー追加<br/>
 			<TextField id="outlined-basic" label="名前" variant="outlined" onChange={(e)=>{setNewUserName(e.target.value)}} />
 			<Button variant="outlined" onClick={async ()=>{
@@ -60,7 +66,7 @@ const Users: NextPage = () => {
 
 			<List sx={{ width: "100%", maxWidth: 360, bgcolor: 'background.paper'}}>
 				{
-					users.map((user)=>{
+					data.users.map((user: any)=>{
 						return (
 							<ListItem alignItems="flex-start" key={user["name"]}>
 							<ListItemText
