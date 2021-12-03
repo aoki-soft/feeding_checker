@@ -8,13 +8,12 @@ import Typography from '@mui/material/Typography';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import { create_pet } from '../components/graphql/pets/create_pet';
-import { update_pet } from '../components/graphql/pets/update_pet';
-import { delete_pet } from '../components/graphql/pets/delete_pet';
+
 import {
 	useQuery,
 	NetworkStatus,
 	gql,
+	useMutation,
 } from "@apollo/client";
 
 const GET_PETS = gql`
@@ -29,10 +28,49 @@ const GET_PETS = gql`
 	}
 `
 
+const CREATE_PET = gql`
+	mutation Mutation($input: [PetCreateInput!]!) {
+		createPets(input: $input) {
+			pets {
+				id
+				name
+				createAt
+			}
+			info {
+				nodesCreated
+			}
+		}
+	}
+`
+
+const DELETE_PET = gql`
+	mutation Mutation($where: PetWhere) {
+		deletePets(where: $where) {
+			nodesDeleted
+			relationshipsDeleted
+		}
+	}
+`
+
+const UPDATE_PET = gql`
+	mutation Mutation($where: PetWhere, $update: PetUpdateInput) {
+		updatePets(where: $where, update: $update) {
+			pets {
+				id
+				name
+				updateAt
+			}
+		}
+	}
+`
+
 const Pets: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = useQuery(GET_PETS,{
 		pollInterval: 500
 	});
+	const [createPet, create_result ] = useMutation(CREATE_PET);
+	const [deletePet, delete_reult ] = useMutation(DELETE_PET);
+	const [updatePet, update_result ] = useMutation(UPDATE_PET);
 
 	const [new_pet_name, setNewPetName] = useState("");
 	const [rename_pet_id, setRenamePetId] = useState<String | null>(null);
@@ -57,7 +95,7 @@ const Pets: NextPage = () => {
 				if (new_pet_name == "") {
 					alert("名前が未入力です。")
 				} else {
-					const res = await create_pet(new_pet_name);
+					const res = await createPet({ variables: { "input": [{"name": new_pet_name }]}})
 					console.log(res);
 					alert("新しいペットを追加しました。")
 				}
@@ -84,7 +122,7 @@ const Pets: NextPage = () => {
 											setRenamePetId(pet["id"])
 										}}>名前変更</Button>
 										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											const res = await delete_pet(pet["id"]);
+											const res = await deletePet({variables:{"where": {"id": pet["id"]}}});
 											console.log(res);
 											alert("ペットを削除しました")
 										}}>削除</Button>
@@ -118,7 +156,14 @@ const Pets: NextPage = () => {
           <Button onClick={()=>{setRenamePetId(null)}}>Cancel</Button>
           <Button onClick={async ()=>{
 						if (rename_pet_id != null) {
-							const res = await update_pet(rename_pet_id, rename_name);
+							const res = await updatePet({variables: {
+								"where": {
+									"id": rename_pet_id
+								},
+								"update": {
+									"name": rename_name
+								}
+							}})
 							console.log(res);
 						}
 						setRenamePetId(null)
