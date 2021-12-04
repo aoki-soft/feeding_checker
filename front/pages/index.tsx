@@ -84,9 +84,12 @@ const Home: NextPage = () => {
   const [date, setDate] = useState<Date | null>(null);
   useEffect(() => {
     setDate(new Date())
-    setInterval(async () => {
+    const timer = setInterval(async () => {
       setDate(new Date())
-    }, 1000)
+    }, 1000);
+    return () => {
+      clearInterval(timer);
+    }
   }, [])
 
   const [feeding_user_id, setFeedingUserId] = useState<string | null>(null);
@@ -123,7 +126,7 @@ const Home: NextPage = () => {
         <div>
           {
             data.pets.map((pet: any)=>{
-              return(<>
+              return(<div key={pet.id}>
                 <div>
                   {pet.name}
                 </div>
@@ -219,7 +222,7 @@ const Home: NextPage = () => {
                       alert("えさを与える人を選択してください")
                     }
                   }}>午後</FeedingButton>
-              </>)
+              </div>)
             })
           }
         </div>
