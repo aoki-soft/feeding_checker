@@ -1,4 +1,4 @@
-schema: schema.graphql
+schema: http://api:3001/api
 documents: graphql/**/*.graphql
 generates:
   lib/generated/client.ts:

@@ -54,9 +54,7 @@ const Users: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = useUsersQuery({
 		pollInterval: 500
 	})
-	// const { loading, error, data, refetch, networkStatus } = useQuery<UsersQuery>(GET_USERS,{
-	// 	pollInterval: 500
-	// });
+
 	const [createUser, create_result ] = useMutation(CREATE_USER);
 	const [deleteUser, delte_reult ] = useMutation(DELETE_USER);
 	const [updateUser, update_result ] = useMutation(UPDATE_USER);
