@@ -1,0 +1,39 @@
+query Pets {
+  pets {
+    id
+    name
+    eatingAggregate {
+      count
+    }
+  }
+}
+
+mutation CreatePets($input: [PetCreateInput!]!) {
+  createPets(input: $input) {
+    pets {
+      id
+      name
+      createAt
+    }
+    info {
+      nodesCreated
+    }
+  }
+}
+
+mutation DeletePets($where: PetWhere) {
+  deletePets(where: $where) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}
+
+mutation UpdatePets($where: PetWhere, $update: PetUpdateInput) {
+  updatePets(where: $where, update: $update) {
+    pets {
+      id
+      name
+      updateAt
+    }
+  }
+}

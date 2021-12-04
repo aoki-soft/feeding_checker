@@ -9,72 +9,24 @@ import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentT
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 
-import {
-	useQuery,
-	NetworkStatus,
-	gql,
-	useMutation,
-} from "@apollo/client";
-
-const GET_PETS = gql`
-	query Query {
-		pets {
-			id
-			name
-			eatingAggregate {
-				count
-			}
-		}
-	}
-`
-
-const CREATE_PET = gql`
-	mutation Mutation($input: [PetCreateInput!]!) {
-		createPets(input: $input) {
-			pets {
-				id
-				name
-				createAt
-			}
-			info {
-				nodesCreated
-			}
-		}
-	}
-`
-
-const DELETE_PET = gql`
-	mutation Mutation($where: PetWhere) {
-		deletePets(where: $where) {
-			nodesDeleted
-			relationshipsDeleted
-		}
-	}
-`
-
-const UPDATE_PET = gql`
-	mutation Mutation($where: PetWhere, $update: PetUpdateInput) {
-		updatePets(where: $where, update: $update) {
-			pets {
-				id
-				name
-				updateAt
-			}
-		}
-	}
-`
+import { NetworkStatus } from "@apollo/client";
+import { useCreatePetsMutation, useDeletePetsMutation, usePetsQuery, useUpdatePetsMutation } from '../lib/generated/client';
 
 const Pets: NextPage = () => {
-	const { loading, error, data, refetch, networkStatus } = useQuery(GET_PETS,{
+	const { loading, error, data, refetch, networkStatus } = usePetsQuery({
 		pollInterval: 500
 	});
-	const [createPet, create_result ] = useMutation(CREATE_PET);
-	const [deletePet, delete_reult ] = useMutation(DELETE_PET);
-	const [updatePet, update_result ] = useMutation(UPDATE_PET);
+	const [createPet, create_result ] = useCreatePetsMutation();
+	const [deletePet, delete_reult ] = useDeletePetsMutation();
+	const [updatePet, update_result ] = useUpdatePetsMutation();
 
 	const [new_pet_name, setNewPetName] = useState("");
-	const [rename_pet_id, setRenamePetId] = useState<String | null>(null);
+	const [rename_pet_id, setRenamePetId] = useState<string | null>(null);
 	const [rename_name, setRenameName] = useState("");
+
+	if (loading) return <div>ローディング中です</div>;
+	if (error) return <div>`Error! ${error.message}`</div>;
+	if (data == undefined) return <div>データを取得出来ませんでした。</div>
 
 	return (<>
 		<Head>
@@ -86,8 +38,6 @@ const Pets: NextPage = () => {
       />
     </Head>
 		<MiniDrawer>
-			{
-				loading? <>ローディング中です</>:<>
 			ペット追加<br/>
 			<TextField id="outlined-basic" label="名前" variant="outlined" onChange={(e)=>{setNewPetName(e.target.value)}} />
 			<Button variant="outlined" onClick={async ()=>{
@@ -105,9 +55,9 @@ const Pets: NextPage = () => {
 				{
 					data.pets.map((pet: any)=>{
 						return (
-							<ListItem alignItems="flex-start" key={pet["name"]}>
+							<ListItem alignItems="flex-start" key={pet.name}>
 							<ListItemText
-								primary={pet["name"]}
+								primary={pet.name}
 								secondary={
 									<Fragment>
 										<Typography
@@ -119,10 +69,10 @@ const Pets: NextPage = () => {
 											{`えさを食べた回数 ${pet["eatingAggregate"]["count"]}回`}
 										</Typography>
 										<Button color="primary" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											setRenamePetId(pet["id"])
+											setRenamePetId(pet.id)
 										}}>名前変更</Button>
 										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											const res = await deletePet({variables:{"where": {"id": pet["id"]}}});
+											const res = await deletePet({variables:{"where": {"id": pet.id}}});
 											console.log(res);
 											alert("ペットを削除しました")
 										}}>削除</Button>
@@ -134,7 +84,6 @@ const Pets: NextPage = () => {
 					})
 				}
 			</List>
-			</>}
 			<Dialog open={rename_pet_id != null} onClose={()=>{setRenamePetId(null)}}>
         <DialogTitle>名前変更</DialogTitle>
         <DialogContent>

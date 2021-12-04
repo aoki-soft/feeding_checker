@@ -1,0 +1,46 @@
+query FeedingCheck($where: FeedingWhere) {
+  pets {
+    id
+    name
+  }
+  users {
+    id
+    name
+  }
+  feedings(where: $where) {
+    id
+    am_pm
+    createAt
+    updateAt
+    giver {
+      id
+      name
+    }
+    eater {
+      id
+      name
+    }
+  }
+}
+
+mutation CreateFeedings($input: [FeedingCreateInput!]!) {
+  createFeedings(input: $input) {
+    info {
+      nodesCreated
+    }
+    feedings {
+      id
+      am_pm
+      createAt
+      updateAt
+      giver {
+        id
+        name
+      }
+      eater {
+        id
+        name
+      }
+    }
+  }
+}

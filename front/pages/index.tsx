@@ -6,41 +6,19 @@ import { styled } from '@mui/system';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 
-import { create_feeding } from '../components/graphql/create_feeding'
+import { NetworkStatus } from "@apollo/client";
+import { useCreateFeedingsMutation, useFeedingCheckQuery } from '../lib/generated/client';
 
-import {
-	useQuery,
-	NetworkStatus,
-	gql,
-} from "@apollo/client";
-
-const GET_USER_PETS_FEEDING = gql`
-  query Query($where: FeedingWhere) {
-  pets {
-    id
-    name
-  }
-  users {
-    id
-    name
-  }
-  feedings(where: $where) {
-    id
-    am_pm
-    createAt
-    updateAt
-    giver {
-      id
-      name
-    }
-    eater {
-      id
-      name
-    }
-  }
+/**
+ * 1桁の数値を0でパディングする
+ * @param num 2桁以下の数値
+ */
+const zero_padding = (num: number) => {
+	if (num < 10) {
+		return "0" + num;
+	}
+	return "" + num;
 }
-`
-
 
 type ClockProps = {
   date: Date|null;
@@ -54,8 +32,8 @@ function Clock(props: ClockProps) {
       props.date == null?
       <></>:
       <>
-        <div> {props.date.getMonth()+1}月 {props.date.getDate()}日 {WeekChars[props.date.getDay()]}</div>
-        <div> {props.date.getHours()}:{props.date.getMinutes()}</div>
+        <div> {zero_padding(props.date.getMonth()+1)}月 {zero_padding(props.date.getDate())}日 {WeekChars[props.date.getDay()]}</div>
+        <div> {zero_padding(props.date.getHours())}:{zero_padding(props.date.getMinutes())}</div>
       </>
     }
   </>)
@@ -85,17 +63,6 @@ const GiverButton = styled(Button)<ButtonProps>(({ theme }) => ({
   // },
 }));
 
-/**
- * 1桁の数値を0でパディングする
- * @param num 2桁以下の数値
- */
-const zero_padding = (num: number) => {
-	if (num < 10) {
-		return "0" + num;
-	}
-	return "" + num;
-}
-
 const Home: NextPage = () => {
   const now = new Date();
   const end_datetime = `${now.getFullYear()}-${zero_padding(now.getMonth()+1)}-${zero_padding(now.getDate())}T15:00:00.000Z`;
@@ -103,7 +70,7 @@ const Home: NextPage = () => {
 	yesterday.setTime(now.getTime() -86400000);
 	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
 
-  const { loading, error, data, refetch, networkStatus } = useQuery(GET_USER_PETS_FEEDING,{
+  const { loading, error, data, refetch, networkStatus } = useFeedingCheckQuery({
     variables: {
       "where": {
         "createAt_GTE": start_datetime,
@@ -112,6 +79,7 @@ const Home: NextPage = () => {
     },
 		pollInterval: 500
 	});
+  const [ createFeedings, create_result ] = useCreateFeedingsMutation();
 
   const [date, setDate] = useState<Date | null>(null);
   useEffect(() => {
@@ -121,7 +89,11 @@ const Home: NextPage = () => {
     }, 1000)
   }, [])
 
-  const [feeding_user_id, setFeedingUserId] = useState<String | null>(null);
+  const [feeding_user_id, setFeedingUserId] = useState<string | null>(null);
+
+  if (loading) return <div>ローディング中です</div>;
+	if (error) return <div>`Error! ${error.message}`</div>;
+	if (data == undefined) return <div>データを取得出来ませんでした。</div>
 
   return (<>
     <Head>
@@ -133,83 +105,125 @@ const Home: NextPage = () => {
       />
     </Head>
     <MiniDrawer>
-      {
-        loading?
-        <div>ローディング中です</div>
-        :<>
-          <Clock date={date} />
-          <div>
-            <div>
-              えさをあげる人
-            </div>
-            <div>
-              {data.users.map((user: any)=>{
-                return <GiverButton key={user["id"]} variant="contained" color={feeding_user_id == user["id"] ? "warning": "primary"} onClick={()=>{setFeedingUserId(user["id"])}} >{user["name"]}</GiverButton>
-              })}    
-            </div>
-          </div>
-          <div>
-            <div>
-              えさを与えたら押す
-            </div>
-            <div>
-              {
-                data.pets.map((pet: any)=>{
-                  return(<>
-                    <div>
-                      {pet["name"]}
-                    </div>
-                    <FeedingButton key={pet["id"] + "_am"} variant="contained" size="large" color="primary" disabled={(()=>{
-                        for (const feeding of data.feedings) {
-                          if (feeding["eater"] != null) {
-                            if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "am") { return true }
+      <Clock date={date} />
+      <div>
+        <div>
+          えさをあげる人
+        </div>
+        <div>
+          {data.users.map((user: any)=>{
+            return <GiverButton key={user.id} variant="contained" color={feeding_user_id == user.id ? "warning": "primary"} onClick={()=>{setFeedingUserId(user.id)}} >{user.name}</GiverButton>
+          })}    
+        </div>
+      </div>
+      <div>
+        <div>
+          えさを与えたら押す
+        </div>
+        <div>
+          {
+            data.pets.map((pet: any)=>{
+              return(<>
+                <div>
+                  {pet.name}
+                </div>
+                <FeedingButton key={pet.id + "_am"} variant="contained" size="large" color="primary" disabled={(()=>{
+                    for (const feeding of data.feedings) {
+                      if (feeding.eater != null) {
+                        if (feeding.eater.id == pet.id && feeding.am_pm == "am") { return true }
+                      }
+                    }
+                    return false
+                  })()} 
+                  sx={{
+                    backgroundColor: colors.blue[300],
+                    '&:hover': {
+                      backgroundColor: colors.blue[400],
+                    }
+                  }}
+                  onClick={async ()=>{
+                    if (feeding_user_id != null) {
+                      const res = await createFeedings({variables:{
+                        "input": [
+                          {
+                            "am_pm": "am",
+                            "giver": {
+                              "connect": {
+                                "where": {
+                                  "node": {
+                                    "id": feeding_user_id
+                                  }
+                                }
+                              }
+                            },
+                            "eater": {
+                              "connect": {
+                                "where": {
+                                  "node": {
+                                    "id": pet.id
+                                  }
+                                }
+                              }
+                            }
                           }
-                        }
-                        return false
-                      })()} 
-                      sx={{
-                        backgroundColor: colors.blue[300],
-                        '&:hover': {
-                          backgroundColor: colors.blue[400],
-                        }
-                      }}
-                      onClick={async ()=>{
-                        if (feeding_user_id != null) {
-                          const res = await create_feeding(feeding_user_id, pet["id"], "am");
-                          console.log(res);
-                        } else {
-                          alert("えさを与える人を選択してください")
-                        }
-                      }}>午前</FeedingButton>
-                    <FeedingButton key={pet["id"] + "_pm"} variant="contained" size="large" color="error" disabled={(()=>{
-                        for (const feeding of data.feedings) {
-                          if (feeding["eater"] != null) {
-                            if (feeding["eater"]["id"] == pet["id"] && feeding["am_pm"] == "pm") { return true }
+                        ]
+                      }})
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }}>午前</FeedingButton>
+                <FeedingButton key={pet.id + "_pm"} variant="contained" size="large" color="error" disabled={(()=>{
+                    for (const feeding of data.feedings) {
+                      if (feeding.eater != null) {
+                        if (feeding.eater.id == pet.id && feeding.am_pm == "pm") { return true }
+                      }
+                    }
+                    return false
+                  })()} 
+                  sx={{
+                    backgroundColor: colors.orange[600],
+                    '&:hover': {
+                      backgroundColor: colors.orange[700],
+                    }
+                  }}
+                  onClick={async ()=>{
+                    if (feeding_user_id != null) {
+                      const res = await createFeedings({variables:{
+                        "input": [
+                          {
+                            "am_pm": "pm",
+                            "giver": {
+                              "connect": {
+                                "where": {
+                                  "node": {
+                                    "id": feeding_user_id
+                                  }
+                                }
+                              }
+                            },
+                            "eater": {
+                              "connect": {
+                                "where": {
+                                  "node": {
+                                    "id": pet.id
+                                  }
+                                }
+                              }
+                            }
                           }
-                        }
-                        return false
-                      })()} 
-                      sx={{
-                        backgroundColor: colors.orange[600],
-                        '&:hover': {
-                          backgroundColor: colors.orange[700],
-                        }
-                      }}
-                      onClick={async ()=>{
-                        if (feeding_user_id != null) {
-                          const res = await create_feeding(feeding_user_id, pet["id"], "pm");
-                          console.log(res);
-                        } else {
-                          alert("えさを与える人を選択してください")
-                        }
-                      }}>午後</FeedingButton>
-                  </>)
-                })
-              }
-            </div>
-          </div>
-        </>
-      }
+                        ]
+                      }})
+                      console.log(res);
+                    } else {
+                      alert("えさを与える人を選択してください")
+                    }
+                  }}>午後</FeedingButton>
+              </>)
+            })
+          }
+        </div>
+      </div>
     </MiniDrawer>
   </>)
 }

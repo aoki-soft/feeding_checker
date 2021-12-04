@@ -1238,17 +1238,333 @@ export type UserWhere = {
   updateAt_NOT_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
 };
 
+export type FeedingCheckQueryVariables = Exact<{
+  where?: InputMaybe<FeedingWhere>;
+}>;
+
+
+export type FeedingCheckQuery = { __typename?: 'Query', pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }>, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm?: string | null | undefined, createAt?: any | null | undefined, updateAt?: any | null | undefined, giver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> };
+
+export type CreateFeedingsMutationVariables = Exact<{
+  input: Array<FeedingCreateInput> | FeedingCreateInput;
+}>;
+
+
+export type CreateFeedingsMutation = { __typename?: 'Mutation', createFeedings: { __typename?: 'CreateFeedingsMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number }, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm?: string | null | undefined, createAt?: any | null | undefined, updateAt?: any | null | undefined, giver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
+
+export type PetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PetsQuery = { __typename?: 'Query', pets: Array<{ __typename?: 'Pet', id: string, name: string, eatingAggregate?: { __typename?: 'PetFeedingEatingAggregationSelection', count: number } | null | undefined }> };
+
+export type CreatePetsMutationVariables = Exact<{
+  input: Array<PetCreateInput> | PetCreateInput;
+}>;
+
+
+export type CreatePetsMutation = { __typename?: 'Mutation', createPets: { __typename?: 'CreatePetsMutationResponse', pets: Array<{ __typename?: 'Pet', id: string, name: string, createAt?: any | null | undefined }>, info: { __typename?: 'CreateInfo', nodesCreated: number } } };
+
+export type DeletePetsMutationVariables = Exact<{
+  where?: InputMaybe<PetWhere>;
+}>;
+
+
+export type DeletePetsMutation = { __typename?: 'Mutation', deletePets: { __typename?: 'DeleteInfo', nodesDeleted: number, relationshipsDeleted: number } };
+
+export type UpdatePetsMutationVariables = Exact<{
+  where?: InputMaybe<PetWhere>;
+  update?: InputMaybe<PetUpdateInput>;
+}>;
+
+
+export type UpdatePetsMutation = { __typename?: 'Mutation', updatePets: { __typename?: 'UpdatePetsMutationResponse', pets: Array<{ __typename?: 'Pet', id: string, name: string, updateAt?: any | null | undefined }> } };
+
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, feedingAggregate?: { __typename?: 'UserFeedingFeedingAggregationSelection', count: number } | null | undefined }> };
 
-export type GetUsersPetsQueryVariables = Exact<{ [key: string]: never; }>;
+export type UsersPetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUsersPetsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, feedingAggregate?: { __typename?: 'UserFeedingFeedingAggregationSelection', count: number } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string, eatingAggregate?: { __typename?: 'PetFeedingEatingAggregationSelection', count: number } | null | undefined }> };
+export type UsersPetsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, feedingAggregate?: { __typename?: 'UserFeedingFeedingAggregationSelection', count: number } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string, eatingAggregate?: { __typename?: 'PetFeedingEatingAggregationSelection', count: number } | null | undefined }> };
+
+export type CreateUsersMutationVariables = Exact<{
+  input: Array<UserCreateInput> | UserCreateInput;
+}>;
 
 
+export type CreateUsersMutation = { __typename?: 'Mutation', createUsers: { __typename?: 'CreateUsersMutationResponse', users: Array<{ __typename?: 'User', id: string, name: string, createAt?: any | null | undefined }> } };
+
+export type DeleteUsersMutationVariables = Exact<{
+  where?: InputMaybe<UserWhere>;
+}>;
+
+
+export type DeleteUsersMutation = { __typename?: 'Mutation', deleteUsers: { __typename?: 'DeleteInfo', nodesDeleted: number, relationshipsDeleted: number } };
+
+export type UpdateUsersMutationVariables = Exact<{
+  where?: InputMaybe<UserWhere>;
+  update?: InputMaybe<UserUpdateInput>;
+}>;
+
+
+export type UpdateUsersMutation = { __typename?: 'Mutation', updateUsers: { __typename?: 'UpdateUsersMutationResponse', users: Array<{ __typename?: 'User', id: string, name: string, createAt?: any | null | undefined, updateAt?: any | null | undefined }> } };
+
+
+export const FeedingCheckDocument = gql`
+    query FeedingCheck($where: FeedingWhere) {
+  pets {
+    id
+    name
+  }
+  users {
+    id
+    name
+  }
+  feedings(where: $where) {
+    id
+    am_pm
+    createAt
+    updateAt
+    giver {
+      id
+      name
+    }
+    eater {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFeedingCheckQuery__
+ *
+ * To run a query within a React component, call `useFeedingCheckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedingCheckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeedingCheckQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useFeedingCheckQuery(baseOptions?: Apollo.QueryHookOptions<FeedingCheckQuery, FeedingCheckQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FeedingCheckQuery, FeedingCheckQueryVariables>(FeedingCheckDocument, options);
+      }
+export function useFeedingCheckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedingCheckQuery, FeedingCheckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FeedingCheckQuery, FeedingCheckQueryVariables>(FeedingCheckDocument, options);
+        }
+export type FeedingCheckQueryHookResult = ReturnType<typeof useFeedingCheckQuery>;
+export type FeedingCheckLazyQueryHookResult = ReturnType<typeof useFeedingCheckLazyQuery>;
+export type FeedingCheckQueryResult = Apollo.QueryResult<FeedingCheckQuery, FeedingCheckQueryVariables>;
+export const CreateFeedingsDocument = gql`
+    mutation CreateFeedings($input: [FeedingCreateInput!]!) {
+  createFeedings(input: $input) {
+    info {
+      nodesCreated
+    }
+    feedings {
+      id
+      am_pm
+      createAt
+      updateAt
+      giver {
+        id
+        name
+      }
+      eater {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export type CreateFeedingsMutationFn = Apollo.MutationFunction<CreateFeedingsMutation, CreateFeedingsMutationVariables>;
+
+/**
+ * __useCreateFeedingsMutation__
+ *
+ * To run a mutation, you first call `useCreateFeedingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFeedingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFeedingsMutation, { data, loading, error }] = useCreateFeedingsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFeedingsMutation(baseOptions?: Apollo.MutationHookOptions<CreateFeedingsMutation, CreateFeedingsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFeedingsMutation, CreateFeedingsMutationVariables>(CreateFeedingsDocument, options);
+      }
+export type CreateFeedingsMutationHookResult = ReturnType<typeof useCreateFeedingsMutation>;
+export type CreateFeedingsMutationResult = Apollo.MutationResult<CreateFeedingsMutation>;
+export type CreateFeedingsMutationOptions = Apollo.BaseMutationOptions<CreateFeedingsMutation, CreateFeedingsMutationVariables>;
+export const PetsDocument = gql`
+    query Pets {
+  pets {
+    id
+    name
+    eatingAggregate {
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __usePetsQuery__
+ *
+ * To run a query within a React component, call `usePetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePetsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePetsQuery(baseOptions?: Apollo.QueryHookOptions<PetsQuery, PetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PetsQuery, PetsQueryVariables>(PetsDocument, options);
+      }
+export function usePetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PetsQuery, PetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PetsQuery, PetsQueryVariables>(PetsDocument, options);
+        }
+export type PetsQueryHookResult = ReturnType<typeof usePetsQuery>;
+export type PetsLazyQueryHookResult = ReturnType<typeof usePetsLazyQuery>;
+export type PetsQueryResult = Apollo.QueryResult<PetsQuery, PetsQueryVariables>;
+export const CreatePetsDocument = gql`
+    mutation CreatePets($input: [PetCreateInput!]!) {
+  createPets(input: $input) {
+    pets {
+      id
+      name
+      createAt
+    }
+    info {
+      nodesCreated
+    }
+  }
+}
+    `;
+export type CreatePetsMutationFn = Apollo.MutationFunction<CreatePetsMutation, CreatePetsMutationVariables>;
+
+/**
+ * __useCreatePetsMutation__
+ *
+ * To run a mutation, you first call `useCreatePetsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePetsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPetsMutation, { data, loading, error }] = useCreatePetsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePetsMutation(baseOptions?: Apollo.MutationHookOptions<CreatePetsMutation, CreatePetsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePetsMutation, CreatePetsMutationVariables>(CreatePetsDocument, options);
+      }
+export type CreatePetsMutationHookResult = ReturnType<typeof useCreatePetsMutation>;
+export type CreatePetsMutationResult = Apollo.MutationResult<CreatePetsMutation>;
+export type CreatePetsMutationOptions = Apollo.BaseMutationOptions<CreatePetsMutation, CreatePetsMutationVariables>;
+export const DeletePetsDocument = gql`
+    mutation DeletePets($where: PetWhere) {
+  deletePets(where: $where) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}
+    `;
+export type DeletePetsMutationFn = Apollo.MutationFunction<DeletePetsMutation, DeletePetsMutationVariables>;
+
+/**
+ * __useDeletePetsMutation__
+ *
+ * To run a mutation, you first call `useDeletePetsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePetsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePetsMutation, { data, loading, error }] = useDeletePetsMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeletePetsMutation(baseOptions?: Apollo.MutationHookOptions<DeletePetsMutation, DeletePetsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePetsMutation, DeletePetsMutationVariables>(DeletePetsDocument, options);
+      }
+export type DeletePetsMutationHookResult = ReturnType<typeof useDeletePetsMutation>;
+export type DeletePetsMutationResult = Apollo.MutationResult<DeletePetsMutation>;
+export type DeletePetsMutationOptions = Apollo.BaseMutationOptions<DeletePetsMutation, DeletePetsMutationVariables>;
+export const UpdatePetsDocument = gql`
+    mutation UpdatePets($where: PetWhere, $update: PetUpdateInput) {
+  updatePets(where: $where, update: $update) {
+    pets {
+      id
+      name
+      updateAt
+    }
+  }
+}
+    `;
+export type UpdatePetsMutationFn = Apollo.MutationFunction<UpdatePetsMutation, UpdatePetsMutationVariables>;
+
+/**
+ * __useUpdatePetsMutation__
+ *
+ * To run a mutation, you first call `useUpdatePetsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePetsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePetsMutation, { data, loading, error }] = useUpdatePetsMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      update: // value for 'update'
+ *   },
+ * });
+ */
+export function useUpdatePetsMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePetsMutation, UpdatePetsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePetsMutation, UpdatePetsMutationVariables>(UpdatePetsDocument, options);
+      }
+export type UpdatePetsMutationHookResult = ReturnType<typeof useUpdatePetsMutation>;
+export type UpdatePetsMutationResult = Apollo.MutationResult<UpdatePetsMutation>;
+export type UpdatePetsMutationOptions = Apollo.BaseMutationOptions<UpdatePetsMutation, UpdatePetsMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
@@ -1287,8 +1603,8 @@ export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<User
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
-export const GetUsersPetsDocument = gql`
-    query GetUsersPets {
+export const UsersPetsDocument = gql`
+    query UsersPets {
   users {
     id
     name
@@ -1307,28 +1623,138 @@ export const GetUsersPetsDocument = gql`
     `;
 
 /**
- * __useGetUsersPetsQuery__
+ * __useUsersPetsQuery__
  *
- * To run a query within a React component, call `useGetUsersPetsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUsersPetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useUsersPetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersPetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUsersPetsQuery({
+ * const { data, loading, error } = useUsersPetsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetUsersPetsQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersPetsQuery, GetUsersPetsQueryVariables>) {
+export function useUsersPetsQuery(baseOptions?: Apollo.QueryHookOptions<UsersPetsQuery, UsersPetsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUsersPetsQuery, GetUsersPetsQueryVariables>(GetUsersPetsDocument, options);
+        return Apollo.useQuery<UsersPetsQuery, UsersPetsQueryVariables>(UsersPetsDocument, options);
       }
-export function useGetUsersPetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersPetsQuery, GetUsersPetsQueryVariables>) {
+export function useUsersPetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersPetsQuery, UsersPetsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUsersPetsQuery, GetUsersPetsQueryVariables>(GetUsersPetsDocument, options);
+          return Apollo.useLazyQuery<UsersPetsQuery, UsersPetsQueryVariables>(UsersPetsDocument, options);
         }
-export type GetUsersPetsQueryHookResult = ReturnType<typeof useGetUsersPetsQuery>;
-export type GetUsersPetsLazyQueryHookResult = ReturnType<typeof useGetUsersPetsLazyQuery>;
-export type GetUsersPetsQueryResult = Apollo.QueryResult<GetUsersPetsQuery, GetUsersPetsQueryVariables>;
+export type UsersPetsQueryHookResult = ReturnType<typeof useUsersPetsQuery>;
+export type UsersPetsLazyQueryHookResult = ReturnType<typeof useUsersPetsLazyQuery>;
+export type UsersPetsQueryResult = Apollo.QueryResult<UsersPetsQuery, UsersPetsQueryVariables>;
+export const CreateUsersDocument = gql`
+    mutation CreateUsers($input: [UserCreateInput!]!) {
+  createUsers(input: $input) {
+    users {
+      id
+      name
+      createAt
+    }
+  }
+}
+    `;
+export type CreateUsersMutationFn = Apollo.MutationFunction<CreateUsersMutation, CreateUsersMutationVariables>;
+
+/**
+ * __useCreateUsersMutation__
+ *
+ * To run a mutation, you first call `useCreateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUsersMutation, { data, loading, error }] = useCreateUsersMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUsersMutation(baseOptions?: Apollo.MutationHookOptions<CreateUsersMutation, CreateUsersMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUsersMutation, CreateUsersMutationVariables>(CreateUsersDocument, options);
+      }
+export type CreateUsersMutationHookResult = ReturnType<typeof useCreateUsersMutation>;
+export type CreateUsersMutationResult = Apollo.MutationResult<CreateUsersMutation>;
+export type CreateUsersMutationOptions = Apollo.BaseMutationOptions<CreateUsersMutation, CreateUsersMutationVariables>;
+export const DeleteUsersDocument = gql`
+    mutation DeleteUsers($where: UserWhere) {
+  deleteUsers(where: $where) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}
+    `;
+export type DeleteUsersMutationFn = Apollo.MutationFunction<DeleteUsersMutation, DeleteUsersMutationVariables>;
+
+/**
+ * __useDeleteUsersMutation__
+ *
+ * To run a mutation, you first call `useDeleteUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUsersMutation, { data, loading, error }] = useDeleteUsersMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeleteUsersMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUsersMutation, DeleteUsersMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUsersMutation, DeleteUsersMutationVariables>(DeleteUsersDocument, options);
+      }
+export type DeleteUsersMutationHookResult = ReturnType<typeof useDeleteUsersMutation>;
+export type DeleteUsersMutationResult = Apollo.MutationResult<DeleteUsersMutation>;
+export type DeleteUsersMutationOptions = Apollo.BaseMutationOptions<DeleteUsersMutation, DeleteUsersMutationVariables>;
+export const UpdateUsersDocument = gql`
+    mutation UpdateUsers($where: UserWhere, $update: UserUpdateInput) {
+  updateUsers(where: $where, update: $update) {
+    users {
+      id
+      name
+      createAt
+      updateAt
+    }
+  }
+}
+    `;
+export type UpdateUsersMutationFn = Apollo.MutationFunction<UpdateUsersMutation, UpdateUsersMutationVariables>;
+
+/**
+ * __useUpdateUsersMutation__
+ *
+ * To run a mutation, you first call `useUpdateUsersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUsersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUsersMutation, { data, loading, error }] = useUpdateUsersMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      update: // value for 'update'
+ *   },
+ * });
+ */
+export function useUpdateUsersMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUsersMutation, UpdateUsersMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUsersMutation, UpdateUsersMutationVariables>(UpdateUsersDocument, options);
+      }
+export type UpdateUsersMutationHookResult = ReturnType<typeof useUpdateUsersMutation>;
+export type UpdateUsersMutationResult = Apollo.MutationResult<UpdateUsersMutation>;
+export type UpdateUsersMutationOptions = Apollo.BaseMutationOptions<UpdateUsersMutation, UpdateUsersMutationVariables>;

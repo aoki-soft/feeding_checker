@@ -1,0 +1,54 @@
+query Users {
+	users {
+		id
+		name
+		feedingAggregate {
+			count
+		}
+	}
+}
+
+query UsersPets {
+	users {
+		id
+		name
+		feedingAggregate {
+			count
+		}
+	}
+	pets {
+		id
+		name
+		eatingAggregate {
+			count
+		}
+	}
+}
+
+mutation CreateUsers($input: [UserCreateInput!]!) {
+	createUsers(input: $input) {
+		users {
+			id
+			name
+			createAt
+		}
+	}
+}
+
+mutation DeleteUsers($where: UserWhere) {
+	deleteUsers(where: $where) {
+		nodesDeleted
+		relationshipsDeleted
+	}
+}
+
+mutation UpdateUsers($where: UserWhere, $update: UserUpdateInput) {
+	updateUsers(where: $where, update: $update) {
+		users {
+			id
+			name
+			createAt
+			updateAt
+		}
+	}
+}

@@ -6,61 +6,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { useUsersQuery } from '../lib/generated/client';
+import { useCreateUsersMutation, useDeleteUsersMutation, useUpdateUsersMutation, useUsersQuery } from '../lib/generated/client';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import {
-	NetworkStatus,
-	gql,
-	useMutation,
-} from "@apollo/client";
-
-const CREATE_USER = gql`
-	mutation Mutation($input: [UserCreateInput!]!) {
-		createUsers(input: $input) {
-			users {
-				id
-				name
-				createAt
-			}
-		}
-	}
-`
-
-const DELETE_USER = gql`
-	mutation Mutation($where: UserWhere) {
-		deleteUsers(where: $where) {
-			nodesDeleted
-			relationshipsDeleted
-		}
-	}
-`
-
-const UPDATE_USER = gql`
-		mutation UpdateUsers($where: UserWhere, $update: UserUpdateInput) {
-		updateUsers(where: $where, update: $update) {
-			users {
-				id
-				name
-				createAt
-				updateAt
-			}
-		}
-	}
-`
-
+import { NetworkStatus } from "@apollo/client";
 
 const Users: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = useUsersQuery({
 		pollInterval: 500
 	})
 
-	const [createUser, create_result ] = useMutation(CREATE_USER);
-	const [deleteUser, delte_reult ] = useMutation(DELETE_USER);
-	const [updateUser, update_result ] = useMutation(UPDATE_USER);
+	const [createUsers, create_result ] = useCreateUsersMutation();
+	const [deleteUsers, delte_reult ] = useDeleteUsersMutation();
+	const [updateUsers, update_result ] = useUpdateUsersMutation();
 
 	const [new_user_name, setNewUserName] = useState("");
-	const [rename_user_id, setRenameUserId] = useState<String | null>(null);
+	const [rename_user_id, setRenameUserId] = useState<string | null>(null);
 	const [rename_name, setRenameName] = useState("");
 
 	if (loading) return <div>ローディング中です</div>;
@@ -84,7 +45,7 @@ const Users: NextPage = () => {
 				if (new_user_name == "") {
 					alert("名前が未入力です。")
 				} else {
-					const res = await createUser({ variables: { "input": [{"name": new_user_name }]}})
+					const res = await createUsers({ variables: { "input": [{"name": new_user_name }]}})
 					console.log(res);
 					alert("新しいユーザーを追加しました。")
 				}
@@ -111,7 +72,7 @@ const Users: NextPage = () => {
 											setRenameUserId(user.id)
 										}}>名前変更</Button>
 										<Button color="error" variant="contained" size="small" sx={{margin: "10px"}} onClick={async ()=>{
-											const res = await deleteUser({variables:{"where": {"id": user.id}}})
+											const res = await deleteUsers({variables:{"where": {"id": user.id}}})
 											console.log(res);
 											alert("ユーザーを削除しました")
 										}}>削除</Button>
@@ -144,7 +105,7 @@ const Users: NextPage = () => {
           <Button onClick={()=>{setRenameUserId(null)}}>Cancel</Button>
           <Button onClick={async ()=>{
 						if (rename_user_id != null) {
-							const res = await updateUser({variables:{
+							const res = await updateUsers({variables:{
 								"where": {
 									"id": rename_user_id
 								},
