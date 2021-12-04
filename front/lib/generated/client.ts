@@ -1,8 +1,11 @@
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1239,3 +1242,93 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, feedingAggregate?: { __typename?: 'UserFeedingFeedingAggregationSelection', count: number } | null | undefined }> };
+
+export type GetUsersPetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersPetsQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, feedingAggregate?: { __typename?: 'UserFeedingFeedingAggregationSelection', count: number } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string, eatingAggregate?: { __typename?: 'PetFeedingEatingAggregationSelection', count: number } | null | undefined }> };
+
+
+export const UsersDocument = gql`
+    query Users {
+  users {
+    id
+    name
+    feedingAggregate {
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export const GetUsersPetsDocument = gql`
+    query GetUsersPets {
+  users {
+    id
+    name
+    feedingAggregate {
+      count
+    }
+  }
+  pets {
+    id
+    name
+    eatingAggregate {
+      count
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUsersPetsQuery__
+ *
+ * To run a query within a React component, call `useGetUsersPetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUsersPetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUsersPetsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUsersPetsQuery(baseOptions?: Apollo.QueryHookOptions<GetUsersPetsQuery, GetUsersPetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUsersPetsQuery, GetUsersPetsQueryVariables>(GetUsersPetsDocument, options);
+      }
+export function useGetUsersPetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUsersPetsQuery, GetUsersPetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUsersPetsQuery, GetUsersPetsQueryVariables>(GetUsersPetsDocument, options);
+        }
+export type GetUsersPetsQueryHookResult = ReturnType<typeof useGetUsersPetsQuery>;
+export type GetUsersPetsLazyQueryHookResult = ReturnType<typeof useGetUsersPetsLazyQuery>;
+export type GetUsersPetsQueryResult = Apollo.QueryResult<GetUsersPetsQuery, GetUsersPetsQueryVariables>;

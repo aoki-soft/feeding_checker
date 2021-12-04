@@ -1,33 +1,20 @@
 import type { NextPage } from 'next'
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import Head from 'next/head'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { useUsersQuery } from '../lib/generated/client';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 import {
-	useQuery,
 	NetworkStatus,
 	gql,
 	useMutation,
 } from "@apollo/client";
 
-import { UsersQuery } from '../lib/generated/client';
-
-const GET_USERS = gql`
-	query Users {
-		users {
-			id
-			name
-			feedingAggregate {
-				count
-			}
-		}
-	}
-`
 const CREATE_USER = gql`
 	mutation Mutation($input: [UserCreateInput!]!) {
 		createUsers(input: $input) {
@@ -64,9 +51,12 @@ const UPDATE_USER = gql`
 
 
 const Users: NextPage = () => {
-	const { loading, error, data, refetch, networkStatus } = useQuery<UsersQuery>(GET_USERS,{
+	const { loading, error, data, refetch, networkStatus } = useUsersQuery({
 		pollInterval: 500
-	});
+	})
+	// const { loading, error, data, refetch, networkStatus } = useQuery<UsersQuery>(GET_USERS,{
+	// 	pollInterval: 500
+	// });
 	const [createUser, create_result ] = useMutation(CREATE_USER);
 	const [deleteUser, delte_reult ] = useMutation(DELETE_USER);
 	const [updateUser, update_result ] = useMutation(UPDATE_USER);

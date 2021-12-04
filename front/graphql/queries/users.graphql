@@ -7,3 +7,19 @@ query Users {
 			}
 		}
 	}
+query GetUsersPets {
+	users {
+		id
+		name
+		feedingAggregate {
+			count
+		}
+	}
+	pets {
+		id
+		name
+		eatingAggregate {
+			count
+		}
+	}
+}
