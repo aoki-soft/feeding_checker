@@ -143,8 +143,6 @@ export default function MiniDrawer({ children }: Props) {
               <ListItemText primary={"えさやり登録"} />
             </ListItem>
           </Link>
-        </List>
-        <List>
           <Link href="/users">
             <ListItem button key="ユーザー管理">
               <ListItemIcon>
@@ -153,14 +151,20 @@ export default function MiniDrawer({ children }: Props) {
               <ListItemText primary={"ユーザー管理"} />
             </ListItem>
           </Link>
-        </List>
-        <List>
           <Link href="/pets">
             <ListItem button key="ペット管理">
               <ListItemIcon>
                 <img style={{height:"40px"}} src="/siba.svg" />
               </ListItemIcon>
               <ListItemText primary={"ペット管理"} />
+            </ListItem>
+          </Link>
+          <Link href="/schedule">
+            <ListItem button key="スケジュール">
+              <ListItemIcon>
+                <img style={{height:"40px"}} src="/schedule.svg" />
+              </ListItemIcon>
+              <ListItemText primary={"スケジュール"} />
             </ListItem>
           </Link>
         </List>

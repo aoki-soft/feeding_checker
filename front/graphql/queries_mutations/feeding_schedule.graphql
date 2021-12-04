@@ -1,0 +1,10 @@
+query FeedingSchedule {
+  pets {
+    id
+    name
+  }
+  users {
+    id
+    name
+  }
+}
