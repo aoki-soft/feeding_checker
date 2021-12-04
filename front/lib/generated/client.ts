@@ -72,6 +72,9 @@ export type Feeding = {
   giverAggregate?: Maybe<FeedingUserGiverAggregationSelection>;
   giverConnection: FeedingGiverConnection;
   id: Scalars['ID'];
+  schedlue?: Maybe<FeedingSchedule>;
+  schedlueAggregate?: Maybe<FeedingFeedingScheduleSchedlueAggregationSelection>;
+  schedlueConnection: FeedingSchedlueConnection;
   updateAt?: Maybe<Scalars['DateTime']>;
 };
 
@@ -113,6 +116,25 @@ export type FeedingGiverConnectionArgs = {
   where?: InputMaybe<FeedingGiverConnectionWhere>;
 };
 
+
+export type FeedingSchedlueArgs = {
+  options?: InputMaybe<FeedingScheduleOptions>;
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type FeedingSchedlueAggregateArgs = {
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type FeedingSchedlueConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<FeedingSchedlueConnectionSort>>;
+  where?: InputMaybe<FeedingSchedlueConnectionWhere>;
+};
+
 export type FeedingAggregateSelection = {
   __typename?: 'FeedingAggregateSelection';
   am_pm: StringAggregateSelection;
@@ -125,6 +147,7 @@ export type FeedingAggregateSelection = {
 export type FeedingConnectInput = {
   eater?: InputMaybe<FeedingEaterConnectFieldInput>;
   giver?: InputMaybe<FeedingGiverConnectFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueConnectFieldInput>;
 };
 
 export type FeedingConnectWhere = {
@@ -135,16 +158,19 @@ export type FeedingCreateInput = {
   am_pm: Scalars['String'];
   eater?: InputMaybe<FeedingEaterFieldInput>;
   giver?: InputMaybe<FeedingGiverFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueFieldInput>;
 };
 
 export type FeedingDeleteInput = {
   eater?: InputMaybe<FeedingEaterDeleteFieldInput>;
   giver?: InputMaybe<FeedingGiverDeleteFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueDeleteFieldInput>;
 };
 
 export type FeedingDisconnectInput = {
   eater?: InputMaybe<FeedingEaterDisconnectFieldInput>;
   giver?: InputMaybe<FeedingGiverDisconnectFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueDisconnectFieldInput>;
 };
 
 export type FeedingEaterAggregateInput = {
@@ -273,6 +299,21 @@ export type FeedingEaterUpdateFieldInput = {
   disconnect?: InputMaybe<FeedingEaterDisconnectFieldInput>;
   update?: InputMaybe<FeedingEaterUpdateConnectionInput>;
   where?: InputMaybe<FeedingEaterConnectionWhere>;
+};
+
+export type FeedingFeedingScheduleSchedlueAggregationSelection = {
+  __typename?: 'FeedingFeedingScheduleSchedlueAggregationSelection';
+  count: Scalars['Int'];
+  node?: Maybe<FeedingFeedingScheduleSchedlueNodeAggregateSelection>;
+};
+
+export type FeedingFeedingScheduleSchedlueNodeAggregateSelection = {
+  __typename?: 'FeedingFeedingScheduleSchedlueNodeAggregateSelection';
+  am_pm: StringAggregateSelection;
+  createAt: DateTimeAggregateSelection;
+  id: IdAggregateSelection;
+  scheduledDate: DateTimeAggregateSelection;
+  updateAt: DateTimeAggregateSelection;
 };
 
 export type FeedingGiverAggregateInput = {
@@ -427,22 +468,187 @@ export type FeedingPetEaterNodeAggregateSelection = {
 export type FeedingRelationInput = {
   eater?: InputMaybe<FeedingEaterCreateFieldInput>;
   giver?: InputMaybe<FeedingGiverCreateFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueCreateFieldInput>;
+};
+
+export type FeedingSchedlueAggregateInput = {
+  AND?: InputMaybe<Array<FeedingSchedlueAggregateInput>>;
+  OR?: InputMaybe<Array<FeedingSchedlueAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']>;
+  count_GT?: InputMaybe<Scalars['Int']>;
+  count_GTE?: InputMaybe<Scalars['Int']>;
+  count_LT?: InputMaybe<Scalars['Int']>;
+  count_LTE?: InputMaybe<Scalars['Int']>;
+  node?: InputMaybe<FeedingSchedlueNodeAggregationWhereInput>;
+};
+
+export type FeedingSchedlueConnectFieldInput = {
+  connect?: InputMaybe<FeedingScheduleConnectInput>;
+  where?: InputMaybe<FeedingScheduleConnectWhere>;
+};
+
+export type FeedingSchedlueConnection = {
+  __typename?: 'FeedingSchedlueConnection';
+  edges: Array<FeedingSchedlueRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FeedingSchedlueConnectionSort = {
+  node?: InputMaybe<FeedingScheduleSort>;
+};
+
+export type FeedingSchedlueConnectionWhere = {
+  AND?: InputMaybe<Array<FeedingSchedlueConnectionWhere>>;
+  OR?: InputMaybe<Array<FeedingSchedlueConnectionWhere>>;
+  node?: InputMaybe<FeedingScheduleWhere>;
+  node_NOT?: InputMaybe<FeedingScheduleWhere>;
+};
+
+export type FeedingSchedlueCreateFieldInput = {
+  node: FeedingScheduleCreateInput;
+};
+
+export type FeedingSchedlueDeleteFieldInput = {
+  delete?: InputMaybe<FeedingScheduleDeleteInput>;
+  where?: InputMaybe<FeedingSchedlueConnectionWhere>;
+};
+
+export type FeedingSchedlueDisconnectFieldInput = {
+  disconnect?: InputMaybe<FeedingScheduleDisconnectInput>;
+  where?: InputMaybe<FeedingSchedlueConnectionWhere>;
+};
+
+export type FeedingSchedlueFieldInput = {
+  connect?: InputMaybe<FeedingSchedlueConnectFieldInput>;
+  create?: InputMaybe<FeedingSchedlueCreateFieldInput>;
+};
+
+export type FeedingSchedlueNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<FeedingSchedlueNodeAggregationWhereInput>>;
+  OR?: InputMaybe<Array<FeedingSchedlueNodeAggregationWhereInput>>;
+  am_pm_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GTE?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LTE?: InputMaybe<Scalars['Float']>;
+  am_pm_EQUAL?: InputMaybe<Scalars['String']>;
+  am_pm_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LTE?: InputMaybe<Scalars['Int']>;
+  createAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  id_EQUAL?: InputMaybe<Scalars['ID']>;
+  scheduledDate_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type FeedingSchedlueRelationship = {
+  __typename?: 'FeedingSchedlueRelationship';
+  cursor: Scalars['String'];
+  node: FeedingSchedule;
+};
+
+export type FeedingSchedlueUpdateConnectionInput = {
+  node?: InputMaybe<FeedingScheduleUpdateInput>;
+};
+
+export type FeedingSchedlueUpdateFieldInput = {
+  connect?: InputMaybe<FeedingSchedlueConnectFieldInput>;
+  create?: InputMaybe<FeedingSchedlueCreateFieldInput>;
+  delete?: InputMaybe<FeedingSchedlueDeleteFieldInput>;
+  disconnect?: InputMaybe<FeedingSchedlueDisconnectFieldInput>;
+  update?: InputMaybe<FeedingSchedlueUpdateConnectionInput>;
+  where?: InputMaybe<FeedingSchedlueConnectionWhere>;
 };
 
 export type FeedingSchedule = {
   __typename?: 'FeedingSchedule';
+  achievement?: Maybe<Feeding>;
+  achievementAggregate?: Maybe<FeedingScheduleFeedingAchievementAggregationSelection>;
+  achievementConnection: FeedingScheduleAchievementConnection;
   am_pm: Scalars['String'];
   createAt: Scalars['DateTime'];
   eater: Pet;
   eaterAggregate?: Maybe<FeedingSchedulePetEaterAggregationSelection>;
   eaterConnection: FeedingScheduleEaterConnection;
-  feeding?: Maybe<Feeding>;
-  feedingDate: Scalars['DateTime'];
-  giver: User;
-  giverAggregate?: Maybe<FeedingScheduleUserGiverAggregationSelection>;
-  giverConnection: FeedingScheduleGiverConnection;
   id: Scalars['ID'];
+  scheduledDate: Scalars['DateTime'];
+  scheduledGiver: User;
+  scheduledGiverAggregate?: Maybe<FeedingScheduleUserScheduledGiverAggregationSelection>;
+  scheduledGiverConnection: FeedingScheduleScheduledGiverConnection;
   updateAt?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type FeedingScheduleAchievementArgs = {
+  options?: InputMaybe<FeedingOptions>;
+  where?: InputMaybe<FeedingWhere>;
+};
+
+
+export type FeedingScheduleAchievementAggregateArgs = {
+  where?: InputMaybe<FeedingWhere>;
+};
+
+
+export type FeedingScheduleAchievementConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<FeedingScheduleAchievementConnectionSort>>;
+  where?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
 };
 
 
@@ -465,22 +671,150 @@ export type FeedingScheduleEaterConnectionArgs = {
 };
 
 
-export type FeedingScheduleGiverArgs = {
+export type FeedingScheduleScheduledGiverArgs = {
   options?: InputMaybe<UserOptions>;
   where?: InputMaybe<UserWhere>;
 };
 
 
-export type FeedingScheduleGiverAggregateArgs = {
+export type FeedingScheduleScheduledGiverAggregateArgs = {
   where?: InputMaybe<UserWhere>;
 };
 
 
-export type FeedingScheduleGiverConnectionArgs = {
+export type FeedingScheduleScheduledGiverConnectionArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Array<FeedingScheduleGiverConnectionSort>>;
-  where?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
+  sort?: InputMaybe<Array<FeedingScheduleScheduledGiverConnectionSort>>;
+  where?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
+};
+
+export type FeedingScheduleAchievementAggregateInput = {
+  AND?: InputMaybe<Array<FeedingScheduleAchievementAggregateInput>>;
+  OR?: InputMaybe<Array<FeedingScheduleAchievementAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']>;
+  count_GT?: InputMaybe<Scalars['Int']>;
+  count_GTE?: InputMaybe<Scalars['Int']>;
+  count_LT?: InputMaybe<Scalars['Int']>;
+  count_LTE?: InputMaybe<Scalars['Int']>;
+  node?: InputMaybe<FeedingScheduleAchievementNodeAggregationWhereInput>;
+};
+
+export type FeedingScheduleAchievementConnectFieldInput = {
+  connect?: InputMaybe<FeedingConnectInput>;
+  where?: InputMaybe<FeedingConnectWhere>;
+};
+
+export type FeedingScheduleAchievementConnection = {
+  __typename?: 'FeedingScheduleAchievementConnection';
+  edges: Array<FeedingScheduleAchievementRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FeedingScheduleAchievementConnectionSort = {
+  node?: InputMaybe<FeedingSort>;
+};
+
+export type FeedingScheduleAchievementConnectionWhere = {
+  AND?: InputMaybe<Array<FeedingScheduleAchievementConnectionWhere>>;
+  OR?: InputMaybe<Array<FeedingScheduleAchievementConnectionWhere>>;
+  node?: InputMaybe<FeedingWhere>;
+  node_NOT?: InputMaybe<FeedingWhere>;
+};
+
+export type FeedingScheduleAchievementCreateFieldInput = {
+  node: FeedingCreateInput;
+};
+
+export type FeedingScheduleAchievementDeleteFieldInput = {
+  delete?: InputMaybe<FeedingDeleteInput>;
+  where?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
+};
+
+export type FeedingScheduleAchievementDisconnectFieldInput = {
+  disconnect?: InputMaybe<FeedingDisconnectInput>;
+  where?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
+};
+
+export type FeedingScheduleAchievementFieldInput = {
+  connect?: InputMaybe<FeedingScheduleAchievementConnectFieldInput>;
+  create?: InputMaybe<FeedingScheduleAchievementCreateFieldInput>;
+};
+
+export type FeedingScheduleAchievementNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<FeedingScheduleAchievementNodeAggregationWhereInput>>;
+  OR?: InputMaybe<Array<FeedingScheduleAchievementNodeAggregationWhereInput>>;
+  am_pm_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GTE?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LTE?: InputMaybe<Scalars['Float']>;
+  am_pm_EQUAL?: InputMaybe<Scalars['String']>;
+  am_pm_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LTE?: InputMaybe<Scalars['Int']>;
+  createAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  id_EQUAL?: InputMaybe<Scalars['ID']>;
+  updateAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type FeedingScheduleAchievementRelationship = {
+  __typename?: 'FeedingScheduleAchievementRelationship';
+  cursor: Scalars['String'];
+  node: Feeding;
+};
+
+export type FeedingScheduleAchievementUpdateConnectionInput = {
+  node?: InputMaybe<FeedingUpdateInput>;
+};
+
+export type FeedingScheduleAchievementUpdateFieldInput = {
+  connect?: InputMaybe<FeedingScheduleAchievementConnectFieldInput>;
+  create?: InputMaybe<FeedingScheduleAchievementCreateFieldInput>;
+  delete?: InputMaybe<FeedingScheduleAchievementDeleteFieldInput>;
+  disconnect?: InputMaybe<FeedingScheduleAchievementDisconnectFieldInput>;
+  update?: InputMaybe<FeedingScheduleAchievementUpdateConnectionInput>;
+  where?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
 };
 
 export type FeedingScheduleAggregateSelection = {
@@ -488,31 +822,39 @@ export type FeedingScheduleAggregateSelection = {
   am_pm: StringAggregateSelection;
   count: Scalars['Int'];
   createAt: DateTimeAggregateSelection;
-  feedingDate: DateTimeAggregateSelection;
   id: IdAggregateSelection;
+  scheduledDate: DateTimeAggregateSelection;
   updateAt: DateTimeAggregateSelection;
 };
 
 export type FeedingScheduleConnectInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementConnectFieldInput>;
   eater?: InputMaybe<FeedingScheduleEaterConnectFieldInput>;
-  giver?: InputMaybe<FeedingScheduleGiverConnectFieldInput>;
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverConnectFieldInput>;
+};
+
+export type FeedingScheduleConnectWhere = {
+  node: FeedingScheduleWhere;
 };
 
 export type FeedingScheduleCreateInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementFieldInput>;
   am_pm: Scalars['String'];
   eater?: InputMaybe<FeedingScheduleEaterFieldInput>;
-  feedingDate: Scalars['DateTime'];
-  giver?: InputMaybe<FeedingScheduleGiverFieldInput>;
+  scheduledDate: Scalars['DateTime'];
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverFieldInput>;
 };
 
 export type FeedingScheduleDeleteInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementDeleteFieldInput>;
   eater?: InputMaybe<FeedingScheduleEaterDeleteFieldInput>;
-  giver?: InputMaybe<FeedingScheduleGiverDeleteFieldInput>;
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverDeleteFieldInput>;
 };
 
 export type FeedingScheduleDisconnectInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementDisconnectFieldInput>;
   eater?: InputMaybe<FeedingScheduleEaterDisconnectFieldInput>;
-  giver?: InputMaybe<FeedingScheduleGiverDisconnectFieldInput>;
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverDisconnectFieldInput>;
 };
 
 export type FeedingScheduleEaterAggregateInput = {
@@ -643,62 +985,103 @@ export type FeedingScheduleEaterUpdateFieldInput = {
   where?: InputMaybe<FeedingScheduleEaterConnectionWhere>;
 };
 
-export type FeedingScheduleGiverAggregateInput = {
-  AND?: InputMaybe<Array<FeedingScheduleGiverAggregateInput>>;
-  OR?: InputMaybe<Array<FeedingScheduleGiverAggregateInput>>;
+export type FeedingScheduleFeedingAchievementAggregationSelection = {
+  __typename?: 'FeedingScheduleFeedingAchievementAggregationSelection';
+  count: Scalars['Int'];
+  node?: Maybe<FeedingScheduleFeedingAchievementNodeAggregateSelection>;
+};
+
+export type FeedingScheduleFeedingAchievementNodeAggregateSelection = {
+  __typename?: 'FeedingScheduleFeedingAchievementNodeAggregateSelection';
+  am_pm: StringAggregateSelection;
+  createAt: DateTimeAggregateSelection;
+  id: IdAggregateSelection;
+  updateAt: DateTimeAggregateSelection;
+};
+
+export type FeedingScheduleOptions = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  /** Specify one or more FeedingScheduleSort objects to sort FeedingSchedules by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<InputMaybe<FeedingScheduleSort>>>;
+};
+
+export type FeedingSchedulePetEaterAggregationSelection = {
+  __typename?: 'FeedingSchedulePetEaterAggregationSelection';
+  count: Scalars['Int'];
+  node?: Maybe<FeedingSchedulePetEaterNodeAggregateSelection>;
+};
+
+export type FeedingSchedulePetEaterNodeAggregateSelection = {
+  __typename?: 'FeedingSchedulePetEaterNodeAggregateSelection';
+  createAt: DateTimeAggregateSelection;
+  id: IdAggregateSelection;
+  name: StringAggregateSelection;
+  updateAt: DateTimeAggregateSelection;
+};
+
+export type FeedingScheduleRelationInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementCreateFieldInput>;
+  eater?: InputMaybe<FeedingScheduleEaterCreateFieldInput>;
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverCreateFieldInput>;
+};
+
+export type FeedingScheduleScheduledGiverAggregateInput = {
+  AND?: InputMaybe<Array<FeedingScheduleScheduledGiverAggregateInput>>;
+  OR?: InputMaybe<Array<FeedingScheduleScheduledGiverAggregateInput>>;
   count?: InputMaybe<Scalars['Int']>;
   count_GT?: InputMaybe<Scalars['Int']>;
   count_GTE?: InputMaybe<Scalars['Int']>;
   count_LT?: InputMaybe<Scalars['Int']>;
   count_LTE?: InputMaybe<Scalars['Int']>;
-  node?: InputMaybe<FeedingScheduleGiverNodeAggregationWhereInput>;
+  node?: InputMaybe<FeedingScheduleScheduledGiverNodeAggregationWhereInput>;
 };
 
-export type FeedingScheduleGiverConnectFieldInput = {
+export type FeedingScheduleScheduledGiverConnectFieldInput = {
   connect?: InputMaybe<UserConnectInput>;
   where?: InputMaybe<UserConnectWhere>;
 };
 
-export type FeedingScheduleGiverConnection = {
-  __typename?: 'FeedingScheduleGiverConnection';
-  edges: Array<FeedingScheduleGiverRelationship>;
+export type FeedingScheduleScheduledGiverConnection = {
+  __typename?: 'FeedingScheduleScheduledGiverConnection';
+  edges: Array<FeedingScheduleScheduledGiverRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int'];
 };
 
-export type FeedingScheduleGiverConnectionSort = {
+export type FeedingScheduleScheduledGiverConnectionSort = {
   node?: InputMaybe<UserSort>;
 };
 
-export type FeedingScheduleGiverConnectionWhere = {
-  AND?: InputMaybe<Array<FeedingScheduleGiverConnectionWhere>>;
-  OR?: InputMaybe<Array<FeedingScheduleGiverConnectionWhere>>;
+export type FeedingScheduleScheduledGiverConnectionWhere = {
+  AND?: InputMaybe<Array<FeedingScheduleScheduledGiverConnectionWhere>>;
+  OR?: InputMaybe<Array<FeedingScheduleScheduledGiverConnectionWhere>>;
   node?: InputMaybe<UserWhere>;
   node_NOT?: InputMaybe<UserWhere>;
 };
 
-export type FeedingScheduleGiverCreateFieldInput = {
+export type FeedingScheduleScheduledGiverCreateFieldInput = {
   node: UserCreateInput;
 };
 
-export type FeedingScheduleGiverDeleteFieldInput = {
+export type FeedingScheduleScheduledGiverDeleteFieldInput = {
   delete?: InputMaybe<UserDeleteInput>;
-  where?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
+  where?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
 };
 
-export type FeedingScheduleGiverDisconnectFieldInput = {
+export type FeedingScheduleScheduledGiverDisconnectFieldInput = {
   disconnect?: InputMaybe<UserDisconnectInput>;
-  where?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
+  where?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
 };
 
-export type FeedingScheduleGiverFieldInput = {
-  connect?: InputMaybe<FeedingScheduleGiverConnectFieldInput>;
-  create?: InputMaybe<FeedingScheduleGiverCreateFieldInput>;
+export type FeedingScheduleScheduledGiverFieldInput = {
+  connect?: InputMaybe<FeedingScheduleScheduledGiverConnectFieldInput>;
+  create?: InputMaybe<FeedingScheduleScheduledGiverCreateFieldInput>;
 };
 
-export type FeedingScheduleGiverNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<FeedingScheduleGiverNodeAggregationWhereInput>>;
-  OR?: InputMaybe<Array<FeedingScheduleGiverNodeAggregationWhereInput>>;
+export type FeedingScheduleScheduledGiverNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<FeedingScheduleScheduledGiverNodeAggregationWhereInput>>;
+  OR?: InputMaybe<Array<FeedingScheduleScheduledGiverNodeAggregationWhereInput>>;
   createAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
   createAt_GT?: InputMaybe<Scalars['DateTime']>;
   createAt_GTE?: InputMaybe<Scalars['DateTime']>;
@@ -752,75 +1135,50 @@ export type FeedingScheduleGiverNodeAggregationWhereInput = {
   updateAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
 };
 
-export type FeedingScheduleGiverRelationship = {
-  __typename?: 'FeedingScheduleGiverRelationship';
+export type FeedingScheduleScheduledGiverRelationship = {
+  __typename?: 'FeedingScheduleScheduledGiverRelationship';
   cursor: Scalars['String'];
   node: User;
 };
 
-export type FeedingScheduleGiverUpdateConnectionInput = {
+export type FeedingScheduleScheduledGiverUpdateConnectionInput = {
   node?: InputMaybe<UserUpdateInput>;
 };
 
-export type FeedingScheduleGiverUpdateFieldInput = {
-  connect?: InputMaybe<FeedingScheduleGiverConnectFieldInput>;
-  create?: InputMaybe<FeedingScheduleGiverCreateFieldInput>;
-  delete?: InputMaybe<FeedingScheduleGiverDeleteFieldInput>;
-  disconnect?: InputMaybe<FeedingScheduleGiverDisconnectFieldInput>;
-  update?: InputMaybe<FeedingScheduleGiverUpdateConnectionInput>;
-  where?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
-};
-
-export type FeedingScheduleOptions = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  /** Specify one or more FeedingScheduleSort objects to sort FeedingSchedules by. The sorts will be applied in the order in which they are arranged in the array. */
-  sort?: InputMaybe<Array<InputMaybe<FeedingScheduleSort>>>;
-};
-
-export type FeedingSchedulePetEaterAggregationSelection = {
-  __typename?: 'FeedingSchedulePetEaterAggregationSelection';
-  count: Scalars['Int'];
-  node?: Maybe<FeedingSchedulePetEaterNodeAggregateSelection>;
-};
-
-export type FeedingSchedulePetEaterNodeAggregateSelection = {
-  __typename?: 'FeedingSchedulePetEaterNodeAggregateSelection';
-  createAt: DateTimeAggregateSelection;
-  id: IdAggregateSelection;
-  name: StringAggregateSelection;
-  updateAt: DateTimeAggregateSelection;
-};
-
-export type FeedingScheduleRelationInput = {
-  eater?: InputMaybe<FeedingScheduleEaterCreateFieldInput>;
-  giver?: InputMaybe<FeedingScheduleGiverCreateFieldInput>;
+export type FeedingScheduleScheduledGiverUpdateFieldInput = {
+  connect?: InputMaybe<FeedingScheduleScheduledGiverConnectFieldInput>;
+  create?: InputMaybe<FeedingScheduleScheduledGiverCreateFieldInput>;
+  delete?: InputMaybe<FeedingScheduleScheduledGiverDeleteFieldInput>;
+  disconnect?: InputMaybe<FeedingScheduleScheduledGiverDisconnectFieldInput>;
+  update?: InputMaybe<FeedingScheduleScheduledGiverUpdateConnectionInput>;
+  where?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
 };
 
 /** Fields to sort FeedingSchedules by. The order in which sorts are applied is not guaranteed when specifying many fields in one FeedingScheduleSort object. */
 export type FeedingScheduleSort = {
   am_pm?: InputMaybe<SortDirection>;
   createAt?: InputMaybe<SortDirection>;
-  feedingDate?: InputMaybe<SortDirection>;
   id?: InputMaybe<SortDirection>;
+  scheduledDate?: InputMaybe<SortDirection>;
   updateAt?: InputMaybe<SortDirection>;
 };
 
 export type FeedingScheduleUpdateInput = {
+  achievement?: InputMaybe<FeedingScheduleAchievementUpdateFieldInput>;
   am_pm?: InputMaybe<Scalars['String']>;
   eater?: InputMaybe<FeedingScheduleEaterUpdateFieldInput>;
-  feedingDate?: InputMaybe<Scalars['DateTime']>;
-  giver?: InputMaybe<FeedingScheduleGiverUpdateFieldInput>;
+  scheduledDate?: InputMaybe<Scalars['DateTime']>;
+  scheduledGiver?: InputMaybe<FeedingScheduleScheduledGiverUpdateFieldInput>;
 };
 
-export type FeedingScheduleUserGiverAggregationSelection = {
-  __typename?: 'FeedingScheduleUserGiverAggregationSelection';
+export type FeedingScheduleUserScheduledGiverAggregationSelection = {
+  __typename?: 'FeedingScheduleUserScheduledGiverAggregationSelection';
   count: Scalars['Int'];
-  node?: Maybe<FeedingScheduleUserGiverNodeAggregateSelection>;
+  node?: Maybe<FeedingScheduleUserScheduledGiverNodeAggregateSelection>;
 };
 
-export type FeedingScheduleUserGiverNodeAggregateSelection = {
-  __typename?: 'FeedingScheduleUserGiverNodeAggregateSelection';
+export type FeedingScheduleUserScheduledGiverNodeAggregateSelection = {
+  __typename?: 'FeedingScheduleUserScheduledGiverNodeAggregateSelection';
   createAt: DateTimeAggregateSelection;
   id: IdAggregateSelection;
   name: StringAggregateSelection;
@@ -830,6 +1188,11 @@ export type FeedingScheduleUserGiverNodeAggregateSelection = {
 export type FeedingScheduleWhere = {
   AND?: InputMaybe<Array<FeedingScheduleWhere>>;
   OR?: InputMaybe<Array<FeedingScheduleWhere>>;
+  achievement?: InputMaybe<FeedingWhere>;
+  achievementAggregate?: InputMaybe<FeedingScheduleAchievementAggregateInput>;
+  achievementConnection?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
+  achievementConnection_NOT?: InputMaybe<FeedingScheduleAchievementConnectionWhere>;
+  achievement_NOT?: InputMaybe<FeedingWhere>;
   am_pm?: InputMaybe<Scalars['String']>;
   am_pm_CONTAINS?: InputMaybe<Scalars['String']>;
   am_pm_ENDS_WITH?: InputMaybe<Scalars['String']>;
@@ -853,19 +1216,6 @@ export type FeedingScheduleWhere = {
   eaterConnection?: InputMaybe<FeedingScheduleEaterConnectionWhere>;
   eaterConnection_NOT?: InputMaybe<FeedingScheduleEaterConnectionWhere>;
   eater_NOT?: InputMaybe<PetWhere>;
-  feedingDate?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_GT?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_GTE?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  feedingDate_LT?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_LTE?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_NOT?: InputMaybe<Scalars['DateTime']>;
-  feedingDate_NOT_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
-  giver?: InputMaybe<UserWhere>;
-  giverAggregate?: InputMaybe<FeedingScheduleGiverAggregateInput>;
-  giverConnection?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
-  giverConnection_NOT?: InputMaybe<FeedingScheduleGiverConnectionWhere>;
-  giver_NOT?: InputMaybe<UserWhere>;
   id?: InputMaybe<Scalars['ID']>;
   id_CONTAINS?: InputMaybe<Scalars['ID']>;
   id_ENDS_WITH?: InputMaybe<Scalars['ID']>;
@@ -876,6 +1226,19 @@ export type FeedingScheduleWhere = {
   id_NOT_IN?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   id_NOT_STARTS_WITH?: InputMaybe<Scalars['ID']>;
   id_STARTS_WITH?: InputMaybe<Scalars['ID']>;
+  scheduledDate?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  scheduledDate_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_NOT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_NOT_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']>>>;
+  scheduledGiver?: InputMaybe<UserWhere>;
+  scheduledGiverAggregate?: InputMaybe<FeedingScheduleScheduledGiverAggregateInput>;
+  scheduledGiverConnection?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
+  scheduledGiverConnection_NOT?: InputMaybe<FeedingScheduleScheduledGiverConnectionWhere>;
+  scheduledGiver_NOT?: InputMaybe<UserWhere>;
   updateAt?: InputMaybe<Scalars['DateTime']>;
   updateAt_GT?: InputMaybe<Scalars['DateTime']>;
   updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
@@ -898,6 +1261,7 @@ export type FeedingUpdateInput = {
   am_pm?: InputMaybe<Scalars['String']>;
   eater?: InputMaybe<FeedingEaterUpdateFieldInput>;
   giver?: InputMaybe<FeedingGiverUpdateFieldInput>;
+  schedlue?: InputMaybe<FeedingSchedlueUpdateFieldInput>;
 };
 
 export type FeedingUserGiverAggregationSelection = {
@@ -955,6 +1319,11 @@ export type FeedingWhere = {
   id_NOT_IN?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   id_NOT_STARTS_WITH?: InputMaybe<Scalars['ID']>;
   id_STARTS_WITH?: InputMaybe<Scalars['ID']>;
+  schedlue?: InputMaybe<FeedingScheduleWhere>;
+  schedlueAggregate?: InputMaybe<FeedingSchedlueAggregateInput>;
+  schedlueConnection?: InputMaybe<FeedingSchedlueConnectionWhere>;
+  schedlueConnection_NOT?: InputMaybe<FeedingSchedlueConnectionWhere>;
+  schedlue_NOT?: InputMaybe<FeedingScheduleWhere>;
   updateAt?: InputMaybe<Scalars['DateTime']>;
   updateAt_GT?: InputMaybe<Scalars['DateTime']>;
   updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
@@ -1086,6 +1455,9 @@ export type Pet = {
   eating?: Maybe<Array<Maybe<Feeding>>>;
   eatingAggregate?: Maybe<PetFeedingEatingAggregationSelection>;
   eatingConnection: PetEatingConnection;
+  etaingSchedlue?: Maybe<Array<Maybe<FeedingSchedule>>>;
+  etaingSchedlueAggregate?: Maybe<PetFeedingScheduleEtaingSchedlueAggregationSelection>;
+  etaingSchedlueConnection: PetEtaingSchedlueConnection;
   id: Scalars['ID'];
   name: Scalars['String'];
   updateAt?: Maybe<Scalars['DateTime']>;
@@ -1110,6 +1482,25 @@ export type PetEatingConnectionArgs = {
   where?: InputMaybe<PetEatingConnectionWhere>;
 };
 
+
+export type PetEtaingSchedlueArgs = {
+  options?: InputMaybe<FeedingScheduleOptions>;
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type PetEtaingSchedlueAggregateArgs = {
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type PetEtaingSchedlueConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<PetEtaingSchedlueConnectionSort>>;
+  where?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+};
+
 export type PetAggregateSelection = {
   __typename?: 'PetAggregateSelection';
   count: Scalars['Int'];
@@ -1121,6 +1512,7 @@ export type PetAggregateSelection = {
 
 export type PetConnectInput = {
   eating?: InputMaybe<Array<PetEatingConnectFieldInput>>;
+  etaingSchedlue?: InputMaybe<Array<PetEtaingSchedlueConnectFieldInput>>;
 };
 
 export type PetConnectWhere = {
@@ -1129,15 +1521,18 @@ export type PetConnectWhere = {
 
 export type PetCreateInput = {
   eating?: InputMaybe<PetEatingFieldInput>;
+  etaingSchedlue?: InputMaybe<PetEtaingSchedlueFieldInput>;
   name: Scalars['String'];
 };
 
 export type PetDeleteInput = {
   eating?: InputMaybe<Array<PetEatingDeleteFieldInput>>;
+  etaingSchedlue?: InputMaybe<Array<PetEtaingSchedlueDeleteFieldInput>>;
 };
 
 export type PetDisconnectInput = {
   eating?: InputMaybe<Array<PetEatingDisconnectFieldInput>>;
+  etaingSchedlue?: InputMaybe<Array<PetEtaingSchedlueDisconnectFieldInput>>;
 };
 
 export type PetEatingAggregateInput = {
@@ -1268,6 +1663,149 @@ export type PetEatingUpdateFieldInput = {
   where?: InputMaybe<PetEatingConnectionWhere>;
 };
 
+export type PetEtaingSchedlueAggregateInput = {
+  AND?: InputMaybe<Array<PetEtaingSchedlueAggregateInput>>;
+  OR?: InputMaybe<Array<PetEtaingSchedlueAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']>;
+  count_GT?: InputMaybe<Scalars['Int']>;
+  count_GTE?: InputMaybe<Scalars['Int']>;
+  count_LT?: InputMaybe<Scalars['Int']>;
+  count_LTE?: InputMaybe<Scalars['Int']>;
+  node?: InputMaybe<PetEtaingSchedlueNodeAggregationWhereInput>;
+};
+
+export type PetEtaingSchedlueConnectFieldInput = {
+  connect?: InputMaybe<Array<FeedingScheduleConnectInput>>;
+  where?: InputMaybe<FeedingScheduleConnectWhere>;
+};
+
+export type PetEtaingSchedlueConnection = {
+  __typename?: 'PetEtaingSchedlueConnection';
+  edges: Array<PetEtaingSchedlueRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type PetEtaingSchedlueConnectionSort = {
+  node?: InputMaybe<FeedingScheduleSort>;
+};
+
+export type PetEtaingSchedlueConnectionWhere = {
+  AND?: InputMaybe<Array<PetEtaingSchedlueConnectionWhere>>;
+  OR?: InputMaybe<Array<PetEtaingSchedlueConnectionWhere>>;
+  node?: InputMaybe<FeedingScheduleWhere>;
+  node_NOT?: InputMaybe<FeedingScheduleWhere>;
+};
+
+export type PetEtaingSchedlueCreateFieldInput = {
+  node: FeedingScheduleCreateInput;
+};
+
+export type PetEtaingSchedlueDeleteFieldInput = {
+  delete?: InputMaybe<FeedingScheduleDeleteInput>;
+  where?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+};
+
+export type PetEtaingSchedlueDisconnectFieldInput = {
+  disconnect?: InputMaybe<FeedingScheduleDisconnectInput>;
+  where?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+};
+
+export type PetEtaingSchedlueFieldInput = {
+  connect?: InputMaybe<Array<PetEtaingSchedlueConnectFieldInput>>;
+  create?: InputMaybe<Array<PetEtaingSchedlueCreateFieldInput>>;
+};
+
+export type PetEtaingSchedlueNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<PetEtaingSchedlueNodeAggregationWhereInput>>;
+  OR?: InputMaybe<Array<PetEtaingSchedlueNodeAggregationWhereInput>>;
+  am_pm_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GTE?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LTE?: InputMaybe<Scalars['Float']>;
+  am_pm_EQUAL?: InputMaybe<Scalars['String']>;
+  am_pm_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LTE?: InputMaybe<Scalars['Int']>;
+  createAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  id_EQUAL?: InputMaybe<Scalars['ID']>;
+  scheduledDate_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type PetEtaingSchedlueRelationship = {
+  __typename?: 'PetEtaingSchedlueRelationship';
+  cursor: Scalars['String'];
+  node: FeedingSchedule;
+};
+
+export type PetEtaingSchedlueUpdateConnectionInput = {
+  node?: InputMaybe<FeedingScheduleUpdateInput>;
+};
+
+export type PetEtaingSchedlueUpdateFieldInput = {
+  connect?: InputMaybe<Array<PetEtaingSchedlueConnectFieldInput>>;
+  create?: InputMaybe<Array<PetEtaingSchedlueCreateFieldInput>>;
+  delete?: InputMaybe<Array<PetEtaingSchedlueDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<PetEtaingSchedlueDisconnectFieldInput>>;
+  update?: InputMaybe<PetEtaingSchedlueUpdateConnectionInput>;
+  where?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+};
+
 export type PetFeedingEatingAggregationSelection = {
   __typename?: 'PetFeedingEatingAggregationSelection';
   count: Scalars['Int'];
@@ -1282,6 +1820,21 @@ export type PetFeedingEatingNodeAggregateSelection = {
   updateAt: DateTimeAggregateSelection;
 };
 
+export type PetFeedingScheduleEtaingSchedlueAggregationSelection = {
+  __typename?: 'PetFeedingScheduleEtaingSchedlueAggregationSelection';
+  count: Scalars['Int'];
+  node?: Maybe<PetFeedingScheduleEtaingSchedlueNodeAggregateSelection>;
+};
+
+export type PetFeedingScheduleEtaingSchedlueNodeAggregateSelection = {
+  __typename?: 'PetFeedingScheduleEtaingSchedlueNodeAggregateSelection';
+  am_pm: StringAggregateSelection;
+  createAt: DateTimeAggregateSelection;
+  id: IdAggregateSelection;
+  scheduledDate: DateTimeAggregateSelection;
+  updateAt: DateTimeAggregateSelection;
+};
+
 export type PetOptions = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1291,6 +1844,7 @@ export type PetOptions = {
 
 export type PetRelationInput = {
   eating?: InputMaybe<Array<PetEatingCreateFieldInput>>;
+  etaingSchedlue?: InputMaybe<Array<PetEtaingSchedlueCreateFieldInput>>;
 };
 
 /** Fields to sort Pets by. The order in which sorts are applied is not guaranteed when specifying many fields in one PetSort object. */
@@ -1303,6 +1857,7 @@ export type PetSort = {
 
 export type PetUpdateInput = {
   eating?: InputMaybe<Array<PetEatingUpdateFieldInput>>;
+  etaingSchedlue?: InputMaybe<Array<PetEtaingSchedlueUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']>;
 };
 
@@ -1322,6 +1877,11 @@ export type PetWhere = {
   eatingConnection?: InputMaybe<PetEatingConnectionWhere>;
   eatingConnection_NOT?: InputMaybe<PetEatingConnectionWhere>;
   eating_NOT?: InputMaybe<FeedingWhere>;
+  etaingSchedlue?: InputMaybe<FeedingScheduleWhere>;
+  etaingSchedlueAggregate?: InputMaybe<PetEtaingSchedlueAggregateInput>;
+  etaingSchedlueConnection?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+  etaingSchedlueConnection_NOT?: InputMaybe<PetEtaingSchedlueConnectionWhere>;
+  etaingSchedlue_NOT?: InputMaybe<FeedingScheduleWhere>;
   id?: InputMaybe<Scalars['ID']>;
   id_CONTAINS?: InputMaybe<Scalars['ID']>;
   id_ENDS_WITH?: InputMaybe<Scalars['ID']>;
@@ -1484,6 +2044,9 @@ export type User = {
   feeding?: Maybe<Array<Maybe<Feeding>>>;
   feedingAggregate?: Maybe<UserFeedingFeedingAggregationSelection>;
   feedingConnection: UserFeedingConnection;
+  feedingSchedule?: Maybe<Array<Maybe<FeedingSchedule>>>;
+  feedingScheduleAggregate?: Maybe<UserFeedingScheduleFeedingScheduleAggregationSelection>;
+  feedingScheduleConnection: UserFeedingScheduleConnection;
   id: Scalars['ID'];
   name: Scalars['String'];
   updateAt?: Maybe<Scalars['DateTime']>;
@@ -1508,6 +2071,25 @@ export type UserFeedingConnectionArgs = {
   where?: InputMaybe<UserFeedingConnectionWhere>;
 };
 
+
+export type UserFeedingScheduleArgs = {
+  options?: InputMaybe<FeedingScheduleOptions>;
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type UserFeedingScheduleAggregateArgs = {
+  where?: InputMaybe<FeedingScheduleWhere>;
+};
+
+
+export type UserFeedingScheduleConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<UserFeedingScheduleConnectionSort>>;
+  where?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+};
+
 export type UserAggregateSelection = {
   __typename?: 'UserAggregateSelection';
   count: Scalars['Int'];
@@ -1519,6 +2101,7 @@ export type UserAggregateSelection = {
 
 export type UserConnectInput = {
   feeding?: InputMaybe<Array<UserFeedingConnectFieldInput>>;
+  feedingSchedule?: InputMaybe<Array<UserFeedingScheduleConnectFieldInput>>;
 };
 
 export type UserConnectWhere = {
@@ -1527,15 +2110,18 @@ export type UserConnectWhere = {
 
 export type UserCreateInput = {
   feeding?: InputMaybe<UserFeedingFieldInput>;
+  feedingSchedule?: InputMaybe<UserFeedingScheduleFieldInput>;
   name: Scalars['String'];
 };
 
 export type UserDeleteInput = {
   feeding?: InputMaybe<Array<UserFeedingDeleteFieldInput>>;
+  feedingSchedule?: InputMaybe<Array<UserFeedingScheduleDeleteFieldInput>>;
 };
 
 export type UserDisconnectInput = {
   feeding?: InputMaybe<Array<UserFeedingDisconnectFieldInput>>;
+  feedingSchedule?: InputMaybe<Array<UserFeedingScheduleDisconnectFieldInput>>;
 };
 
 export type UserFeedingAggregateInput = {
@@ -1667,6 +2253,164 @@ export type UserFeedingRelationship = {
   node: Feeding;
 };
 
+export type UserFeedingScheduleAggregateInput = {
+  AND?: InputMaybe<Array<UserFeedingScheduleAggregateInput>>;
+  OR?: InputMaybe<Array<UserFeedingScheduleAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']>;
+  count_GT?: InputMaybe<Scalars['Int']>;
+  count_GTE?: InputMaybe<Scalars['Int']>;
+  count_LT?: InputMaybe<Scalars['Int']>;
+  count_LTE?: InputMaybe<Scalars['Int']>;
+  node?: InputMaybe<UserFeedingScheduleNodeAggregationWhereInput>;
+};
+
+export type UserFeedingScheduleConnectFieldInput = {
+  connect?: InputMaybe<Array<FeedingScheduleConnectInput>>;
+  where?: InputMaybe<FeedingScheduleConnectWhere>;
+};
+
+export type UserFeedingScheduleConnection = {
+  __typename?: 'UserFeedingScheduleConnection';
+  edges: Array<UserFeedingScheduleRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type UserFeedingScheduleConnectionSort = {
+  node?: InputMaybe<FeedingScheduleSort>;
+};
+
+export type UserFeedingScheduleConnectionWhere = {
+  AND?: InputMaybe<Array<UserFeedingScheduleConnectionWhere>>;
+  OR?: InputMaybe<Array<UserFeedingScheduleConnectionWhere>>;
+  node?: InputMaybe<FeedingScheduleWhere>;
+  node_NOT?: InputMaybe<FeedingScheduleWhere>;
+};
+
+export type UserFeedingScheduleCreateFieldInput = {
+  node: FeedingScheduleCreateInput;
+};
+
+export type UserFeedingScheduleDeleteFieldInput = {
+  delete?: InputMaybe<FeedingScheduleDeleteInput>;
+  where?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+};
+
+export type UserFeedingScheduleDisconnectFieldInput = {
+  disconnect?: InputMaybe<FeedingScheduleDisconnectInput>;
+  where?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+};
+
+export type UserFeedingScheduleFeedingScheduleAggregationSelection = {
+  __typename?: 'UserFeedingScheduleFeedingScheduleAggregationSelection';
+  count: Scalars['Int'];
+  node?: Maybe<UserFeedingScheduleFeedingScheduleNodeAggregateSelection>;
+};
+
+export type UserFeedingScheduleFeedingScheduleNodeAggregateSelection = {
+  __typename?: 'UserFeedingScheduleFeedingScheduleNodeAggregateSelection';
+  am_pm: StringAggregateSelection;
+  createAt: DateTimeAggregateSelection;
+  id: IdAggregateSelection;
+  scheduledDate: DateTimeAggregateSelection;
+  updateAt: DateTimeAggregateSelection;
+};
+
+export type UserFeedingScheduleFieldInput = {
+  connect?: InputMaybe<Array<UserFeedingScheduleConnectFieldInput>>;
+  create?: InputMaybe<Array<UserFeedingScheduleCreateFieldInput>>;
+};
+
+export type UserFeedingScheduleNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserFeedingScheduleNodeAggregationWhereInput>>;
+  OR?: InputMaybe<Array<UserFeedingScheduleNodeAggregationWhereInput>>;
+  am_pm_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_GTE?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LT?: InputMaybe<Scalars['Float']>;
+  am_pm_AVERAGE_LTE?: InputMaybe<Scalars['Float']>;
+  am_pm_EQUAL?: InputMaybe<Scalars['String']>;
+  am_pm_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LONGEST_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_LTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_EQUAL?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_GTE?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LT?: InputMaybe<Scalars['Int']>;
+  am_pm_SHORTEST_LTE?: InputMaybe<Scalars['Int']>;
+  createAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  createAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  id_EQUAL?: InputMaybe<Scalars['ID']>;
+  scheduledDate_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  scheduledDate_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MAX_LTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_EQUAL?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_GTE?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LT?: InputMaybe<Scalars['DateTime']>;
+  updateAt_MIN_LTE?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type UserFeedingScheduleRelationship = {
+  __typename?: 'UserFeedingScheduleRelationship';
+  cursor: Scalars['String'];
+  node: FeedingSchedule;
+};
+
+export type UserFeedingScheduleUpdateConnectionInput = {
+  node?: InputMaybe<FeedingScheduleUpdateInput>;
+};
+
+export type UserFeedingScheduleUpdateFieldInput = {
+  connect?: InputMaybe<Array<UserFeedingScheduleConnectFieldInput>>;
+  create?: InputMaybe<Array<UserFeedingScheduleCreateFieldInput>>;
+  delete?: InputMaybe<Array<UserFeedingScheduleDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<UserFeedingScheduleDisconnectFieldInput>>;
+  update?: InputMaybe<UserFeedingScheduleUpdateConnectionInput>;
+  where?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+};
+
 export type UserFeedingUpdateConnectionInput = {
   node?: InputMaybe<FeedingUpdateInput>;
 };
@@ -1689,6 +2433,7 @@ export type UserOptions = {
 
 export type UserRelationInput = {
   feeding?: InputMaybe<Array<UserFeedingCreateFieldInput>>;
+  feedingSchedule?: InputMaybe<Array<UserFeedingScheduleCreateFieldInput>>;
 };
 
 /** Fields to sort Users by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSort object. */
@@ -1701,6 +2446,7 @@ export type UserSort = {
 
 export type UserUpdateInput = {
   feeding?: InputMaybe<Array<UserFeedingUpdateFieldInput>>;
+  feedingSchedule?: InputMaybe<Array<UserFeedingScheduleUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']>;
 };
 
@@ -1719,6 +2465,11 @@ export type UserWhere = {
   feedingAggregate?: InputMaybe<UserFeedingAggregateInput>;
   feedingConnection?: InputMaybe<UserFeedingConnectionWhere>;
   feedingConnection_NOT?: InputMaybe<UserFeedingConnectionWhere>;
+  feedingSchedule?: InputMaybe<FeedingScheduleWhere>;
+  feedingScheduleAggregate?: InputMaybe<UserFeedingScheduleAggregateInput>;
+  feedingScheduleConnection?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+  feedingScheduleConnection_NOT?: InputMaybe<UserFeedingScheduleConnectionWhere>;
+  feedingSchedule_NOT?: InputMaybe<FeedingScheduleWhere>;
   feeding_NOT?: InputMaybe<FeedingWhere>;
   id?: InputMaybe<Scalars['ID']>;
   id_CONTAINS?: InputMaybe<Scalars['ID']>;
@@ -1764,10 +2515,12 @@ export type CreateFeedingsMutationVariables = Exact<{
 
 export type CreateFeedingsMutation = { __typename?: 'Mutation', createFeedings: { __typename?: 'CreateFeedingsMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number }, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string } }> } };
 
-export type FeedingScheduleQueryVariables = Exact<{ [key: string]: never; }>;
+export type FeedingScheduleQueryVariables = Exact<{
+  where?: InputMaybe<FeedingScheduleWhere>;
+}>;
 
 
-export type FeedingScheduleQuery = { __typename?: 'Query', pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
+export type FeedingScheduleQuery = { __typename?: 'Query', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string }, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
 
 export type PetsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1933,7 +2686,23 @@ export type CreateFeedingsMutationHookResult = ReturnType<typeof useCreateFeedin
 export type CreateFeedingsMutationResult = Apollo.MutationResult<CreateFeedingsMutation>;
 export type CreateFeedingsMutationOptions = Apollo.BaseMutationOptions<CreateFeedingsMutation, CreateFeedingsMutationVariables>;
 export const FeedingScheduleDocument = gql`
-    query FeedingSchedule {
+    query FeedingSchedule($where: FeedingScheduleWhere) {
+  feedingSchedules(where: $where) {
+    id
+    am_pm
+    scheduledDate
+    scheduledGiver {
+      id
+      name
+    }
+    eater {
+      id
+      name
+    }
+    achievement {
+      id
+    }
+  }
   pets {
     id
     name
@@ -1957,6 +2726,7 @@ export const FeedingScheduleDocument = gql`
  * @example
  * const { data, loading, error } = useFeedingScheduleQuery({
  *   variables: {
+ *      where: // value for 'where'
  *   },
  * });
  */

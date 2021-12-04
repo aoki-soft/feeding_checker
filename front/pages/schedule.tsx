@@ -5,13 +5,49 @@ import { Button } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 import { useFeedingScheduleQuery } from '../lib/generated/client'
+import { tmpdir } from 'os';
 
 const WEEK_CHARS = [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ];
 
+/**
+ * 1桁の数値を0でパディングする
+ * @param num 2桁以下の数値
+ */
+const zero_padding = (num: number) => {
+	if (num < 10) {
+		return "0" + num;
+	}
+	return "" + num;
+}
+
 const Schedule: NextPage = () => {
+  const now = new Date();
+	const yesterday = new Date(now);
+	yesterday.setHours(now.getHours() - 9);
+	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
+  const end_date = new Date()
+  end_date.setDate(now.getDate()+ 14);
+  const end_datetime = `${end_date.getFullYear()}-${zero_padding(end_date.getMonth()+1)}-${zero_padding(end_date.getDate())}T15:00:00.000Z`;
+
   const { loading, error, data, refetch, networkStatus } = useFeedingScheduleQuery({
-		pollInterval: 500
+		pollInterval: 500,
+    variables: {
+      "where": {
+        "scheduledDate_GTE": start_datetime,
+        "scheduledDate_LT": end_datetime
+      }
+    }
 	});
+
+  const get_date_string = (date: Date) =>{
+    const tmp_date = new Date(date);
+    tmp_date.setHours(tmp_date.getHours() - 9);
+    return `${tmp_date.getFullYear()}-${zero_padding(tmp_date.getMonth()+1)}-${zero_padding(tmp_date.getDate())}`
+  }
+
+  const extract_date_stinrg = (date_stinrg: string) => {
+    return date_stinrg.slice(0, 10)
+  }
 
   const [date_list, setDateList ]= useState<Date[]>([]);
   
@@ -28,6 +64,7 @@ const Schedule: NextPage = () => {
   if (loading) return <div>ローディング中です</div>;
 	if (error) return <div>`Error! ${error.message}`</div>;
 	if (data == undefined) return <div>データを取得出来ませんでした。</div>
+  console.log(data);
 
   return (<>
     <MiniDrawer>
@@ -100,7 +137,19 @@ const Schedule: NextPage = () => {
                         {
                           data.users.map((user)=>{
                             return (
-                            <Button variant="contained" size="large" color="primary" sx={{
+                            <Button variant="contained" size="large" color={
+                              (()=>{
+                                for (const schedule of data.feedingSchedules) {
+                                  const formated_date = get_date_string(date);
+                                  const scheduled_date = extract_date_stinrg(schedule.scheduledDate);
+                                  if (scheduled_date == formated_date && schedule.am_pm == am_pm[0] && schedule.scheduledGiver.id == user.id) {
+                                    return true;
+                                  }
+                                }
+                                return false;
+                              })()? "warning": "primary"
+                            }
+                            sx={{
                               height: 100,
                               margin: 1,
                             }}>

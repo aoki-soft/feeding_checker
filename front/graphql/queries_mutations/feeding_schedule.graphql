@@ -1,9 +1,25 @@
-query FeedingSchedule {
-  pets {
+query FeedingSchedule($where: FeedingScheduleWhere) {
+  feedingSchedules(where: $where) {
+    id
+    am_pm
+    scheduledDate
+    scheduledGiver {
+      id
+      name
+    }
+    eater {
+      id
+      name
+    }
+    achievement {
+      id
+    }
+  }
+    pets {
     id
     name
   }
-  users {
+    users {
     id
     name
   }
