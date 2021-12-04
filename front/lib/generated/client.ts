@@ -2515,12 +2515,19 @@ export type CreateFeedingsMutationVariables = Exact<{
 
 export type CreateFeedingsMutation = { __typename?: 'Mutation', createFeedings: { __typename?: 'CreateFeedingsMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number }, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string } }> } };
 
-export type FeedingScheduleQueryVariables = Exact<{
+export type FeedingSchedulesQueryVariables = Exact<{
   where?: InputMaybe<FeedingScheduleWhere>;
 }>;
 
 
-export type FeedingScheduleQuery = { __typename?: 'Query', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string }, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
+export type FeedingSchedulesQuery = { __typename?: 'Query', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string }, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
+
+export type CreateFeedingSchedulesMutationVariables = Exact<{
+  input: Array<FeedingScheduleCreateInput> | FeedingScheduleCreateInput;
+}>;
+
+
+export type CreateFeedingSchedulesMutation = { __typename?: 'Mutation', createFeedingSchedules: { __typename?: 'CreateFeedingSchedulesMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number, relationshipsCreated: number }, feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, eater: { __typename?: 'Pet', id: string, name: string }, scheduledGiver: { __typename?: 'User', id: string, name: string } }> } };
 
 export type PetsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2685,8 +2692,8 @@ export function useCreateFeedingsMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateFeedingsMutationHookResult = ReturnType<typeof useCreateFeedingsMutation>;
 export type CreateFeedingsMutationResult = Apollo.MutationResult<CreateFeedingsMutation>;
 export type CreateFeedingsMutationOptions = Apollo.BaseMutationOptions<CreateFeedingsMutation, CreateFeedingsMutationVariables>;
-export const FeedingScheduleDocument = gql`
-    query FeedingSchedule($where: FeedingScheduleWhere) {
+export const FeedingSchedulesDocument = gql`
+    query FeedingSchedules($where: FeedingScheduleWhere) {
   feedingSchedules(where: $where) {
     id
     am_pm
@@ -2715,32 +2722,81 @@ export const FeedingScheduleDocument = gql`
     `;
 
 /**
- * __useFeedingScheduleQuery__
+ * __useFeedingSchedulesQuery__
  *
- * To run a query within a React component, call `useFeedingScheduleQuery` and pass it any options that fit your needs.
- * When your component renders, `useFeedingScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFeedingSchedulesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedingSchedulesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFeedingScheduleQuery({
+ * const { data, loading, error } = useFeedingSchedulesQuery({
  *   variables: {
  *      where: // value for 'where'
  *   },
  * });
  */
-export function useFeedingScheduleQuery(baseOptions?: Apollo.QueryHookOptions<FeedingScheduleQuery, FeedingScheduleQueryVariables>) {
+export function useFeedingSchedulesQuery(baseOptions?: Apollo.QueryHookOptions<FeedingSchedulesQuery, FeedingSchedulesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FeedingScheduleQuery, FeedingScheduleQueryVariables>(FeedingScheduleDocument, options);
+        return Apollo.useQuery<FeedingSchedulesQuery, FeedingSchedulesQueryVariables>(FeedingSchedulesDocument, options);
       }
-export function useFeedingScheduleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedingScheduleQuery, FeedingScheduleQueryVariables>) {
+export function useFeedingSchedulesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FeedingSchedulesQuery, FeedingSchedulesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FeedingScheduleQuery, FeedingScheduleQueryVariables>(FeedingScheduleDocument, options);
+          return Apollo.useLazyQuery<FeedingSchedulesQuery, FeedingSchedulesQueryVariables>(FeedingSchedulesDocument, options);
         }
-export type FeedingScheduleQueryHookResult = ReturnType<typeof useFeedingScheduleQuery>;
-export type FeedingScheduleLazyQueryHookResult = ReturnType<typeof useFeedingScheduleLazyQuery>;
-export type FeedingScheduleQueryResult = Apollo.QueryResult<FeedingScheduleQuery, FeedingScheduleQueryVariables>;
+export type FeedingSchedulesQueryHookResult = ReturnType<typeof useFeedingSchedulesQuery>;
+export type FeedingSchedulesLazyQueryHookResult = ReturnType<typeof useFeedingSchedulesLazyQuery>;
+export type FeedingSchedulesQueryResult = Apollo.QueryResult<FeedingSchedulesQuery, FeedingSchedulesQueryVariables>;
+export const CreateFeedingSchedulesDocument = gql`
+    mutation CreateFeedingSchedules($input: [FeedingScheduleCreateInput!]!) {
+  createFeedingSchedules(input: $input) {
+    info {
+      nodesCreated
+      relationshipsCreated
+    }
+    feedingSchedules {
+      id
+      am_pm
+      scheduledDate
+      eater {
+        id
+        name
+      }
+      scheduledGiver {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export type CreateFeedingSchedulesMutationFn = Apollo.MutationFunction<CreateFeedingSchedulesMutation, CreateFeedingSchedulesMutationVariables>;
+
+/**
+ * __useCreateFeedingSchedulesMutation__
+ *
+ * To run a mutation, you first call `useCreateFeedingSchedulesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFeedingSchedulesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFeedingSchedulesMutation, { data, loading, error }] = useCreateFeedingSchedulesMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFeedingSchedulesMutation(baseOptions?: Apollo.MutationHookOptions<CreateFeedingSchedulesMutation, CreateFeedingSchedulesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFeedingSchedulesMutation, CreateFeedingSchedulesMutationVariables>(CreateFeedingSchedulesDocument, options);
+      }
+export type CreateFeedingSchedulesMutationHookResult = ReturnType<typeof useCreateFeedingSchedulesMutation>;
+export type CreateFeedingSchedulesMutationResult = Apollo.MutationResult<CreateFeedingSchedulesMutation>;
+export type CreateFeedingSchedulesMutationOptions = Apollo.BaseMutationOptions<CreateFeedingSchedulesMutation, CreateFeedingSchedulesMutationVariables>;
 export const PetsDocument = gql`
     query Pets {
   pets {

@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import { useFeedingScheduleQuery } from '../lib/generated/client'
-import { tmpdir } from 'os';
+import { useCreateFeedingSchedulesMutation, useFeedingSchedulesQuery } from '../lib/generated/client'
 
 const WEEK_CHARS = [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ];
 
@@ -23,13 +22,15 @@ const zero_padding = (num: number) => {
 const Schedule: NextPage = () => {
   const now = new Date();
 	const yesterday = new Date(now);
-	yesterday.setHours(now.getHours() - 9);
+	yesterday.setDate(now.getDate() - 1);
 	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
   const end_date = new Date()
   end_date.setDate(now.getDate()+ 14);
   const end_datetime = `${end_date.getFullYear()}-${zero_padding(end_date.getMonth()+1)}-${zero_padding(end_date.getDate())}T15:00:00.000Z`;
+  console.log("スタート" + start_datetime)
+  console.log("エンド" + end_datetime)
 
-  const { loading, error, data, refetch, networkStatus } = useFeedingScheduleQuery({
+  const { loading, error, data, refetch, networkStatus } = useFeedingSchedulesQuery({
 		pollInterval: 500,
     variables: {
       "where": {
@@ -38,6 +39,7 @@ const Schedule: NextPage = () => {
       }
     }
 	});
+  const [ createSchedules, create_result ] = useCreateFeedingSchedulesMutation();
 
   const get_date_string = (date: Date) =>{
     const tmp_date = new Date(date);
@@ -149,11 +151,41 @@ const Schedule: NextPage = () => {
                                 return false;
                               })()? "warning": "primary"
                             }
+                            onClick={async ()=>{
+                              data.pets.map(async (pet)=>{
+                                const res = await createSchedules({variables:{
+                                  "input": [
+                                    {
+                                      "scheduledDate": `${date.getUTCFullYear()}-${zero_padding(date.getUTCMonth()+1)}-${zero_padding(date.getUTCDate())}T${zero_padding(date.getUTCHours())}:00:00.000Z`,
+                                      "am_pm": am_pm[0],
+                                      "scheduledGiver": {
+                                        "connect": {
+                                          "where": {
+                                            "node": {
+                                              "id": user.id
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "eater": {
+                                        "connect": {
+                                          "where": {
+                                            "node": {
+                                              "id": pet.id
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }})
+                                console.log(res);
+                              });
+                            }}
                             sx={{
                               height: 100,
                               margin: 1,
                             }}>
-                              
                             </Button>
                             )
                           })

@@ -1,4 +1,4 @@
-query FeedingSchedule($where: FeedingScheduleWhere) {
+query FeedingSchedules($where: FeedingScheduleWhere) {
   feedingSchedules(where: $where) {
     id
     am_pm
@@ -22,5 +22,27 @@ query FeedingSchedule($where: FeedingScheduleWhere) {
     users {
     id
     name
+  }
+}
+
+mutation CreateFeedingSchedules($input: [FeedingScheduleCreateInput!]!) {
+  createFeedingSchedules(input: $input) {
+    info {
+      nodesCreated
+      relationshipsCreated
+    }
+    feedingSchedules {
+      id
+      am_pm
+      scheduledDate
+      eater {
+        id
+        name
+      }
+      scheduledGiver {
+        id
+        name
+      }
+    }
   }
 }

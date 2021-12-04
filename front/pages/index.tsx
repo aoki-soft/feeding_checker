@@ -67,7 +67,7 @@ const Home: NextPage = () => {
   const now = new Date();
   const end_datetime = `${now.getFullYear()}-${zero_padding(now.getMonth()+1)}-${zero_padding(now.getDate())}T15:00:00.000Z`;
 	const yesterday = now;
-	yesterday.setTime(now.getTime() -86400000);
+	yesterday.setDate(now.getDate() -1);
 	const start_datetime = `${yesterday.getFullYear()}-${zero_padding(yesterday.getMonth()+1)}-${zero_padding(yesterday.getDate())}T15:00:00.000Z`;
 
   const { loading, error, data, refetch, networkStatus } = useFeedingCheckQuery({
