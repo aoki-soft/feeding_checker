@@ -26,7 +26,7 @@ docker-compose down
 ## 再デプロイ
 新しいバージョンをクローン・フェッチした場合は、以前のバージョンのコンテナイメージを上書きするために以下のコマンドを実行してデプロイを行う。
 ```
-docker-compose up -d
+docker-compose up -d --build 
 ```
 
 ## 開発用メモ

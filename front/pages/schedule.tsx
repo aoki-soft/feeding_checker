@@ -114,14 +114,14 @@ const Schedule: NextPage = () => {
           {
             date_list.map((date)=>{
               return (
-              <div style={{
+              <div key={date.toDateString()} style={{
                 display: 'flex',
                 flexDirection: 'row',
               }}>
                 {
                   [["am", "午前"], ["pm", "午後"]].map((am_pm)=>{
                     return (
-                      <div style={{
+                      <div key={date.toDateString() + am_pm[0]} style={{
                         margin: 5,
                         color: 'white',
                         display: 'flex',
@@ -139,7 +139,7 @@ const Schedule: NextPage = () => {
                         {
                           data.users.map((user)=>{
                             return (
-                            <Button variant="contained" size="large" color={
+                            <Button key={user.id} variant="contained" size="large" color={
                               (()=>{
                                 for (const schedule of data.feedingSchedules) {
                                   const formated_date = get_date_string(date);
