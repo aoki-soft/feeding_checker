@@ -7,21 +7,26 @@ query FeedingSchedules($where: FeedingScheduleWhere) {
       id
       name
     }
-    eater {
+  eater {
       id
       name
     }
-    achievement {
+  achievement {
       id
     }
   }
-    pets {
+  pets {
     id
     name
   }
-    users {
+  users {
     id
     name
+    feedingSchedule {
+      id
+      am_pm
+      scheduledDate
+    }
   }
 }
 
@@ -46,3 +51,4 @@ mutation CreateFeedingSchedules($input: [FeedingScheduleCreateInput!]!) {
     }
   }
 }
+
