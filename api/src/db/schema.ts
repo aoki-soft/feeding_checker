@@ -15,8 +15,8 @@ const typeDefs = gql`
         id: ID! @id @readonly
         createAt: DateTime! @timestamp(operations: [CREATE]) @readonly
         updateAt: DateTime @timestamp(operations: [UPDATE]) @readonly
-        giver: User! @relationship(type: "GIVE", direction: IN)
-        eater: Pet! @relationship(type: "EATE", direction: OUT)
+        giver: User @relationship(type: "GIVE", direction: IN)
+        eater: Pet @relationship(type: "EATE", direction: OUT)
         am_pm: String!
         schedlue: FeedingSchedule @relationship(type: "SCHEDLUE", direction: IN)
     }
@@ -36,8 +36,8 @@ const typeDefs = gql`
         am_pm: String!
         createAt: DateTime! @timestamp(operations: [CREATE]) @readonly
         updateAt: DateTime @timestamp(operations: [UPDATE]) @readonly
-        scheduledGiver: User! @relationship(type: "GIVE", direction: IN)
-        eater: Pet! @relationship(type: "EATE", direction: OUT)
+        scheduledGiver: User @relationship(type: "GIVE", direction: IN)
+        eater: Pet @relationship(type: "EATE", direction: OUT)
         achievement: Feeding @relationship(type: "SCHEDLUE", direction: OUT)
     }
 `
