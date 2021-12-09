@@ -62,11 +62,17 @@ const Schedule: NextPage = () => {
   const end_datetime = `${end_date.getFullYear()}-${zero_padding(end_date.getMonth()+1)}-${zero_padding(end_date.getDate())}T15:00:00.000Z`;
 
   const { loading, error, data, refetch, networkStatus } = useFeedingSchedulesQuery({
-		pollInterval: 500,
+		pollInterval: 200,
     variables: {
       "where": {
         "scheduledDate_GTE": start_datetime,
-        "scheduledDate_LT": end_datetime
+        "scheduledDate_LT": end_datetime,
+        "scheduledGiverAggregate": {
+          "count_GTE": 1
+        },
+        "eaterAggregate": {
+          "count_GTE": 1
+        },
       }
     }
 	});
@@ -132,7 +138,7 @@ const Schedule: NextPage = () => {
                   // そのブロックにえさやり予定が入っている場合
                   let match_feeding_schedule = false;
                   schedule.schedule.map((that_day_schedule)=>{
-                    if (that_day_schedule.scheduledGiver.id != null) {
+                    if (that_day_schedule.scheduledGiver != null) {
                       if (that_day_schedule.scheduledGiver.id == user.id) {match_feeding_schedule = true}
                     }
                   })
@@ -156,6 +162,8 @@ const Schedule: NextPage = () => {
                         // ほかのユーザーがスケジュールを持っていた場合
                         console.log("スケジュール変更")
                         schedule.schedule.map(async (this_schedule) => {
+                          console.log("ミューテーション")
+                          console.log(this_schedule.id)
                           console.log(user.name)
                           console.log(user.id)
                           await updateFeedingSchedules({variables: {
@@ -164,6 +172,13 @@ const Schedule: NextPage = () => {
                             },
                             "update": {
                               "scheduledGiver": {
+                                "disconnect": {
+                                  "where": {
+                                    "node": {
+                                      "id": this_schedule.scheduledGiver.id
+                                    }
+                                  }
+                                },
                                 "connect": {
                                   "where": {
                                     "node": {
@@ -173,7 +188,9 @@ const Schedule: NextPage = () => {
                                 }
                               }
                             }
-                          }})
+                          }
+                        })
+                          refetch()
                           console.log(update_result)
                         })
                       } else {

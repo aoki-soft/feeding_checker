@@ -2542,7 +2542,7 @@ export type UpdateFeedingSchedulesMutationVariables = Exact<{
 }>;
 
 
-export type UpdateFeedingSchedulesMutation = { __typename?: 'Mutation', updateFeedingSchedules: { __typename?: 'UpdateFeedingSchedulesMutationResponse', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, createAt: any, updateAt?: any | null | undefined, scheduledGiver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
+export type UpdateFeedingSchedulesMutation = { __typename?: 'Mutation', updateFeedingSchedules: { __typename?: 'UpdateFeedingSchedulesMutationResponse', info: { __typename?: 'UpdateInfo', nodesCreated: number, nodesDeleted: number, relationshipsCreated: number, relationshipsDeleted: number }, feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, createAt: any, updateAt?: any | null | undefined, scheduledGiver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
 
 export type PetsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2850,6 +2850,12 @@ export type DeleteFeedingSchedulesMutationOptions = Apollo.BaseMutationOptions<D
 export const UpdateFeedingSchedulesDocument = gql`
     mutation UpdateFeedingSchedules($where: FeedingScheduleWhere, $update: FeedingScheduleUpdateInput) {
   updateFeedingSchedules(where: $where, update: $update) {
+    info {
+      nodesCreated
+      nodesDeleted
+      relationshipsCreated
+      relationshipsDeleted
+    }
     feedingSchedules {
       id
       am_pm

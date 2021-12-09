@@ -77,7 +77,7 @@ const Home: NextPage = () => {
         "createAt_LT": end_datetime,
       }
     },
-		pollInterval: 500
+		pollInterval: 200
 	});
   const [ createFeedings, create_result ] = useCreateFeedingsMutation();
 

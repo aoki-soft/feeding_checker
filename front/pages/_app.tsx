@@ -7,7 +7,14 @@ import {
 } from "@apollo/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const cache = new InMemoryCache();
+  const cache = new InMemoryCache({
+		// typePolicies: {
+		// 	feedingSchedules: {
+		// 		keyFields: ["id", "scheduledGiver"]
+		// 	}
+		// }
+		// resultCaching: false,
+	});
 	const httpLink = createHttpLink({
 			uri: `/api`
 	});

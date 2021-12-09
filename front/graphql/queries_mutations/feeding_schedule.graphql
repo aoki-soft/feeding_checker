@@ -57,6 +57,12 @@ mutation DeleteFeedingSchedules($where: FeedingScheduleWhere) {
 
 mutation UpdateFeedingSchedules($where: FeedingScheduleWhere, $update: FeedingScheduleUpdateInput) {
   updateFeedingSchedules(where: $where, update: $update) {
+    info {
+      nodesCreated
+      nodesDeleted
+      relationshipsCreated
+      relationshipsDeleted
+    }
     feedingSchedules {
       id
       am_pm

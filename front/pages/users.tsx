@@ -13,7 +13,7 @@ import { NetworkStatus } from "@apollo/client";
 
 const Users: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = useUsersQuery({
-		pollInterval: 500
+		pollInterval: 200
 	})
 
 	const [createUsers, create_result ] = useCreateUsersMutation();

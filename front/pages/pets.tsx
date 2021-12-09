@@ -14,7 +14,7 @@ import { useCreatePetsMutation, useDeletePetsMutation, usePetsQuery, useUpdatePe
 
 const Pets: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = usePetsQuery({
-		pollInterval: 500
+		pollInterval: 200
 	});
 	const [createPet, create_result ] = useCreatePetsMutation();
 	const [deletePet, delete_reult ] = useDeletePetsMutation();
