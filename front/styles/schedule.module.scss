@@ -1,0 +1,44 @@
+.ScheduleTable {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  width: fit-content;
+  margin: auto;
+}
+
+.UserName {
+  border-left: 1px solid black;
+  width: 70px;
+  height: 70px;
+  text-align: center;
+}
+
+.ScheduleBlock {
+  border-left: 1px solid black;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.DateAmPmBlock {
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  width: fit-content;
+}
+
+.DateAmPmTitleBlock {
+  height: 70px;
+  width: 80px;
+}
+
+.FeedingScheduleBlock {
+  width: 60px;
+  height: 60px;
+  border: 2px solid black;
+  border-radius: 15px;
+  background-color: #f57c00;
+  margin: auto;
+}

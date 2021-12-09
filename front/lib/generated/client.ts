@@ -65,10 +65,10 @@ export type Feeding = {
   __typename?: 'Feeding';
   am_pm: Scalars['String'];
   createAt: Scalars['DateTime'];
-  eater: Pet;
+  eater?: Maybe<Pet>;
   eaterAggregate?: Maybe<FeedingPetEaterAggregationSelection>;
   eaterConnection: FeedingEaterConnection;
-  giver: User;
+  giver?: Maybe<User>;
   giverAggregate?: Maybe<FeedingUserGiverAggregationSelection>;
   giverConnection: FeedingGiverConnection;
   id: Scalars['ID'];
@@ -621,12 +621,12 @@ export type FeedingSchedule = {
   achievementConnection: FeedingScheduleAchievementConnection;
   am_pm: Scalars['String'];
   createAt: Scalars['DateTime'];
-  eater: Pet;
+  eater?: Maybe<Pet>;
   eaterAggregate?: Maybe<FeedingSchedulePetEaterAggregationSelection>;
   eaterConnection: FeedingScheduleEaterConnection;
   id: Scalars['ID'];
   scheduledDate: Scalars['DateTime'];
-  scheduledGiver: User;
+  scheduledGiver?: Maybe<User>;
   scheduledGiverAggregate?: Maybe<FeedingScheduleUserScheduledGiverAggregationSelection>;
   scheduledGiverConnection: FeedingScheduleScheduledGiverConnection;
   updateAt?: Maybe<Scalars['DateTime']>;
@@ -2506,28 +2506,43 @@ export type FeedingCheckQueryVariables = Exact<{
 }>;
 
 
-export type FeedingCheckQuery = { __typename?: 'Query', pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }>, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string } }> };
+export type FeedingCheckQuery = { __typename?: 'Query', pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }>, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> };
 
 export type CreateFeedingsMutationVariables = Exact<{
   input: Array<FeedingCreateInput> | FeedingCreateInput;
 }>;
 
 
-export type CreateFeedingsMutation = { __typename?: 'Mutation', createFeedings: { __typename?: 'CreateFeedingsMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number }, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string } }> } };
+export type CreateFeedingsMutation = { __typename?: 'Mutation', createFeedings: { __typename?: 'CreateFeedingsMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number }, feedings: Array<{ __typename?: 'Feeding', id: string, am_pm: string, createAt: any, updateAt?: any | null | undefined, giver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
 
 export type FeedingSchedulesQueryVariables = Exact<{
   where?: InputMaybe<FeedingScheduleWhere>;
 }>;
 
 
-export type FeedingSchedulesQuery = { __typename?: 'Query', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string }, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
+export type FeedingSchedulesQuery = { __typename?: 'Query', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }>, pets: Array<{ __typename?: 'Pet', id: string, name: string }>, users: Array<{ __typename?: 'User', id: string, name: string }> };
 
 export type CreateFeedingSchedulesMutationVariables = Exact<{
   input: Array<FeedingScheduleCreateInput> | FeedingScheduleCreateInput;
 }>;
 
 
-export type CreateFeedingSchedulesMutation = { __typename?: 'Mutation', createFeedingSchedules: { __typename?: 'CreateFeedingSchedulesMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number, relationshipsCreated: number }, feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, eater: { __typename?: 'Pet', id: string, name: string }, scheduledGiver: { __typename?: 'User', id: string, name: string } }> } };
+export type CreateFeedingSchedulesMutation = { __typename?: 'Mutation', createFeedingSchedules: { __typename?: 'CreateFeedingSchedulesMutationResponse', info: { __typename?: 'CreateInfo', nodesCreated: number, relationshipsCreated: number }, feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, createAt: any, scheduledGiver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
+
+export type DeleteFeedingSchedulesMutationVariables = Exact<{
+  where?: InputMaybe<FeedingScheduleWhere>;
+}>;
+
+
+export type DeleteFeedingSchedulesMutation = { __typename?: 'Mutation', deleteFeedingSchedules: { __typename?: 'DeleteInfo', nodesDeleted: number, relationshipsDeleted: number } };
+
+export type UpdateFeedingSchedulesMutationVariables = Exact<{
+  where?: InputMaybe<FeedingScheduleWhere>;
+  update?: InputMaybe<FeedingScheduleUpdateInput>;
+}>;
+
+
+export type UpdateFeedingSchedulesMutation = { __typename?: 'Mutation', updateFeedingSchedules: { __typename?: 'UpdateFeedingSchedulesMutationResponse', feedingSchedules: Array<{ __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, createAt: any, updateAt?: any | null | undefined, scheduledGiver?: { __typename?: 'User', id: string, name: string } | null | undefined, eater?: { __typename?: 'Pet', id: string, name: string } | null | undefined }> } };
 
 export type PetsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2759,11 +2774,12 @@ export const CreateFeedingSchedulesDocument = gql`
       id
       am_pm
       scheduledDate
-      eater {
+      createAt
+      scheduledGiver {
         id
         name
       }
-      scheduledGiver {
+      eater {
         id
         name
       }
@@ -2797,6 +2813,88 @@ export function useCreateFeedingSchedulesMutation(baseOptions?: Apollo.MutationH
 export type CreateFeedingSchedulesMutationHookResult = ReturnType<typeof useCreateFeedingSchedulesMutation>;
 export type CreateFeedingSchedulesMutationResult = Apollo.MutationResult<CreateFeedingSchedulesMutation>;
 export type CreateFeedingSchedulesMutationOptions = Apollo.BaseMutationOptions<CreateFeedingSchedulesMutation, CreateFeedingSchedulesMutationVariables>;
+export const DeleteFeedingSchedulesDocument = gql`
+    mutation DeleteFeedingSchedules($where: FeedingScheduleWhere) {
+  deleteFeedingSchedules(where: $where) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}
+    `;
+export type DeleteFeedingSchedulesMutationFn = Apollo.MutationFunction<DeleteFeedingSchedulesMutation, DeleteFeedingSchedulesMutationVariables>;
+
+/**
+ * __useDeleteFeedingSchedulesMutation__
+ *
+ * To run a mutation, you first call `useDeleteFeedingSchedulesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFeedingSchedulesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFeedingSchedulesMutation, { data, loading, error }] = useDeleteFeedingSchedulesMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeleteFeedingSchedulesMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFeedingSchedulesMutation, DeleteFeedingSchedulesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFeedingSchedulesMutation, DeleteFeedingSchedulesMutationVariables>(DeleteFeedingSchedulesDocument, options);
+      }
+export type DeleteFeedingSchedulesMutationHookResult = ReturnType<typeof useDeleteFeedingSchedulesMutation>;
+export type DeleteFeedingSchedulesMutationResult = Apollo.MutationResult<DeleteFeedingSchedulesMutation>;
+export type DeleteFeedingSchedulesMutationOptions = Apollo.BaseMutationOptions<DeleteFeedingSchedulesMutation, DeleteFeedingSchedulesMutationVariables>;
+export const UpdateFeedingSchedulesDocument = gql`
+    mutation UpdateFeedingSchedules($where: FeedingScheduleWhere, $update: FeedingScheduleUpdateInput) {
+  updateFeedingSchedules(where: $where, update: $update) {
+    feedingSchedules {
+      id
+      am_pm
+      scheduledDate
+      createAt
+      updateAt
+      scheduledGiver {
+        id
+        name
+      }
+      eater {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export type UpdateFeedingSchedulesMutationFn = Apollo.MutationFunction<UpdateFeedingSchedulesMutation, UpdateFeedingSchedulesMutationVariables>;
+
+/**
+ * __useUpdateFeedingSchedulesMutation__
+ *
+ * To run a mutation, you first call `useUpdateFeedingSchedulesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFeedingSchedulesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFeedingSchedulesMutation, { data, loading, error }] = useUpdateFeedingSchedulesMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      update: // value for 'update'
+ *   },
+ * });
+ */
+export function useUpdateFeedingSchedulesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFeedingSchedulesMutation, UpdateFeedingSchedulesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFeedingSchedulesMutation, UpdateFeedingSchedulesMutationVariables>(UpdateFeedingSchedulesDocument, options);
+      }
+export type UpdateFeedingSchedulesMutationHookResult = ReturnType<typeof useUpdateFeedingSchedulesMutation>;
+export type UpdateFeedingSchedulesMutationResult = Apollo.MutationResult<UpdateFeedingSchedulesMutation>;
+export type UpdateFeedingSchedulesMutationOptions = Apollo.BaseMutationOptions<UpdateFeedingSchedulesMutation, UpdateFeedingSchedulesMutationVariables>;
 export const PetsDocument = gql`
     query Pets {
   pets {

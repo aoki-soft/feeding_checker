@@ -1,12 +1,18 @@
 import { flexbox } from '@mui/system';
 import type { NextPage } from 'next'
 import { useState, useEffect } from 'react';
-import { Button } from '@mui/material';
+import { Button, Box } from '@mui/material';
+import Head from 'next/head'
 
 import MiniDrawer from '../components/MiniVariantDrawer'
-import { useCreateFeedingSchedulesMutation, useFeedingSchedulesQuery } from '../lib/generated/client'
+import { useCreateFeedingSchedulesMutation, useDeleteFeedingSchedulesMutation, useFeedingSchedulesQuery, useUpdateFeedingSchedulesMutation} from '../lib/generated/client'
+import { styled } from '@mui/system';
+import style  from '../styles/schedule.module.scss'
 
 const WEEK_CHARS = [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ];
+
+type FeedingScheduleForQuery = { __typename?: 'FeedingSchedule', id: string, am_pm: string, scheduledDate: any, scheduledGiver: { __typename?: 'User', id: string, name: string }, eater: { __typename?: 'Pet', id: string, name: string }, achievement?: { __typename?: 'Feeding', id: string } | null | undefined }
+type Schedule = { date: Date, am_pm: string, schedule: FeedingScheduleForQuery[] }
 
 /**
  * 1桁の数値を0でパディングする
@@ -19,6 +25,33 @@ const zero_padding = (num: number) => {
 	return "" + num;
 }
 
+const zero_padding_three = (num: number) =>{
+  if (num < 10) {
+		return "00" + num;
+	} else if (num < 100) {
+    return "0" + num;
+  }
+  return "" + num;
+}
+
+const get_date_string = (date: Date) =>{
+  const tmp_date = new Date(date);
+  tmp_date.setHours(tmp_date.getHours() - 9);
+  return `${tmp_date.getFullYear()}-${zero_padding(tmp_date.getMonth()+1)}-${zero_padding(tmp_date.getDate())}`
+}
+
+const extract_date_stinrg = (date_stinrg: string) => {
+  return date_stinrg.slice(0, 10)
+}
+
+const compare_date = (date: Date, date_string: string) => {
+  return get_date_string(date) == extract_date_stinrg(date_string)
+}
+
+const to_datetime_string = (date: Date) => {
+  return `${date.getUTCFullYear()}-${zero_padding(date.getUTCMonth()+1)}-${zero_padding(date.getUTCDate())}T${zero_padding(date.getUTCHours())}:${zero_padding(date.getUTCMinutes())}:${zero_padding(date.getUTCSeconds())}.${zero_padding_three(date.getUTCMilliseconds())}Z`
+}
+
 const Schedule: NextPage = () => {
   const now = new Date();
 	const yesterday = new Date(now);
@@ -27,8 +60,6 @@ const Schedule: NextPage = () => {
   const end_date = new Date()
   end_date.setDate(now.getDate()+ 14);
   const end_datetime = `${end_date.getFullYear()}-${zero_padding(end_date.getMonth()+1)}-${zero_padding(end_date.getDate())}T15:00:00.000Z`;
-  console.log("スタート" + start_datetime)
-  console.log("エンド" + end_datetime)
 
   const { loading, error, data, refetch, networkStatus } = useFeedingSchedulesQuery({
 		pollInterval: 500,
@@ -39,167 +70,159 @@ const Schedule: NextPage = () => {
       }
     }
 	});
-  const [ createSchedules, create_result ] = useCreateFeedingSchedulesMutation();
-
-  const get_date_string = (date: Date) =>{
-    const tmp_date = new Date(date);
-    tmp_date.setHours(tmp_date.getHours() - 9);
-    return `${tmp_date.getFullYear()}-${zero_padding(tmp_date.getMonth()+1)}-${zero_padding(tmp_date.getDate())}`
-  }
-
-  const extract_date_stinrg = (date_stinrg: string) => {
-    return date_stinrg.slice(0, 10)
-  }
-
-  const [date_list, setDateList ]= useState<Date[]>([]);
-  
-  useEffect(() => {
-    const date = new Date();
-    const new_date_list = [];
-    for (let i=0; i<14; i++) {
-      new_date_list.push(new Date(date))
-      date.setDate(date.getDate()+1);
-    }
-    setDateList(new_date_list);
-  }, [])
+  const [ createFeedingSchedules, create_result] = useCreateFeedingSchedulesMutation();
+  const [ deleteFeedingSchedules, delete_result] = useDeleteFeedingSchedulesMutation();
+  const [ updateFeedingSchedules, update_result] = useUpdateFeedingSchedulesMutation();
 
   if (loading) return <div>ローディング中です</div>;
 	if (error) return <div>`Error! ${error.message}`</div>;
 	if (data == undefined) return <div>データを取得出来ませんでした。</div>
   console.log(data);
 
+
+  const date = new Date();
+  const schedule_list = [];
+  for (let i=0; i<14; i++) {
+    for (const this_am_pm of ['am', 'pm']) {
+      const this_schedules: any[] = []
+      data.feedingSchedules.map((feedingSchedule) => {
+        const match_date = compare_date(date, feedingSchedule.scheduledDate);
+        const match_am_pm = this_am_pm == feedingSchedule.am_pm;
+        if ( match_date && match_am_pm) { this_schedules.push(feedingSchedule)}
+      })
+      schedule_list.push({
+        date: new Date(date),
+        am_pm: this_am_pm,
+        schedule: this_schedules
+      })
+    }
+    date.setDate(date.getDate() + 1);
+  }
+  console.log(schedule_list)
+
   return (<>
+      <Head>
+      <title>えさやりチェッカー</title>
+      <link rel="icon" href="/dog_food.svg" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      />
+    </Head>
     <MiniDrawer>
-      スケジュール
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        height: '70vh',
-        width: 'auto',
-        marginRight: 30,
-        backgroundColor: 'gray'
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: 100,
-          margin: 5,         
-        }}>
-          <div style={{
-            height: 100,
-            margin: 5,
-          }}>
+      <div className={style.ScheduleTable}>
+        <div className={style.DateAmPmBlock}>
+          <div className={style.DateAmPmTitleBlock}>
           </div>
           {
-            data.users.map((user)=>{
-              return (<div key={user.id} style={{
-                margin: 5,
-                color: 'white',
-                height: 100,
-              }}>
+            data.users.map((user) =>{
+              // ユーザー名
+              return(<div className={style.UserName} key={user.id}>
                 {user.name}
               </div>)
             })
           }
         </div>
-        <div style={{
-            display: 'flex',
-            flexDirection: 'row',
-            marginRight: 15,
-            marginTop: 5,
-            marginBottom: 5,
-            width: '100%',
-            overflow: 'scroll',
-          }}>
-          {
-            date_list.map((date)=>{
-              return (
-              <div key={date.toDateString()} style={{
-                display: 'flex',
-                flexDirection: 'row',
-              }}>
-                {
-                  [["am", "午前"], ["pm", "午後"]].map((am_pm)=>{
-                    return (
-                      <div key={date.toDateString() + am_pm[0]} style={{
-                        margin: 5,
-                        color: 'white',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        borderColor: 'black',
-                        borderStyle: 'solid',
-                      }}>
-                        <div style={{
-                        height: 95,
-                        width: 75,
-                        margin: 5,
-                        }}>
-                        {date.getMonth()+1}/{date.getDate()}<br/>{WEEK_CHARS[date.getDay()]}<br/>{am_pm[1]}
-                        </div>
-                        {
-                          data.users.map((user)=>{
-                            return (
-                            <Button key={user.id} variant="contained" size="large" color={
-                              (()=>{
-                                for (const schedule of data.feedingSchedules) {
-                                  const formated_date = get_date_string(date);
-                                  const scheduled_date = extract_date_stinrg(schedule.scheduledDate);
-                                  if (scheduled_date == formated_date && schedule.am_pm == am_pm[0] && schedule.scheduledGiver.id == user.id) {
-                                    return true;
+        {
+          schedule_list.map((schedule)=>{
+            return(<div key={schedule.date.toString() + schedule.am_pm} className={style.DateAmPmBlock}>
+              <div className={style.DateAmPmTitleBlock} >{schedule.date.getMonth()+1}月 {schedule.date.getDate()}日<br/>{schedule.am_pm}</div>
+              {
+                data.users.map((user) =>{
+                  // そのブロックにえさやり予定が入っている場合
+                  let match_feeding_schedule = false;
+                  schedule.schedule.map((that_day_schedule)=>{
+                    if (that_day_schedule.scheduledGiver.id != null) {
+                      if (that_day_schedule.scheduledGiver.id == user.id) {match_feeding_schedule = true}
+                    }
+                  })
+                  /**
+                   * クリック時の動作
+                   */
+                  const click = async () => {
+                    // 既にそのブロックが予定されているものだった場合
+                    // スケジュールを削除する
+                    if (match_feeding_schedule) {
+                      console.log("スケジュール削除")
+                      schedule.schedule.map((this_schedule) => {
+                        deleteFeedingSchedules({variables:{
+                          "where": {
+                            "id": this_schedule.id
+                          }
+                        }})
+                      })
+                    } else {
+                      if (schedule.schedule.length != 0) {
+                        // ほかのユーザーがスケジュールを持っていた場合
+                        console.log("スケジュール変更")
+                        schedule.schedule.map(async (this_schedule) => {
+                          console.log(user.name)
+                          console.log(user.id)
+                          await updateFeedingSchedules({variables: {
+                            "where": {
+                              "id": this_schedule.id
+                            },
+                            "update": {
+                              "scheduledGiver": {
+                                "connect": {
+                                  "where": {
+                                    "node": {
+                                      "id": user.id
+                                    }
                                   }
                                 }
-                                return false;
-                              })()? "warning": "primary"
+                              }
                             }
-                            onClick={async ()=>{
-                              data.pets.map(async (pet)=>{
-                                const res = await createSchedules({variables:{
-                                  "input": [
-                                    {
-                                      "scheduledDate": `${date.getUTCFullYear()}-${zero_padding(date.getUTCMonth()+1)}-${zero_padding(date.getUTCDate())}T${zero_padding(date.getUTCHours())}:00:00.000Z`,
-                                      "am_pm": am_pm[0],
-                                      "scheduledGiver": {
-                                        "connect": {
-                                          "where": {
-                                            "node": {
-                                              "id": user.id
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "eater": {
-                                        "connect": {
-                                          "where": {
-                                            "node": {
-                                              "id": pet.id
-                                            }
-                                          }
-                                        }
+                          }})
+                          console.log(update_result)
+                        })
+                      } else {
+                        // ほかのユーザーもスケジュールを持っていなかった場合
+                        console.log("スケジュール作成")
+                        // ペット分のスケジュールを生成する
+                        data.pets.map((pet)=>{
+                          createFeedingSchedules({variables:{
+                            "input": [
+                              {
+                                "am_pm": schedule.am_pm,
+                                "scheduledDate": to_datetime_string(schedule.date),
+                                "scheduledGiver": {
+                                  "connect": {
+                                    "where": {
+                                      "node": {
+                                        "id": user.id
                                       }
                                     }
-                                  ]
-                                }})
-                                console.log(res);
-                              });
-                            }}
-                            sx={{
-                              height: 100,
-                              margin: 1,
-                            }}>
-                            </Button>
-                            )
-                          })
-                        }
-                      </div>
-                    )
-                  })
-                }
-              </div>)
-            })
-          }
-        </div>
+                                  }
+                                },
+                                "eater": {
+                                  "connect": {
+                                    "where": {
+                                      "node": {
+                                        "id": pet.id
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }})
+                        })
+                      }
+                    }
+                  }
+
+
+                  return(<div key={schedule.date.toString() + schedule.am_pm +user.id} className={style.ScheduleBlock} onClick={click} >
+                    {match_feeding_schedule?<div className={style.FeedingScheduleBlock}></div>:<></>}
+                    </div>)
+                })
+              }
+              </div>) 
+          })
+        }
       </div>
     </MiniDrawer>
   </>)
 }
-export default Schedule; 
+export default Schedule

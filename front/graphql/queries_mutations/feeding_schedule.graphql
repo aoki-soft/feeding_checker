@@ -22,11 +22,6 @@ query FeedingSchedules($where: FeedingScheduleWhere) {
   users {
     id
     name
-    feedingSchedule {
-      id
-      am_pm
-      scheduledDate
-    }
   }
 }
 
@@ -40,11 +35,12 @@ mutation CreateFeedingSchedules($input: [FeedingScheduleCreateInput!]!) {
       id
       am_pm
       scheduledDate
-      eater {
+      createAt
+      scheduledGiver {
         id
         name
       }
-      scheduledGiver {
+      eater {
         id
         name
       }
@@ -52,3 +48,29 @@ mutation CreateFeedingSchedules($input: [FeedingScheduleCreateInput!]!) {
   }
 }
 
+mutation DeleteFeedingSchedules($where: FeedingScheduleWhere) {
+  deleteFeedingSchedules(where: $where) {
+    nodesDeleted
+    relationshipsDeleted
+  }
+}
+
+mutation UpdateFeedingSchedules($where: FeedingScheduleWhere, $update: FeedingScheduleUpdateInput) {
+  updateFeedingSchedules(where: $where, update: $update) {
+    feedingSchedules {
+      id
+      am_pm
+      scheduledDate
+      createAt
+      updateAt
+      scheduledGiver {
+        id
+        name
+      }
+      eater {
+        id
+        name
+      }
+    }
+  }
+}
