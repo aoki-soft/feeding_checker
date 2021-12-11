@@ -45,10 +45,25 @@ function MyApp({ Component, pageProps }: AppProps) {
 		}
 	},[router])
 
+	const [pass_input, setPassInput] = useState("");
+	const login = ()=>{
+		localStorage.setItem('login', pass_input);
+		setToken({
+			token: pass_input,
+			no_token: false,
+		})
+	}
+
 	if (!token.token) {
 		if (token.no_token) {
 			// ここでログイン画面を実装する
-			return (<div>ログイン認証コードをクエリパラメータに入れてください<br/>ログイン画面を実装予定です</div>)
+			return (
+			<div>
+				パスワードを入力してください<br/>
+				<input value={pass_input} onChange={(event)=>{setPassInput(event.target.value)}}/>
+				<button onClick={login}>ログイン</button>
+			</div>
+			)
 		}
 		// ログイン取得前なのか?ログイン中なのかわからない、、
 		return (<div>ログイントークンを読み込んでいます</div>)
