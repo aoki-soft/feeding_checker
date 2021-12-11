@@ -7,12 +7,14 @@ import {
 	ApolloProvider,
 } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 
 type Token = {
 	token: string | null,
 	no_token: boolean,
 }
+
+export const LogoutContext = createContext(()=>{});
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -46,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	if (!token.token) {
 		if (token.no_token) {
 			// ここでログイン画面を実装する
-			return (<div>ログイン認証コードをクエリパラメータに入れてください</div>)
+			return (<div>ログイン認証コードをクエリパラメータに入れてください<br/>ログイン画面を実装予定です</div>)
 		}
 		// ログイン取得前なのか?ログイン中なのかわからない、、
 		return (<div>ログイントークンを読み込んでいます</div>)
@@ -70,12 +72,27 @@ function MyApp({ Component, pageProps }: AppProps) {
 			link: authLink.concat(httpLink),
 	});
 	
+	/**
+	 * ログアウトの処理を行う関数
+	 */
+	const logout = () =>{
+		localStorage.clear();
+		setToken({
+			token: null,
+			no_token: true,
+		})
+	}
+	
+
 
   return (
-    <ApolloProvider client={client}>
-      <Component {...pageProps} />
-    </ApolloProvider>
-  )
+		<LogoutContext.Provider value={logout}>
+			<ApolloProvider client={client}>
+				<Component {...pageProps} />
+			</ApolloProvider>
+		</LogoutContext.Provider>
+		)
+
 }
 
 export default MyApp

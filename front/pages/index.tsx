@@ -56,11 +56,6 @@ const GiverButton = styled(Button)<ButtonProps>(({ theme }) => ({
   height: '80px',
   margin: '10px',
   fontSize: '1.3em',
-  // color: 'white',
-  // backgroundColor: colors.blue[300],
-  // '&:hover': {
-  //   backgroundColor: colors.blue[400],
-  // },
 }));
 
 const Home: NextPage = () => {

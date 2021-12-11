@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link'
+import { LogoutContext } from '../pages/_app';
 
 
 const drawerWidth = 240;
@@ -97,6 +98,8 @@ export default function MiniDrawer({ children }: Props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const logout = React.useContext(LogoutContext);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -167,6 +170,12 @@ export default function MiniDrawer({ children }: Props) {
               <ListItemText primary={"スケジュール"} />
             </ListItem>
           </Link>
+          <ListItem button key="ログアウト" onClick={logout}>
+            <ListItemIcon>
+              <img style={{height:"40px"}} src="/logout.svg" />
+            </ListItemIcon>
+            <ListItemText primary={"ログアウト"} />
+          </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
