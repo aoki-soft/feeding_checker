@@ -8,6 +8,7 @@ import MiniDrawer from '../components/MiniVariantDrawer'
 
 import { NetworkStatus } from "@apollo/client";
 import { useCreateFeedingsMutation, useFeedingCheckQuery } from '../lib/generated/client';
+import Login from '../components/Login'
 
 /**
  * 1桁の数値を0でパディングする
@@ -72,7 +73,14 @@ const Home: NextPage = () => {
         "createAt_LT": end_datetime,
       }
     },
-		pollInterval: 200
+    onError: (error) => {
+      // console.log("onError");
+      // console.log(error.networkError?.message);
+      // console.log(error.networkError?.stack);
+      // console.log(error.networkError?.);
+
+    }
+		// pollInterval: 200
 	});
   const [ createFeedings, create_result ] = useCreateFeedingsMutation();
 
@@ -88,9 +96,22 @@ const Home: NextPage = () => {
   }, [])
 
   const [feeding_user_id, setFeedingUserId] = useState<string | null>(null);
-
   if (loading) return <div>ローディング中です</div>;
-	if (error) return <div>`Error! ${error.message}`</div>;
+	if (error) {
+    if (error.networkError) {
+      const error_message = error.networkError.message;
+      const split_message = error_message.split(" ");
+      const code_string = split_message[split_message.length - 1];
+      const code = Number(code_string);
+      if (code == 401) {
+        return (<div>
+          <Login/>
+        </div>)
+      }
+      return (<div>ネットワークエラー エラーコード: {"" + code}</div>)
+    }
+    return <div>Error! {error.message}</div>;
+  }
 	if (data == undefined) return <div>データを取得出来ませんでした。</div>
 
   return (<>

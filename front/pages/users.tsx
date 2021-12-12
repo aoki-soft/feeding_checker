@@ -10,6 +10,7 @@ import { useCreateUsersMutation, useDeleteUsersMutation, useUpdateUsersMutation,
 
 import MiniDrawer from '../components/MiniVariantDrawer'
 import { NetworkStatus } from "@apollo/client";
+import Login from '../components/Login'
 
 const Users: NextPage = () => {
 	const { loading, error, data, refetch, networkStatus } = useUsersQuery({
@@ -25,7 +26,21 @@ const Users: NextPage = () => {
 	const [rename_name, setRenameName] = useState("");
 
 	if (loading) return <div>ローディング中です</div>;
-	if (error) return <div>`Error! ${error.message}`</div>;
+	if (error) {
+    if (error.networkError) {
+      const error_message = error.networkError.message;
+      const split_message = error_message.split(" ");
+      const code_string = split_message[split_message.length - 1];
+      const code = Number(code_string);
+      if (code == 401) {
+        return (<div>
+          <Login/>
+        </div>)
+      }
+      return (<div>ネットワークエラー エラーコード: {"" + code}</div>)
+    }
+    return <div>Error! {error.message}</div>;
+  }
 	if (data == undefined) return <div>データを取得出来ませんでした。</div>
 
 	return (<>

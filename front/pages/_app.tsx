@@ -5,9 +5,11 @@ import {
 	InMemoryCache,
 	createHttpLink,
 	ApolloProvider,
+	from,
 } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
 import { useEffect, useState, createContext } from 'react';
+import { onError } from "@apollo/client/link/error";
 
 type Token = {
 	token: string | null,
@@ -15,6 +17,7 @@ type Token = {
 }
 
 export const LogoutContext = createContext(()=>{});
+export const LoginContext = createContext((pass: string)=>{});
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -46,10 +49,16 @@ function MyApp({ Component, pageProps }: AppProps) {
 	},[router])
 
 	const [pass_input, setPassInput] = useState("");
-	const login = ()=>{
-		localStorage.setItem('login', pass_input);
+	const click_login = ()=>{
+		login(pass_input);
+	}
+	const login = (pass: string)=>{
+		if (pass == "") {
+			return;
+		}
+		localStorage.setItem('login', pass);
 		setToken({
-			token: pass_input,
+			token: pass,
 			no_token: false,
 		})
 	}
@@ -61,7 +70,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<div>
 				パスワードを入力してください<br/>
 				<input value={pass_input} onChange={(event)=>{setPassInput(event.target.value)}}/>
-				<button onClick={login}>ログイン</button>
+				<button onClick={click_login}>ログイン</button>
 			</div>
 			)
 		}
@@ -78,13 +87,26 @@ function MyApp({ Component, pageProps }: AppProps) {
 		return {
 			headers: {
 				...headers,
-				authorization: token ? `Bearer ${token}` : "",
+				authorization: token ? `Bearer ${token.token}` : "",
 			}
 		}
 	});
+
+	const errorLink = onError(({ graphQLErrors, networkError }) => {
+		// if (graphQLErrors)
+		// 	graphQLErrors.forEach(({ message, locations, path }) =>
+				// console.log(
+				// 	`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+				// ),
+			// );
+	
+		// if (networkError) console.log(`[Network error]: ${networkError}`);
+	});
+
 	const client = new ApolloClient({
 			cache: new InMemoryCache(),
-			link: authLink.concat(httpLink),
+			// link: authLink.concat(httpLink),
+			link: from([errorLink, authLink, httpLink]),
 	});
 	
 	/**
@@ -102,9 +124,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
 		<LogoutContext.Provider value={logout}>
-			<ApolloProvider client={client}>
-				<Component {...pageProps} />
-			</ApolloProvider>
+			<LoginContext.Provider value={login}>
+				<ApolloProvider client={client}>
+					<Component {...pageProps} />
+				</ApolloProvider>
+			</LoginContext.Provider>
 		</LogoutContext.Provider>
 		)
 

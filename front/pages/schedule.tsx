@@ -8,6 +8,7 @@ import MiniDrawer from '../components/MiniVariantDrawer'
 import { useCreateFeedingSchedulesMutation, useDeleteFeedingSchedulesMutation, useFeedingSchedulesQuery, useUpdateFeedingSchedulesMutation} from '../lib/generated/client'
 import { styled } from '@mui/system';
 import style  from '../styles/schedule.module.scss'
+import Login from '../components/Login'
 
 const WEEK_CHARS = [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ];
 
@@ -81,7 +82,21 @@ const Schedule: NextPage = () => {
   const [ updateFeedingSchedules, update_result] = useUpdateFeedingSchedulesMutation();
 
   if (loading) return <div>ローディング中です</div>;
-	if (error) return <div>`Error! ${error.message}`</div>;
+  if (error) {
+    if (error.networkError) {
+      const error_message = error.networkError.message;
+      const split_message = error_message.split(" ");
+      const code_string = split_message[split_message.length - 1];
+      const code = Number(code_string);
+      if (code == 401) {
+        return (<div>
+          <Login/>
+        </div>)
+      }
+      return (<div>ネットワークエラー エラーコード: {"" + code}</div>)
+    }
+    return <div>Error! {error.message}</div>;
+  }
 	if (data == undefined) return <div>データを取得出来ませんでした。</div>
   console.log(data);
 

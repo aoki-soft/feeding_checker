@@ -19,7 +19,7 @@ const apollo_server_setup = async (driver: Driver, typeDefs: DocumentNode) => {
         schema: neoSchema.schema,
         debug: true,
         logger: logger,
-
+        context: ({req, res})=>{},
     });
     await server.start();
     logger.info("🚀 apollo_serverをセットアップしました")

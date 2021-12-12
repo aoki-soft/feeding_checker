@@ -11,7 +11,8 @@ services:
     restart: always
     # ports:
     #   - "3000:3000"
-    command: "bash"
+    # command: "bash"
+    command: "npm run dev"
   nginx:
     image: nginx
     ports:
@@ -34,7 +35,7 @@ services:
     # ports:
       # - "3001:3001"
     # command: "bash"
-    command: "npx ts-node src/main.ts"
+    command: "npm run dev"
   neo4j:
     image: neo4j
     restart: always
