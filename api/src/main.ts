@@ -13,8 +13,9 @@ import apollo_server_setup from './apollo_server/setup'
  */
 async function main() {
 	const logger = log4js.getLogger();
-	logger.level = 'debug';
+	logger.level = process.env.LOG_LEVEL || 'debug';
 
+	const password =  process.env.LOGIN_PASSWORD || "danger"
 	const db_driver = getDriver();
 	const apollo_server = await apollo_server_setup(db_driver, typeDefs);
 
@@ -47,7 +48,6 @@ async function main() {
 			}))
 			return;
 		}
-		const password = 'puttyo'
 		if (bearer != password) {
 			console.log('認証コードが誤っています:' + bearer)
 			res.status(401)
@@ -65,13 +65,14 @@ async function main() {
 		next();
 	})
 
+	const path = process.env.API_PATH || '/api'
 	apollo_server.applyMiddleware({ 
 		app,
 		// cors: true,
-		path: '/api',
+		path: path,
 	});
 
-	const port = 3001
+	const port = process.env.API_PORT || 3001
 	app.listen(port, () => {
 		logger.info(`🏃 apiサーバーをスタートしました port: ${port}` )
 	})

@@ -26,6 +26,7 @@ services:
       dockerfile: ./Dockerfile
     environment:
       - NODE_ENV=production
+      - LOGIN_PASSWORD=danger
     tty: true
     working_dir: /api
     restart: always
@@ -33,10 +34,6 @@ services:
   neo4j:
     image: neo4j
     restart: always
-    ports: 
-      - '7474:7474'
-      - '7473:7473'
-      - '7687:7687'
     volumes: 
       - ./volumes/neo4j/data:/data
       - ./volumes/neo4j/logs:/logs
