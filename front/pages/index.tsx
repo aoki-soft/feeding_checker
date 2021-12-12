@@ -79,8 +79,8 @@ const Home: NextPage = () => {
       // console.log(error.networkError?.stack);
       // console.log(error.networkError?.);
 
-    }
-		// pollInterval: 200
+    },
+		pollInterval: 200
 	});
   const [ createFeedings, create_result ] = useCreateFeedingsMutation();
 
@@ -116,7 +116,7 @@ const Home: NextPage = () => {
 
   return (<>
     <Head>
-      <title>えさやりチェッカー</title>
+      <title>えさやり登録 / えさやりチェッカー</title>
       <link rel="icon" href="/dog_food.svg" />
       <link
         rel="stylesheet"

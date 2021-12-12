@@ -123,7 +123,7 @@ const Schedule: NextPage = () => {
 
   return (<>
       <Head>
-      <title>えさやりチェッカー</title>
+      <title>スケジュール / えさやりチェッカー</title>
       <link rel="icon" href="/dog_food.svg" />
       <link
         rel="stylesheet"

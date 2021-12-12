@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { LoginContext } from "../pages/_app";
+import Head from "next/head";
 
 export default () => {
   const [pass_input, setPassInput] = useState("");
@@ -9,6 +10,14 @@ export default () => {
 	}
 
   return (<div>
+    <Head>
+      <title>ログイン / えさやりチェッカー</title>
+      <link rel="icon" href="/dog_food.svg" />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      />
+    </Head>
     <div>
       パスワードが誤っています
       <br/>

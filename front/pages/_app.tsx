@@ -10,6 +10,7 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { useEffect, useState, createContext } from 'react';
 import { onError } from "@apollo/client/link/error";
+import Head from "next/head"
 
 type Token = {
 	token: string | null,
@@ -68,14 +69,31 @@ function MyApp({ Component, pageProps }: AppProps) {
 			// ここでログイン画面を実装する
 			return (
 			<div>
+				<Head>
+					<title>ログイン / えさやりチェッカー</title>
+					<link rel="icon" href="/dog_food.svg" />
+					<link
+						rel="stylesheet"
+						href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+					/>
+				</Head>
 				パスワードを入力してください<br/>
 				<input value={pass_input} onChange={(event)=>{setPassInput(event.target.value)}}/>
 				<button onClick={click_login}>ログイン</button>
 			</div>
 			)
 		}
-		// ログイン取得前なのか?ログイン中なのかわからない、、
-		return (<div>ログイントークンを読み込んでいます</div>)
+		return (<div>
+			<Head>
+				<title>ログイン / えさやりチェッカー</title>
+				<link rel="icon" href="/dog_food.svg" />
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+				/>
+			</Head>
+			ログイントークンを読み込んでいます
+		</div>)
 	}
 	console.log(token);
 
@@ -125,6 +143,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
 		<LogoutContext.Provider value={logout}>
 			<LoginContext.Provider value={login}>
+			<Head>
+				<title>えさやりチェッカー</title>
+				<link rel="icon" href="/dog_food.svg" />
+				<link
+					rel="stylesheet"
+					href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+				/>
+			</Head>
 				<ApolloProvider client={client}>
 					<Component {...pageProps} />
 				</ApolloProvider>

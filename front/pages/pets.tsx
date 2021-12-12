@@ -45,7 +45,7 @@ const Pets: NextPage = () => {
 
 	return (<>
 		<Head>
-			<title>ペット管理画面/ えさやりチェッカー</title>
+			<title>ペット管理 / えさやりチェッカー</title>
       <link rel="icon" href="/dog_food.svg" />
       <link
         rel="stylesheet"
