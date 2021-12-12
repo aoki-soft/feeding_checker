@@ -1,4 +1,9 @@
 # えさやりチェッカー
+## 概要
+えさやりの記録を残したり、誰がえさやりをするかといった予定を共有できます。  
+
+<img src="./README_img/index.png">
+
 ## デプロイ方法
 ### 1. 動作環境のセットアップ
 dockerとdocker-composeをインストールし、  
@@ -9,6 +14,9 @@ dockerとdocker-composeをインストールし、
 - 証明書を`cert.pem`
 - 秘密鍵を`privkey.pem`
 というファイル名で配置する。  
+
+### 3. パスワードを変更する
+`docker-compose.yml`の`services`>`api`>`environment`>`LOGIN_PASSWORD`の`danger`を任意のパスワードに変更する。  
 
 ### 3. デプロイを実行する
 リポジトリのルートで以下のコマンドを実行するとデプロイが実行される。
