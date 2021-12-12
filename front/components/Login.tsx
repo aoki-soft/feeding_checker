@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { LoginContext } from "../pages/_app";
 import Head from "next/head";
 
-export default () => {
+export default function Login() {
   const [pass_input, setPassInput] = useState("");
   const login = useContext(LoginContext);
 	const click_login = ()=>{
