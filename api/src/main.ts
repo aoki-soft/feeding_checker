@@ -10,6 +10,7 @@ import apollo_server_setup from './apollo_server/setup'
 
 /**
  * エントリーポイント
+ * 修正
  */
 async function main() {
 	const logger = log4js.getLogger();

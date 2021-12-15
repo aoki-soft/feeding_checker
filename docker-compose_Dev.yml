@@ -9,8 +9,6 @@ services:
     volumes:
       - ./front/:/front
     restart: always
-    # ports:
-    #   - "3000:3000"
     # command: "bash"
     command: "npm run dev"
   nginx:
@@ -23,6 +21,13 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       # sslの鍵 (nginx.confを参照)
       - ./nginx/key_cert:/key_cert
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: "localhost:24224"
+        tag: "docker.{{.Name}}"
+    depends_on:
+      - "fluentd"
   api:
     image: node
     # environment:
@@ -65,3 +70,12 @@ services:
       - NEO4J_dbms_allow__upgrade=true
       - NEO4J_dbms_default__database=neo4j
       - NEO4J_AUTH=neo4j/blz
+  fluentd:
+    image: fluent/fluentd:latest
+    ports:
+      - 24224:24224
+    environment:
+      - FLUENTD_CONF=fluentd.conf
+    volumes:
+      - ./fluentd:/fluentd/etc
+      - ./volumes/fluentd/log:/fluentd/log
